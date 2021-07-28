@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'add' => 'Add category',
+    'searchbox' => 'Search categories by name, description or tagfile...',
+    'empty' => 'No categories available.',
+    'show' => ':name Category',
+    'profile' => "Category's profile",
+    'no_entities' => 'No entities',
+    'name_placeholder' => "Enter category's name",
+    'description_placeholder' => "Enter category's description",
+    'added' => 'Category :name successfully added.',
+    'edit' => 'Edit :name category',
+    'update' => 'Update category',
+    'file_placeholder' => "Enter category's file",
+    'updated' => ':name category has been successfully updated.',
+    'delete_empty' => 'Deleting category with member entities is forbidden.',
+    'deleted' => ':name category has been successfully deleted.',
+    'select_category' => 'Select a category for this identity provider.',
+    'no_categories' => 'There are no categories.',
+    'no_category_selected' => 'No category selected.',
+    'import' => 'Categories import',
+    'empty_import' => 'No categories to import selected.',
+    'refreshed' => 'Categories have been refreshed.',
+    'nothing_to_import' => 'There are no categories to import.',
+    'imported' => '{0} No category has been imported.|{1} One category has been imported and needs to be activated.|[2,*] :count categories have been imported and need to be activated.',
+    'no_description' => 'No description',
+];
