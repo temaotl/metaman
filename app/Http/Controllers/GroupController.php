@@ -185,6 +185,11 @@ class GroupController extends Controller
                 continue;
             }
 
+            if(preg_match('/^' . config('git.hfd') . '$/', $file))
+            {
+                continue;
+            }
+
             if(preg_match('/\.tag$/', $file))
             {
                 $tagfiles[] = $file;
