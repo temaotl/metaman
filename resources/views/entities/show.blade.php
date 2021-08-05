@@ -28,7 +28,7 @@
                 </div>
                 <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm text-gray-500">{{ __('common.type') }}</dt>
-                    <dd class="sm:col-span-2 uppercase">{{ $entity->type }}</dd>
+                    <dd class="sm:col-span-2">{{ $entity->kind }}</dd>
                 </div>
                 <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm text-gray-500">{{ __('common.categories') }}</dt>

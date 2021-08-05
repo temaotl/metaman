@@ -87,4 +87,9 @@ class Entity extends Model
             ->orWhere('description_en', 'like', "%$search%")
             ->orWhere('description_cs', 'like', "%$search%");
     }
+
+    public function getKindAttribute()
+    {
+        return $this->type === 'idp' ? 'IdP' : 'SP';
+    }
 }
