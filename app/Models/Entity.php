@@ -19,6 +19,7 @@ class Entity extends Model
         'description_en',
         'description_cs',
         'edugain',
+        'hfd',
         'rs',
         'cocov1',
         'sirtfi',
