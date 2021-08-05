@@ -33,7 +33,7 @@ class EntityOperatorsChanged extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ['mail'];
     }
 
     /**

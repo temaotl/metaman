@@ -32,7 +32,7 @@ class IdpCategoryChanged extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ['mail'];
     }
 
     /**
