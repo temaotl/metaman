@@ -39,6 +39,7 @@
 
                 <div class="flex flex-col md:flex-row">
                     <ul class="md:pr-4 hidden md:flex flex-col md:flex-row md:text-sm md:items-center" id="profile">
+                        {{--
                         <li>
                             <a class="dark:hover:text-white hover:text-gray-700 whitespace-nowrap" href="{{ route('notifications') }}">
                                 <div class="md:hidden px-4 py-2 hover:bg-gray-300 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:text-gray-400 md:hover:bg-transparent rounded-md">Notifications ({{ $notifications}})</div>
@@ -50,6 +51,7 @@
                                 </div>
                             </a>
                         </li>
+                        --}}
                         <li>
                             <a class="block md:inline-block px-4 py-2 md:rounded hover:bg-gray-400 hover:text-gray-900 whitespace-nowrap"
                             @env(['local', 'testing'])

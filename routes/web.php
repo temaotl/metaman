@@ -40,9 +40,9 @@ if(App::environment(['local', 'testing']))
 
 Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-Route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
-Route::patch('notifications/{id}', [NotificationController::class, 'update'])->name('notifications.update');
-Route::delete('notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+// Route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
+// Route::patch('notifications/{id}', [NotificationController::class, 'update'])->name('notifications.update');
+// Route::delete('notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 
 Route::get('federations/import', [FederationController::class, 'unknown'])->name('federations.unknown');
 Route::post('federations/import', [FederationController::class, 'import'])->name('federations.import');
