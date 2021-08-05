@@ -8,7 +8,7 @@
     @can('update', $entity)
 
         <div class="mb-4">
-            <h3 class="text-lg font-semibold">{{ __('common.delete_operators') }}</h3>
+            <h3 class="text-lg font-semibold">{{ __('common.present_operators') }}</h3>
             <form id="delete_operators" action="{{ route('entities.update', $entity) }}" method="post">
                 @csrf
                 @method('patch')
