@@ -37,7 +37,7 @@
             </div>
             <div class="px-4 py-4 bg-gray-100">
                 <x-buttons.back href="{{ route('groups.index') }}"/>
-                <x-buttons.submit text="{{ __('groups.add') }}"/>
+                <x-submit>{{ __('groups.add') }}</x-submit>
             </div>
         </div>
     </form>

@@ -48,7 +48,7 @@
                 </table>
             </div>
             <div class="px-4 py-4 bg-gray-100 dark:bg-transparent">
-                <x-buttons.submit text="{{ __('groups.import') }}"/>
+                <x-submit>{{ __('groups.import') }}</x-submit>
             </div>
         </form>
 

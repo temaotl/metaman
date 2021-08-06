@@ -75,7 +75,7 @@
                                         @endforelse
                                     </select>
                                     <button class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-gray-50 rounded shadow" type="reset">{{ __('common.reset') }}</button>
-                                    <x-buttons.submit text="Update"/>
+                                    <x-submit>{{ __('commmon.update') }}</x-submit>
                                 </form>
                             </dd>
                         </div>

@@ -56,7 +56,7 @@
                                             >{{ $email }}</option>
                                         @endforeach
                                     </select>
-                                    <x-buttons.submit text="{{ __('users.update_email') }}"/>
+                                    <x-submit>{{ __('users.update_email') }}</x-submit>
                                 </form>
                             </div>
                         @endcan

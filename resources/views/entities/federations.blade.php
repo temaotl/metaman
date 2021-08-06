@@ -40,7 +40,7 @@
                         </table>
                         @if (count($federations))
                             <div class="px-4 py-3 bg-gray-100">
-                                <x-buttons.submit color="red" text="{{ __('entities.leave_federations')}}" target="leave_federations"/>
+                                <x-submit color="red" target="true" data-target="leave_federations">{{ __('entities.leave_federations') }}</x-submit>
                                 <x-modals.confirm :model="$entity" form="leave_federations"/>
                             </div>
                         @endif
@@ -89,7 +89,7 @@
                         </dl>
                     </div>
                     <div class="px-4 py-4 bg-gray-100">
-                        <x-buttons.submit text="{{ __('entities.join_federation') }}"/>
+                        <x-submit>{{ __('entities.join_federation') }}</x-submit>
                     </div>
                 </div>
             </form>

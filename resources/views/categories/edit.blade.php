@@ -49,7 +49,7 @@
             </div>
             <div class="px-4 py-4 bg-gray-100">
                 <x-buttons.back href="{{ route('categories.index') }}"/>
-                <x-buttons.submit text="{{ __('categories.update') }}"/>
+                <x-submit>{{ __('categories.update') }}</x-submit>
             </div>
     </form>
 

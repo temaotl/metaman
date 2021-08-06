@@ -41,7 +41,7 @@
             </div>
             <div class="px-4 py-4 bg-gray-100">
                 <x-buttons.back href="{{ URL::previous() }}"/>
-                <x-buttons.submit text="{{ __('entities.update') }}"/>
+                <x-submit>{{ __('entities.update') }}</x-submit>
             </div>
         </div>
     </form>

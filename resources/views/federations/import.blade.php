@@ -60,7 +60,7 @@
                 </table>
             </div>
             <div class="px-4 py-4 bg-gray-100 dark:bg-transparent">
-                <x-buttons.submit text="{{ __('federations.import') }}"/>
+                <x-submit>{{ __('federations.import') }}</x-submit>
             </div>
         </form>
     @else
