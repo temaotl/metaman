@@ -37,7 +37,7 @@
             </div>
             <div class="px-4 py-4 bg-gray-100">
                 <x-buttons.back href="{{ route('categories.index') }}"/>
-                <x-submit>{{ __('categories.add') }}</x-submit>
+                <x-button>{{ __('categories.add') }}</x-button>
             </div>
         </div>
     </form>

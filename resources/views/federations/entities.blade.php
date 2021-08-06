@@ -58,7 +58,7 @@
                     {{ $members->links() }}
                     @if (count($members))
                         <div class="px-4 py-2 bg-gray-100">
-                            <x-submit color="red" target="true" data-target="delete_members">{{ __('common.delete_members') }}</x-submit>
+                            <x-button color="red" target="true" data-target="delete_members">{{ __('common.delete_members') }}</x-button>
                             <x-modals.confirm :model="$federation" form="delete_members"/>
                         </div>
                     @endif
@@ -123,7 +123,7 @@
                     {{ $entities->links() }}
                     @if (count($entities))
                         <div class="px-4 py-2 bg-gray-100">
-                            <x-submit target="true" data-target="add_members">{{ __('common.add_members') }}</x-submit>
+                            <x-button target="true" data-target="add_members">{{ __('common.add_members') }}</x-button>
                             <x-modals.confirm :model="$federation" form="add_members"/>
                         </div>
                     @endif

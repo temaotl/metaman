@@ -66,7 +66,7 @@
             </div>
             <div class="px-4 py-4 bg-gray-100">
                 <x-buttons.back href="{{ route('entities.index') }}"/>
-                <x-submit>{{ __('entities.add') }}</x-submit>
+                <x-button>{{ __('entities.add') }}</x-button>
             </div>
         </div>
     </form>

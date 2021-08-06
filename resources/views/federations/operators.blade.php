@@ -51,7 +51,7 @@
                     {{ $operators->links() }}
                     @if (count($operators))
                         <div class="px-4 py-3 bg-gray-100">
-                            <x-submit color="red" target="true" data-target="delete_operators">{{ __('common.delete_operators') }}</x-submit>
+                            <x-button color="red" target="true" data-target="delete_operators">{{ __('common.delete_operators') }}</x-button>
                             <x-modals.confirm :model="$federation" form="delete_operators"/>
                         </div>
                     @endif
@@ -109,7 +109,7 @@
                     {{ $users->links() }}
                     @if (count($users))
                         <div class="px-4 py-3 bg-gray-100">
-                            <x-submit target="true" data-target="add_operators">{{ __('common.add_operators') }}</x-submit>
+                            <x-button target="true" data-target="add_operators">{{ __('common.add_operators') }}</x-button>
                             <x-modals.confirm :model="$federation" form="add_operators"/>
                         </div>
                     @endif

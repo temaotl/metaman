@@ -62,7 +62,7 @@
                     </table>
                 </div>
                 <div class="px-4 py-4 bg-gray-100 dark:bg-transparent">
-                    <x-submit>{{ __('entities.import') }}</x-submit>
+                    <x-button>{{ __('entities.import') }}</x-button>
                 </div>
             </form>
 

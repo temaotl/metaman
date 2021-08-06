@@ -42,7 +42,7 @@
         </div>
         <div class="px-4 py-4 bg-gray-100 dark:bg-transparent">
             <x-buttons.back href="{{ route('federations.index') }}"/>
-            <x-submit>{{ __('federations.add') }}</x-submit>
+            <x-button>{{ __('federations.add') }}</x-button>
         </div>
     </div>
 </form>
