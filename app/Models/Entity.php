@@ -28,6 +28,7 @@ class Entity extends Model
 
     protected $casts = [
         'edugain' => 'boolean',
+        'hfd' => 'boolean',
         'rs' => 'boolean',
         'cocov1' => 'boolean',
         'sirtfi' => 'boolean',
