@@ -37,7 +37,7 @@ class Federation extends Model
 
     public function entities()
     {
-        return $this->belongsToMany('App\Models\Entity', 'membership')
+        return $this->belongsToMany('App\Models\Entity', 'memberships')
             ->using('App\Models\Membership')
             ->withPivot('approved')
             ->wherePivot('approved', true)

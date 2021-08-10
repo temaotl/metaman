@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Membership extends Pivot
 {
+    protected $table = 'memberships';
+
     protected $casts = [
         'approved' => 'boolean',
     ];

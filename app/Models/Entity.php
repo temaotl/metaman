@@ -46,7 +46,7 @@ class Entity extends Model
 
     public function federations()
     {
-        return $this->belongsToMany('App\Models\Federation', 'membership')
+        return $this->belongsToMany('App\Models\Federation', 'memberships')
             ->using('App\Models\Membership')
             ->withPivot('approved')
             ->wherePivot('approved', true)
@@ -55,7 +55,7 @@ class Entity extends Model
 
     public function federationsRequested()
     {
-        return $this->belongsToMany('App\Models\Federation', 'membership')
+        return $this->belongsToMany('App\Models\Federation', 'memberships')
             ->using('App\Models\Membership')
             ->withPivot('approved')
             ->wherePivot('approved', false)
