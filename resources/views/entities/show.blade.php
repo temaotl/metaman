@@ -42,18 +42,52 @@
                 <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm text-gray-500">{{ __('common.edugain_membership') }}</dt>
                     <dd class="sm:col-span-2">
-                        @if ($entity->edugain)
-                            {{ __('common.yes') }}
+                        @can('update', $entity)
+                            @unless ($entity->trashed())
+                                @if ($entity->active && $entity->approved)
+                                    <form class="inline-block" id="edugain" action="{{ route('entities.update', $entity) }}" method="POST">
+                                        @csrf
+                                        @method('patch')
+                                        <input type="hidden" name="action" value="edugain">
+                                        <input type="checkbox" name="edugainbox" id="edugainbox" class="open-modal" data-target="edugain"
+                                            @if ($entity->edugain)
+                                                checked
+                                            @endif
+                                            onchange="this.form.submit()">
+                                    </form>
+                                    <x-modals.confirm :model="$entity" form="edugain"/>
+                                @endif
+                            @endunless
                         @else
-                            {{ __('common.no') }}
-                        @endif
+                            @if ($entity->edugain)
+                                {{ __('common.yes') }}
+                            @else
+                                {{ __('common.no') }}
+                            @endif
+                        @endcan
                     </dd>
                 </div>
-                @can('update', $entity)
-                    <div class="px-4 py-5 bg-gray-50 dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm text-gray-500">{{ __('common.file') }}</dt>
-                        <dd class="sm:col-span-2"><code class="text-sm text-pink-500">{{ $entity->file }}</code></dd>
-                    </div>
+                @can('do-everything')
+                    @unless ($entity->trashed())
+                        @if ($entity->active && $entity->approved && $entity->type === 'idp')
+                            <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm text-gray-500">{{ __('common.hfd') }}</dt>
+                                <dd class="sm:col-span-2">
+                                    <form class="inline-block" id="hfd" action="{{ route('entities.update', $entity) }}" method="POST">
+                                        @csrf
+                                        @method('patch')
+                                        <input type="hidden" name="action" value="hfd">
+                                        <input type="checkbox" name="hfdbox" id="hfdbox" class="open-modal" data-target="hfd"
+                                            @if ($entity->hfd)
+                                                checked
+                                            @endif
+                                            onchange="this.form.submit()">
+                                    </form>
+                                    <x-modals.confirm :model="$entity" form="hfd"/>
+                                </dd>
+                            </div>
+                        @endif
+                    @endunless
                 @endcan
                 @can('do-everything')
                     @if ($entity->type === 'idp')
@@ -75,7 +109,7 @@
                                         @endforelse
                                     </select>
                                     <button class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-gray-50 rounded shadow" type="reset">{{ __('common.reset') }}</button>
-                                    <x-button>{{ __('commmon.update') }}</x-button>
+                                    <x-button>{{ __('common.update') }}</x-button>
                                 </form>
                             </dd>
                         </div>
@@ -92,8 +126,6 @@
                 @endunless
             @endcan
 
-            <x-forms.edugain-membership :entity="$entity"/>
-            <x-forms.hide-from-discovery :entity="$entity"/>
             <x-forms.change-status route="entities" :model="$entity"/>
             <x-forms.change-state route="entities" :model="$entity"/>
             <x-forms.destroy route="entities" :model="$entity"/>

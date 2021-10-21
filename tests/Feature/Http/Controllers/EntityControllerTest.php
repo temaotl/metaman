@@ -643,8 +643,7 @@ class EntityControllerTest extends TestCase
             ->assertSeeText($entity->name)
             ->assertSeeText($entity->description)
             ->assertSeeText($entity->entityid)
-            ->assertSeeText($entity->kind)
-            ->assertSeeText($entity->file);
+            ->assertSeeText($entity->kind);
 
         $this->assertEquals(1, Entity::count());
         $this->assertEquals(route('entities.show', $entity), url()->current());

@@ -116,4 +116,5 @@ return [
     'confirm_add_members' => 'Add members?',
     'confirm_add_members_body' => 'Would you really like to add the selected members?',
     'hfd' => 'Hide from Discovery',
+    'update' => 'Update',
 ];
