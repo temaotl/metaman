@@ -31,7 +31,7 @@
                     <dd class="sm:col-span-2">{{ $entity->kind }}</dd>
                 </div>
                 <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm text-gray-500">{{ __('common.categories') }}</dt>
+                    <dt class="text-sm text-gray-500">{{ __('common.entity_categories') }}</dt>
                     <dd class="sm:col-span-2">
                         <x-pils.rs category="{{ $entity->rs }}"/>
                         <x-pils.cocov1 category="{{ $entity->cocov1 }}"/>
@@ -93,7 +93,7 @@
                     @if ($entity->type === 'idp')
                         <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm text-gray-500">
-                                {{ __('common.category') }}
+                                {{ __('common.eduidcz_category') }}
                             </dt>
                             <dd class="sm:col-span-2">
                                 <form class="inline-block" action="{{ route('entities.update', $entity) }}" method="post">
@@ -108,7 +108,7 @@
                                             <option value="">{{ __('categories.no_categories') }}</option>
                                         @endforelse
                                     </select>
-                                    <button class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-gray-50 rounded shadow" type="reset">{{ __('common.reset') }}</button>
+                                    <button class="px-4 py-2 bg-gray-300 text-gray-600 hover:bg-gray-200 rounded shadow" type="reset">{{ __('common.reset') }}</button>
                                     <x-button>{{ __('common.update') }}</x-button>
                                 </form>
                             </dd>

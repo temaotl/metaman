@@ -117,4 +117,6 @@ return [
     'confirm_add_members_body' => 'Would you really like to add the selected members?',
     'hfd' => 'Hide from Discovery',
     'update' => 'Update',
+    'entity_categories' => 'Entity Categories',
+    'eduidcz_category' => 'eduID.cz Category'
 ];
