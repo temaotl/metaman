@@ -118,5 +118,6 @@ return [
     'hfd' => 'Hide from Discovery',
     'update' => 'Update',
     'entity_categories' => 'Entity Categories',
-    'eduidcz_category' => 'eduID.cz Category'
+    'eduidcz_category' => 'eduID.cz Category',
+    'no_categories' => 'No categories',
 ];

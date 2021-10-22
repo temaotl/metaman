@@ -37,6 +37,9 @@
                         <x-pils.cocov1 category="{{ $entity->cocov1 }}"/>
                         <x-pils.sirtfi category="{{ $entity->sirtfi }}"/>
                         <x-pils.hfd category="{{ $entity->hfd }}"/>
+                        @if (!$entity->rs && !$entity->cocov1 && !$entity->sirtfi && !$entity->hfd)
+                            {{ __('common.no_categories') }}
+                        @endif
                     </dd>
                 </div>
                 <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
