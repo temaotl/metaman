@@ -578,7 +578,7 @@ class EntityController extends Controller
 
         $this->authorize('update', $entity);
 
-        if(empty(request('federations')))
+        if(empty(request('federation')))
         {
             return back()
                 ->with('status', __('entities.join_empty_federations'))
