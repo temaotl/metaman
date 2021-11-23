@@ -71,7 +71,7 @@ class MembershipController extends Controller
         $entity = $membership->entity->entityid;
 
         $federation = $membership->federation->name;
-        $entity = $membership->entity->name_en;
+        $entity = $membership->entity->name_en ?? $membership->entity->entityid;
         $operators = $membership->entity->operators;
 
         if(!$membership->entity->approved)
