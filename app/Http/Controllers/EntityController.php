@@ -12,6 +12,7 @@ use App\Jobs\GitAddToHfd;
 use App\Jobs\GitDeleteEntity;
 use App\Jobs\GitDeleteFromCategory;
 use App\Jobs\GitDeleteFromEdugain;
+use App\Jobs\GitDeleteFromFederation;
 use App\Jobs\GitDeleteFromHfd;
 use App\Jobs\GitUpdateEntity;
 use App\Models\Category;
@@ -615,6 +616,12 @@ class EntityController extends Controller
         $entity
             ->federations()
             ->detach($request->input('federations'));
+
+        foreach(request('federations') as $f)
+        {
+            $federation = Federation::find($f);
+            GitDeleteFromFederation::dispatch($entity, $federation, Auth::user());
+        }
 
         return redirect()
             ->back()

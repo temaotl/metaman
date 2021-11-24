@@ -88,4 +88,6 @@ return [
     'entity_added_to_hfd_body' => ':name is now being Hidden from Discovery.',
     'entity_deleted_from_hfd_subject' => 'Entity not Hidden from Discovery anymore',
     'entity_deleted_from_hfd_body' => ':name is not being Hidden from Discovery anymore.',
+    'entity_deleted_from_federation_subject' => 'Entity Deleted from a Federation',
+    'entity_deleted_from_federation_body' => ':name has been deleted from :federation.',
 ];
