@@ -24,6 +24,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/language/{locale}', function($locale = null) {
+    if(isset($locale) && in_array($locale, config('app.locales')))
+    {
+        app()->setLocale($locale);
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+});
+
 Route::get('/', function () {
     return auth()->user() ? view('dashboard') : view('welcome');
 })->name('home');

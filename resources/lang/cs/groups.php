@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'add' => 'Přidat skupinu',
+    'searchbox' => 'Hledat skupinu podle jména, popisu nebo .tag souboru...',
+    'empty' => 'Neexistují žádné skupiny.',
+    'show' => 'Skupina :name',
+    'profile' => 'Profil skupiny',
+    'no_entities' => 'Žádné entity',
+    'name_placeholder' => 'Vložte jméno skupiny',
+    'description_placeholder' => 'Vložte popis skupiny',
+    'added' => 'Skupina :name byla úspěšně přidána.',
+    'edit' => 'Upravit skupinu :name',
+    'update' => 'Upravit skupinu',
+    'file_placeholder' => 'Vložte soubor skupiny',
+    'updated' => 'Skupina :name byla úspěšně aktualizována.',
+    'delete_empty' => 'Není povoleno smazat skupinu obsahující entity.',
+    'deleted' => 'Skupina :name byla úspěšně smazána.',
+    'no_groups' => 'Neexistují žádné skupiny.',
+    'no_group_selected' => 'Nebyla zvolena žádná skupina.',
+    'import' => 'Importovat skupiny',
+    'nothing_to_import' => 'Neexistují žádné skupiny k importování.',
+    'empty_import' => 'Nebyly zvoleny žádné skupiny k importování.',
+    'imported' => '{0} Nebyla importována žádná skupina.|{1} Jedna skupina byla importována a potřebuje být aktivována.|[2,4] :count skupiny byly importovány a potřebují být aktivovány.|[5,*] :count skupin bylo importováno a potřebuje být aktivováno.',
+    'refreshed' => 'Skupiny byly obnoveny.',
+];

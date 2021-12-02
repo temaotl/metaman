@@ -53,6 +53,12 @@
                         </li>
                         --}}
                         <li>
+                            @if (App::currentLocale() == 'cs')
+                                <a class="block md:inline-block px-4 py-2 md:rounded hover:bg-gray-400 hover:text-gray-900" href="/language/en" title="Switch to English">EN</a>
+                            @else
+                                <a class="block md:inline-block px-4 py-2 md:rounded hover:bg-gray-400 hover:text-gray-900" href="/language/cs" title="Přepnout do češtiny">CS</a>
+                            @endif
+
                             <a class="block md:inline-block px-4 py-2 md:rounded hover:bg-gray-400 hover:text-gray-900 whitespace-nowrap"
                             @env(['local', 'testing'])
                                 href="/fakelogout"
