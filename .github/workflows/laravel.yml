@@ -14,6 +14,8 @@ jobs:
         operating-system: ['ubuntu-20.04']
         php-versions: ['7.4', '8.0', '8.1']
 
+    name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
+
     steps:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
