@@ -43,7 +43,7 @@
                         </dt>
                         <dd class="sm:col-span-2">
                             {!! $errors->first('federation', '<div class="text-red-600 text-sm font-semibold float-right">:message</div>') !!}
-                            <select class="text-sm @error('federation') border-red-500 border @else @if(old('federation') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 rounded-md" name="federation" id="federation">
+                            <select class="text-sm @error('federation') border-red-500 border @else @if(old('federation') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 rounded-md" name="federation" id="federation" required>
                                 <option value="">{{ __('entities.choose_federation') }}</option>
                                 @foreach ($federations as $federation)
                                     <option value="{{ $federation->id }}" {{ old('federation') == $federation->id ? "selected" : "" }}>{{ $federation->name }}</option>
@@ -59,7 +59,7 @@
                         </dt>
                         <dd class="sm:col-span-2">
                             {!! $errors->first('explanation', '<div class="text-red-600 text-sm font-semibold float-right">:message</div>') !!}
-                            <textarea class="text-sm @error('explanation') border-red-500 border @else @if(old('explanation') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 rounded-md" name="explanation" id="explanation" rows="3" maxlength="255" placeholder="{{ __('entities.explanation_placeholder') }}">{{ old('explanation') }}</textarea>
+                            <textarea class="text-sm @error('explanation') border-red-500 border @else @if(old('explanation') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 rounded-md" name="explanation" id="explanation" rows="3" maxlength="255" placeholder="{{ __('entities.explanation_placeholder') }}" required>{{ old('explanation') }}</textarea>
                         </dd>
                     </div>
                 </dl>
