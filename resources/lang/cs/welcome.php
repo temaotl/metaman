@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'introduction' => 'Vítejte ve webové aplikaci <em>Metaman</em> (zkratka pro Metadata Manažer) sloužící ke správě <abbr title="Security Assertion Markup Language">SAML</abbr> metadat pro federace identit spravované českou národní sítí pro vědu a výzkum <stron>CESNET</strong>.',
+    'introduction' => 'Vítejte ve webové aplikaci <em>MetaMan</em> (zkratka pro Metadata Manažer) sloužící ke správě <abbr title="Security Assertion Markup Language">SAML</abbr> metadat pro federace identit spravované českou národní sítí pro vědu a výzkum <stron>CESNET</strong>.',
     'requested_attributes' => 'Abyste se mohli přihlásit, tato aplikace vyžaduje od poskytovatele identit (IdP) uvolnění následujících atributů:',
-    'cn' => 'běžné jméno (common name)',
+    'cn' => '"celé jméno" [common name]',
     'uniqueid' => 'eduPersonUniqueId',
     'mail' => 'e-mailová adresa',
     'blocked_account' => 'Váš účet byl zablokován.',
