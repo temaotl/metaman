@@ -44,4 +44,5 @@ return [
     'nothing_to_import' => 'Neexistují žádné federace k importování.',
     'refreshed' => '{0} Žádná federace nybal aktualizována.|{1} Jedna federace byla aktualizována.|[2,4] :count federace byly aktualizovány.|[5,*] :count federací bylo aktualizováno.',
     'no_members' => 'Tato federace nemá žádné členské entity.',
+    'metadata_url' => 'URL adresa metadat',
 ];

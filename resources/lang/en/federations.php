@@ -44,4 +44,5 @@ return [
     'nothing_to_import' => 'There are no federations to import.',
     'refreshed' => '{0} No federations have been refreshed.|{1} Just one federation has been refreshed.|[2,*] :count federations have been refreshed.',
     'no_members' => 'This federation has no member entities.',
+    'metadata_url' => 'Metadata URL',
 ];

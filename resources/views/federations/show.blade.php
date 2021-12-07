@@ -44,8 +44,18 @@
                         </code>
                     </dd>
                 </div>
+                <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm text-gray-500">
+                        {{ __('federations.metadata_url') }}
+                    </dt>
+                    <dd class="sm:col-span-2">
+                        <a href="{{ config('git.metadata_base_url') }}/{{ $federation->xml_id }}">
+                            <code class="text-sm text-blue-500">{{ config('git.metadata_base_url') }}/{{ $federation->xml_id }}</code>
+                        </a>
+                    </dd>
+                </div>
                 @can('do-everything')
-                    <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm text-gray-500">
                             {{ __('federations.tagfile') }}
                         </dt>
@@ -55,7 +65,7 @@
                             </code>
                         </dd>
                     </div>
-                    <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm text-gray-500">
                             {{ __('federations.cfgfile') }}
                         </dt>
@@ -65,7 +75,7 @@
                             </code>
                         </dd>
                     </div>
-                    <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm text-gray-500">
                             {{ __('federations.filters') }}
                         </dt>
