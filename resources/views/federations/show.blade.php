@@ -52,8 +52,8 @@
                         <ul>
                             @foreach (explode(', ', $federation->filters) as $filter)
                                 <li>
-                                    <a class=" text-blue-500" href="{{ config('git.metadata_base_url') }}/{{ $filter }}">
-                                        <code class="text-sm">{{ config('git.metadata_base_url') }}/{{ $filter }}</code>
+                                    <a class="font-mono text-sm text-blue-500" href="{{ config('git.metadata_base_url') }}/{{ $filter }}">
+                                        {{ config('git.metadata_base_url') }}/{{ $filter }}
                                     </a>
                                 </li>
                             @endforeach
