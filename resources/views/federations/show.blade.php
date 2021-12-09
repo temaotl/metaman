@@ -49,9 +49,15 @@
                         {{ __('federations.metadata_url') }}
                     </dt>
                     <dd class="sm:col-span-2">
-                        <a href="{{ config('git.metadata_base_url') }}/{{ $federation->xml_id }}">
-                            <code class="text-sm text-blue-500">{{ config('git.metadata_base_url') }}/{{ $federation->xml_id }}</code>
-                        </a>
+                        <ul>
+                            @foreach (explode(', ', $federation->filters) as $filter)
+                                <li>
+                                    <a class=" text-blue-500" href="{{ config('git.metadata_base_url') }}/{{ $filter }}">
+                                        <code class="text-sm">{{ config('git.metadata_base_url') }}/{{ $filter }}</code>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </dd>
                 </div>
                 @can('do-everything')
