@@ -1,7 +1,5 @@
 module.exports = {
-  purge: [
-    './resources/**/*.blade.php',
-  ],
+  content: ["./resources/**/*.blade.php",],
   darkMode: 'media', // or 'media' or 'class'
   theme: {
     fontFamily: {
