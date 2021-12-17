@@ -172,10 +172,8 @@ class EntityController extends Controller
      * @param  \App\Models\Entity  $entity
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(Entity $entity)
     {
-        $entity = Entity::withTrashed()->findOrFail($id);
-
         $this->authorize('view', $entity);
 
         return view('entities.show', [
@@ -184,10 +182,8 @@ class EntityController extends Controller
         ]);
     }
 
-    public function operators(int $id)
+    public function operators(Entity $entity)
     {
-        $entity = Entity::withTrashed()->findOrFail($id);
-
         $this->authorize('view', $entity);
 
         $operators = $entity->operators()->paginate(10, ['*'], 'operatorsPage');
@@ -204,10 +200,8 @@ class EntityController extends Controller
         ]);
     }
 
-    public function federations(int $id)
+    public function federations(Entity $entity)
     {
-        $entity = Entity::withTrashed()->findOrFail($id);
-
         $this->authorize('view', $entity);
 
         $federations = $entity->federations;
@@ -246,10 +240,8 @@ class EntityController extends Controller
      * @param  \App\Models\Entity  $entity
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, Entity $entity)
     {
-        $entity = Entity::withTrashed()->findOrFail($id);
-
         switch(request('action'))
         {
             case 'update':
@@ -573,10 +565,8 @@ class EntityController extends Controller
         }
     }
 
-    public function join(JoinFederation $request, int $id)
+    public function join(JoinFederation $request, Entity $entity)
     {
-        $entity = Entity::withTrashed()->findOrFail($id);
-
         $this->authorize('update', $entity);
 
         if(empty(request('federation')))
@@ -600,10 +590,8 @@ class EntityController extends Controller
             ]));
     }
 
-    public function leave(Request $request, int $id)
+    public function leave(Request $request, Entity $entity)
     {
-        $entity = Entity::withTrashed()->findOrFail($id);
-
         $this->authorize('update', $entity);
 
         if(empty(request('federations')))
@@ -634,13 +622,11 @@ class EntityController extends Controller
      * @param  \App\Models\Entity  $entity
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(Entity $entity)
     {
-        $entity = Entity::withTrashed()->findOrFail($id);
-
         $this->authorize('forceDelete', $entity);
 
-        $name = $entity->name_en;
+        $name = $entity->name_en ?? $entity->entityid;
         $entity->forceDelete();
 
         $admins = User::activeAdmins()->select('id', 'email')->get();

@@ -114,10 +114,8 @@ class FederationController extends Controller
      * @param  \App\Models\Federation  $federation
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(Federation $federation)
     {
-        $federation = Federation::withTrashed()->findOrFail($id);
-
         $this->authorize('view', $federation);
 
         return view('federations.show', [
@@ -125,10 +123,8 @@ class FederationController extends Controller
         ]);
     }
 
-    public function operators(int $id)
+    public function operators(Federation $federation)
     {
-        $federation = Federation::withTrashed()->findOrFail($id)->load('operators');
-
         $this->authorize('view', $federation);
 
         $operators = $federation->operators()->paginate(10, ['*'], 'operatorsPage');
@@ -145,10 +141,8 @@ class FederationController extends Controller
         ]);
     }
 
-    public function entities(int $id)
+    public function entities(Federation $federation)
     {
-        $federation = Federation::withTrashed()->findOrFail($id)->load('entities');
-
         $this->authorize('view', $federation);
 
         $members = $federation->entities()->paginate(10, ['*'], 'membersPage');
@@ -165,13 +159,11 @@ class FederationController extends Controller
         ]);
     }
 
-    public function requests(int $id)
+    public function requests(Federation $federation)
     {
-        $federation = Federation::withTrashed()->findOrFail($id);
-
         $this->authorize('update', $federation);
 
-        $joins = Membership::where('federation_id', $id)
+        $joins = Membership::where('federation_id', $federation->id)
             ->whereApproved(false)
             ->get();
 
@@ -203,10 +195,8 @@ class FederationController extends Controller
      * @param  \App\Models\Federation  $federation
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateFederation $request, int $id)
+    public function update(UpdateFederation $request, Federation $federation)
     {
-        $federation = Federation::withTrashed()->findOrFail($id);
-
         switch(request('action'))
         {
             case 'cancel':
@@ -427,10 +417,8 @@ class FederationController extends Controller
      * @param  \App\Models\Federation  $federation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(Federation $federation)
     {
-        $federation = Federation::onlyTrashed()->findOrFail($id);
-
         $this->authorize('delete', $federation);
 
         $name = $federation->name;

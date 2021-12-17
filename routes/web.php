@@ -56,20 +56,26 @@ Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashbo
 Route::get('federations/import', [FederationController::class, 'unknown'])->name('federations.unknown');
 Route::post('federations/import', [FederationController::class, 'import'])->name('federations.import');
 Route::get('federations/refresh', [FederationController::class, 'refresh'])->name('federations.refresh');
-Route::get('federations/{id}/operators', [FederationController::class, 'operators'])->name('federations.operators');
-Route::get('federations/{id}/entities', [FederationController::class, 'entities'])->name('federations.entities');
-Route::get('federations/{id}/requests', [FederationController::class, 'requests'])->name('federations.requests');
-Route::post('federations/{id}/request', [FederationController::class, 'request'])->name('federations.request');
+Route::get('federations/{federation}/operators', [FederationController::class, 'operators'])->name('federations.operators')->withTrashed();
+Route::get('federations/{federation}/entities', [FederationController::class, 'entities'])->name('federations.entities')->withTrashed();
+Route::get('federations/{federation}/requests', [FederationController::class, 'requests'])->name('federations.requests')->withTrashed();
+Route::post('federations/{federation}/request', [FederationController::class, 'request'])->name('federations.request');
 Route::resource('federations', FederationController::class);
+Route::get('federations/{federation}', [FederationController::class, 'show'])->name('federations.show')->withTrashed();
+Route::match(['put', 'patch'], 'federations/{federation}', [FederationController::class, 'update'])->name('federations.update')->withTrashed();
+Route::delete('federations/{federation}', [FederationController::class, 'destroy'])->name('federations.destroy')->withTrashed();
 
 Route::get('entities/import', [EntityController::class, 'unknown'])->name('entities.unknown');
 Route::post('entities/import', [EntityController::class, 'import'])->name('entities.import');
 Route::get('entities/refresh', [EntityController::class, 'refresh'])->name('entities.refresh');
-Route::get('entities/{id}/operators', [EntityController::class, 'operators'])->name('entities.operators');
-Route::get('entities/{id}/federations', [EntityController::class, 'federations'])->name('entities.federations');
-Route::post('entities/{id}/join', [EntityController::class, 'join'])->name('entities.join');
-Route::post('entities/{id}/leave', [EntityController::class, 'leave'])->name('entities.leave');
+Route::get('entities/{entity}/operators', [EntityController::class, 'operators'])->name('entities.operators')->withTrashed();
+Route::get('entities/{entity}/federations', [EntityController::class, 'federations'])->name('entities.federations')->withTrashed();
+Route::post('entities/{entity}/join', [EntityController::class, 'join'])->name('entities.join');
+Route::post('entities/{entity}/leave', [EntityController::class, 'leave'])->name('entities.leave');
 Route::resource('entities', EntityController::class);
+Route::get('entities/{entity}', [EntityController::class, 'show'])->name('entities.show')->withTrashed();
+Route::match(['put', 'patch'], 'entities/{entity}', [EntityController::class, 'update'])->name('entities.update')->withTrashed();
+Route::delete('entities/{entity}', [EntityController::class, 'destroy'])->name('entities.destroy')->withTrashed();
 
 Route::get('categories/import', [CategoryController::class, 'unknown'])->name('categories.unknown');
 Route::post('categories/import', [CategoryController::class, 'import'])->name('categories.import');
