@@ -10,4 +10,6 @@ return [
     'blocked_info' => 'For more information and possible unblocking your account, contact us at',
     'contact' => 'In case of any issues or questions, do not hesitate to contact us at',
     'switch_language' => 'Přepnout do češtiny',
+    'pii-link' => 'https://www.cesnet.cz/personal-data-processing/?lang=en',
+    'pii-text' => 'Personal data processing',
 ];

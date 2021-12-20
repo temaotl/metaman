@@ -69,6 +69,7 @@
                 <hr class="hidden">
                 <p class="text-center opacity-75">
                     <small class="text-sm">
+                        <a class="text-blue-500 hover:underline" href="{{ __('welcome.pii-link') }}">{{ __('welcome.pii-text') }}</a><br>
                         &copy; 2019&dash;{{ date('Y') }} <a class="text-blue-500 hover:underline" href="https://www.cesnet.cz">CESNET</a>, 
                         <a class="text-blue-500 hover:underline" href="mailto:info@eduid.cz">info@eduid.cz</a>.
                     </small>
