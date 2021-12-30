@@ -309,7 +309,7 @@ class EntityControllerTest extends TestCase
             ->followingRedirects()
             ->actingAs($user)
             ->post(route('entities.store', [
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
+                'url' => 'https://ratamahatta.cz/whoami.cesnet.cz.xml',
                 'federation' => $federation->id,
                 'explanation' => $this->faker->catchPhrase(),
             ]))
@@ -363,7 +363,7 @@ class EntityControllerTest extends TestCase
             ->actingAs($user)
             ->patch(route('entities.update', $entity), [
                 'action' => 'update',
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
+                'url' => 'https://ratamahatta.cz/whoami.cesnet.cz.xml',
             ])
             ->assertSeeText(__('entities.entity_updated'));
 
@@ -687,7 +687,7 @@ class EntityControllerTest extends TestCase
             ->followingRedirects()
             ->actingAs($admin)
             ->post(route('entities.store'), [
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
+                'url' => 'https://ratamahatta.cz/whoami.cesnet.cz.xml',
                 'federation' => $federation->id,
                 'explanation' => $this->faker->catchPhrase(),
             ])
@@ -740,7 +740,7 @@ class EntityControllerTest extends TestCase
             ->actingAs($admin)
             ->patch(route('entities.update', $entity), [
                 'action' => 'update',
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
+                'url' => 'https://ratamahatta.cz/whoami.cesnet.cz.xml',
             ])
             ->assertSeeText(__('entities.entity_updated'));
 
