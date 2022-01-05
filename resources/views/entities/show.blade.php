@@ -31,18 +31,57 @@
                     <dd class="sm:col-span-2">{{ $entity->kind }}</dd>
                 </div>
                 <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm text-gray-500">{{ __('common.entity_categories') }}</dt>
+                    <dt class="text-sm text-gray-500">{{ __('common.entity_categories_selfasserted') }}</dt>
                     <dd class="sm:col-span-2">
-                        <x-pils.rs category="{{ $entity->rs }}"/>
-                        <x-pils.cocov1 category="{{ $entity->cocov1 }}"/>
-                        <x-pils.sirtfi category="{{ $entity->sirtfi }}"/>
-                        <x-pils.hfd category="{{ $entity->hfd }}"/>
-                        @if (!$entity->rs && !$entity->cocov1 && !$entity->sirtfi && !$entity->hfd)
-                            {{ __('common.no_categories') }}
-                        @endif
+                        <x-pil linethrough="{{ !$entity->cocov1 }}">{{ __('common.cocov1') }}</x-pil>
+                        <x-pil linethrough="{{ !$entity->sirtfi }}">{{ __('common.sirtfi') }}</x-pil>
                     </dd>
                 </div>
-                <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div  class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm text-gray-500">{{ __('common.entity_categories_controlled') }}</dt>
+                    <dd class="sm:col-span-2">
+                        @can('do-everything')
+                            @unless ($entity->trashed())
+                                @if ($entity->active && $entity->approved && $entity->type === 'sp')
+                                    <form class="inline-block" id="rs" action="{{ route('entities.update', $entity) }}" method="POST">
+                                        @csrf
+                                        @method('patch')
+                                        <input type="hidden" name="action" value="rs">
+                                        <input type="checkbox" name="rsbox" id="rsbox" class="open-modal" data-target="rs"
+                                            @if ($entity->rs)
+                                                checked
+                                            @endif
+                                            onchange="this.form.submit()"
+                                        >
+                                    </form>
+                                    <x-modals.confirm :model="$entity" form="rs"/>
+                                    <x-pil linethrough="{{ !$entity->rs }}">{{ __('common.rs') }}</x-pil>
+                                @endif
+                                @if ($entity->active && $entity->approved && $entity->type === 'idp')
+                                    <form class="inline-block" id="hfd" action="{{ route('entities.update', $entity) }}" method="POST">
+                                        @csrf
+                                        @method('patch')
+                                        <input type="hidden" name="action" value="hfd">
+                                        <input type="checkbox" name="hfdbox" id="hfdbox" class="open-modal" data-target="hfd"
+                                            @if ($entity->hfd)
+                                                checked
+                                            @endif
+                                            onchange="this.form.submit()">
+                                    </form>
+                                    <x-modals.confirm :model="$entity" form="hfd"/>
+                                    <x-pil linethrough="{{ !$entity->hfd }}">{{ __('common.hfd') }}</x-pil>
+                                @endif
+                            @endunless
+                        @else
+                            @if ($entity->type === 'sp')
+                                <x-pil linethrough="{{ !$entity->rs }}">{{ __('common.rs') }}</x-pil>
+                            @elseif ($entity->type === 'idp')
+                                <x-pil linethrough="{{ !$entity->hfd }}">{{ __('common.hfd') }}</x-pil>
+                            @endif
+                        @endcan
+                    </dd>
+                </div>
+                <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm text-gray-500">{{ __('common.edugain_membership') }}</dt>
                     <dd class="sm:col-span-2">
                         @can('update', $entity)
@@ -71,30 +110,8 @@
                     </dd>
                 </div>
                 @can('do-everything')
-                    @unless ($entity->trashed())
-                        @if ($entity->active && $entity->approved && $entity->type === 'idp')
-                            <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm text-gray-500">{{ __('common.hfd') }}</dt>
-                                <dd class="sm:col-span-2">
-                                    <form class="inline-block" id="hfd" action="{{ route('entities.update', $entity) }}" method="POST">
-                                        @csrf
-                                        @method('patch')
-                                        <input type="hidden" name="action" value="hfd">
-                                        <input type="checkbox" name="hfdbox" id="hfdbox" class="open-modal" data-target="hfd"
-                                            @if ($entity->hfd)
-                                                checked
-                                            @endif
-                                            onchange="this.form.submit()">
-                                    </form>
-                                    <x-modals.confirm :model="$entity" form="hfd"/>
-                                </dd>
-                            </div>
-                        @endif
-                    @endunless
-                @endcan
-                @can('do-everything')
                     @if ($entity->type === 'idp')
-                        <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm text-gray-500">
                                 {{ __('common.eduidcz_category') }}
                             </dt>

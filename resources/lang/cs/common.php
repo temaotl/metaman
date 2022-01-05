@@ -118,6 +118,12 @@ return [
     'hfd' => 'Hide from Discovery',
     'update' => 'Aktualizovat',
     'entity_categories' => 'Kategorie entit',
+    'entity_categories_selfasserted' => 'Kategorie entit (Obecné)',
+    'entity_categories_controlled' => 'Kategorie entit (Kontrolované)',
     'eduidcz_category' => 'Kategorie eduID.cz',
     'no_categories' => 'Neexistují žádné kategorie',
+    'delete_rs' => 'Smazat R&S?',
+    'delete_rs_body' => 'Opravdu chcete smazat R&S entitě :name?',
+    'add_rs' => 'Přidat R&S?',
+    'add_rs_body' => 'Opravdu chcete přidat R&S entitě :name?',
 ];

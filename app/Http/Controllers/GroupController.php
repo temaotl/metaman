@@ -190,6 +190,11 @@ class GroupController extends Controller
                 continue;
             }
 
+            if(preg_match('/^' . config('git.ec_rs') . '$/', $file))
+            {
+                continue;
+            }
+
             if(preg_match('/\.tag$/', $file))
             {
                 $tagfiles[] = $file;

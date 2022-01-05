@@ -118,6 +118,12 @@ return [
     'hfd' => 'Hide from Discovery',
     'update' => 'Update',
     'entity_categories' => 'Entity Categories',
+    'entity_categories_selfasserted' => 'Entity Categories (Self-asserted)',
+    'entity_categories_controlled' => 'Entity Categories (Controlled)',
     'eduidcz_category' => 'eduID.cz Category',
     'no_categories' => 'No categories',
+    'delete_rs' => 'Delete R&S?',
+    'delete_rs_body' => 'Would you like to delete R&S from :name?',
+    'add_rs' => 'Add R&S?',
+    'add_rs_body' => 'Would you like to add R&S to :name?',
 ];

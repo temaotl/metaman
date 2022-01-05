@@ -50,6 +50,12 @@ class Confirm extends Component
                     : __('common.export_to_edugain');
                 break;
 
+            case 'rs':
+                return $this->model->rs
+                    ? __('common.delete_rs')
+                    : __('common.add_rs');
+                break;
+
             case 'status':
                 return $this->model->active
                     ? __('common.deactivate_model', [
@@ -120,6 +126,16 @@ class Confirm extends Component
                         'name' => $this->model->name_en,
                     ])
                     : __('common.export_to_edugain_body', [
+                        'name' => $this->model->name_en,
+                    ]);
+                break;
+
+            case 'rs':
+                return $this->model->rs
+                    ? __('common.delete_rs_body', [
+                        'name' => $this->model->name_en,
+                    ])
+                    : __('common.add_rs_body', [
                         'name' => $this->model->name_en,
                     ]);
                 break;
@@ -201,6 +217,12 @@ class Confirm extends Component
                 return $this->model->edugain
                     ? __('common.drop')
                     : __('common.export');
+                break;
+
+            case 'rs':
+                return $this->model->rs
+                    ? __('common.delete')
+                    : __('common.add');
                 break;
 
             case 'status':

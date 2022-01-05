@@ -155,17 +155,6 @@ trait ValidatorTrait
                 }
             }
         }
-        else
-        {
-            $values = $xpath->query('/md:EntityDescriptor/md:Extensions/mdattr:EntityAttributes/saml:Attribute[@Name="http://macedir.org/entity-category"]/saml:AttributeValue');
-            foreach($values as $value)
-            {
-                if(strcmp($value->nodeValue, 'http://refeds.org/category/research-and-scholarship') === 0)
-                {
-                    return true;
-                }
-            }
-        }
 
         return false;
     }

@@ -90,4 +90,8 @@ return [
     'entity_deleted_from_hfd_body' => ':name is not being Hidden from Discovery anymore.',
     'entity_deleted_from_federation_subject' => 'Entity Deleted from a Federation',
     'entity_deleted_from_federation_body' => ':name has been deleted from :federation.',
+    'entity_added_to_rs_subject' => 'Entity added to R&S',
+    'entity_added_to_rs_body' => ':name is now member of R&S entity category.',
+    'entity_deleted_from_rs_subject' => 'Entity deleted from R&S',
+    'entity_deleted_from_rs_body' => ':name is not member of R&S entity category anymore.',
 ];

@@ -25,4 +25,6 @@ return [
     'nothing_to_import' => 'There are no categories to import.',
     'imported' => '{0} No category has been imported.|{1} One category has been imported and needs to be activated.|[2,*] :count categories have been imported and need to be activated.',
     'no_description' => 'No description',
+    'rs_controlled_for_sps_only' => 'R&S category is controlled only for Service Providers.',
+    'hfd_controlled_for_idps_only' => 'HfD category is controlled only for Identity Providers.',
 ];

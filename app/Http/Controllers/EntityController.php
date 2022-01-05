@@ -9,11 +9,13 @@ use App\Jobs\GitAddMember;
 use App\Jobs\GitAddToCategory;
 use App\Jobs\GitAddToEdugain;
 use App\Jobs\GitAddToHfd;
+use App\Jobs\GitAddToRs;
 use App\Jobs\GitDeleteEntity;
 use App\Jobs\GitDeleteFromCategory;
 use App\Jobs\GitDeleteFromEdugain;
 use App\Jobs\GitDeleteFromFederation;
 use App\Jobs\GitDeleteFromHfd;
+use App\Jobs\GitDeleteFromRs;
 use App\Jobs\GitUpdateEntity;
 use App\Models\Category;
 use App\Models\Entity;
@@ -498,6 +500,38 @@ class EntityController extends Controller
 
                 break;
 
+            case 'rs':
+                $this->authorize('do-everything');
+
+                if($entity->type !== 'sp')
+                {
+                    return redirect()
+                        ->back()
+                        ->with('status', __('categories.rs_controlled_for_sps_only'));
+                }
+
+                $entity->rs = $entity->rs ? false : true;
+                $entity->update();
+
+                $status = $entity->rs ? 'rs' : 'no_rs';
+                $color = $entity->rs ? 'green' : 'red';
+
+                if($entity->rs)
+                {
+                    GitAddToRs::dispatch($entity, Auth::user());
+                }
+                else
+                {
+                    GitDeleteFromRs::dispatch($entity, Auth::user());
+                }
+
+                return redirect()
+                    ->back()
+                    ->with('status', __("entities.$status"))
+                    ->with('color', $color);
+
+                break;
+
             case 'category':
                 $this->authorize('do-everything');
 
@@ -537,6 +571,13 @@ class EntityController extends Controller
 
             case 'hfd':
                 $this->authorize('do-everything');
+
+                if($entity->type !== 'idp')
+                {
+                    return redirect()
+                        ->back()
+                        ->with('status', __('categories.hfd_controlled_for_idps_only'));
+                }
 
                 $entity->hfd = $entity->hfd ? false : true;
                 $entity->update();
@@ -751,6 +792,7 @@ class EntityController extends Controller
 
             $edugain = false;
             $hfd = false;
+            $rs = $entity['rs'];
             foreach($tagfiles as $tagfile)
             {
                 $content = Storage::get($tagfile);
@@ -769,12 +811,18 @@ class EntityController extends Controller
                         $hfd = true;
                     }
 
+                    if(strcmp($tagfile, config('git.ec_rs')) === 0)
+                    {
+                        $rs = true;
+                    }
+
                     $federation = Federation::whereTagfile($tagfile)->first();
 
-                    DB::transaction(function() use($entity, $federation, $edugain, $hfd) {
+                    DB::transaction(function() use($entity, $federation, $edugain, $hfd, $rs) {
                         $entity = Entity::updateOrCreate($entity, [
                             'edugain' => $edugain,
                             'hfd' => $hfd,
+                            'rs' => $rs,
                         ]);
                         $entity->federations()->attach($federation, [
                             'requested_by' => Auth::id(),
@@ -837,16 +885,34 @@ class EntityController extends Controller
                     $entity->update(['edugain' => false]);
                 }
 
-                $hfd = Storage::get(config('git.hfd'));
-                $pattern = preg_quote($refreshed_entity['entityid'], '/');
-                $pattern = "/^$pattern\$/m";
-                if(preg_match_all($pattern, $hfd))
+                if($entity->type === 'idp')
                 {
-                    $entity->update(['hfd' => true]);
+                    $hfd = Storage::get(config('git.hfd'));
+                    $pattern = preg_quote($refreshed_entity['entityid'], '/');
+                    $pattern = "/^$pattern\$/m";
+                    if(preg_match_all($pattern, $hfd))
+                    {
+                        $entity->update(['hfd' => true]);
+                    }
+                    else
+                    {
+                        $entity->update(['hfd' => false]);
+                    }
                 }
-                else
+
+                if($entity->type === 'sp')
                 {
-                    $entity->update(['hfd' => false]);
+                    $rs = Storage::get(config('git.ec_rs'));
+                    $pattern = preg_quote($refreshed_entity['entityid'], '/');
+                    $pattern = "/^$pattern\$/m";
+                    if(preg_match_all($pattern, $rs))
+                    {
+                        $entity->update(['rs' => true]);
+                    }
+                    else
+                    {
+                        $entity->update(['rs' => false]);
+                    }
                 }
 
                 if($entity->wasChanged())

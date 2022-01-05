@@ -90,4 +90,8 @@ return [
     'entity_deleted_from_hfd_body' => 'Entita :name již není součástí Hide from Discovery.',
     'entity_deleted_from_federation_subject' => 'Odstranění entity z federace',
     'entity_deleted_from_federation_body' => 'Entita :name byla úspěšně odstraněna z federace :federation.',
+    'entity_added_to_rs_subject' => 'Entity součástí R&S',
+    'entity_added_to_rs_body' => 'Entita :name je nyní součástí kategorie entit R&S.',
+    'entity_deleted_from_rs_subject' => 'Entita není součástí R&S',
+    'entity_deleted_from_rs_body' => 'Entita :name již není součástí kategorie entit R&S.',
 ];

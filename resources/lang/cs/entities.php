@@ -59,4 +59,6 @@ return [
     'hfd' => 'Entita má nyní nastaveno Hide from Discovery.',
     'no_hfd' => 'Entita již nemá nastaveno Hide from Discovery.',
     'no_metadata' => 'Zvolený soubor nebo URL adresa neobsahuje žádná metadata protokolu SAML.',
+    'rs' => 'Entita je nyní členem kategorie entit R&S',
+    'no_rs' => 'Entita již není členem kategorie entit R&S.',
 ];

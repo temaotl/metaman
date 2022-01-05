@@ -59,4 +59,6 @@ return [
     'hfd' => 'Entity is now Hidden from Discovery.',
     'no_hfd' => 'Entity is not Hidden from Discovery anymore.',
     'no_metadata' => 'The supplied file or URL does not contain any SAML metadata.',
+    'rs' => 'Entity is now a member of R&S entity category.',
+    'no_rs' => 'Entity is no longer a member of R&S entity category.',
 ];

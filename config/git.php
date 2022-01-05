@@ -12,4 +12,6 @@ return [
     'edugain_tag' => env('GIT_EDUGAIN_TAG'),
     'edugain_cfg' => env('GIT_EDUGAIN_CFG'),
     'hfd' => env('GIT_HFD_TAG'),
+    'ec_rs' => env('GIT_EC_RS'),
+    'ec_esi' => env('GIT_EC_ESI'),
 ];

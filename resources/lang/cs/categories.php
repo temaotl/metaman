@@ -25,4 +25,6 @@ return [
     'nothing_to_import' => 'Neexistují žádné skupiny k importování.',
     'imported' => '{0} Nebyla importována žádná kategorie.|{1} Jedna kategorie byla importována a potřebuje být aktivována.|[2,4] :count kategorie byly importovány a potřebují být aktivovány|[5,*] :count kategorií bylo importováno a potřebuje být aktivováno.',
     'no_description' => 'Popis neexistuje',
+    'rs_controlled_for_sps_only' => 'Kategorie entit R&S je kontrolovaná jen pro poskytovatele služeb (SP).',
+    'hfd_controlled_for_idps_only' => 'Kategorie entit HfD je kontrolovaná jen pro poskytovatele identit (IdP).',
 ];
