@@ -61,4 +61,6 @@ return [
     'no_metadata' => 'The supplied file or URL does not contain any SAML metadata.',
     'rs' => 'Entity is now a member of R&S entity category.',
     'no_rs' => 'Entity is no longer a member of R&S entity category.',
+    'ask_rs' => 'Ask R&S',
+    'rs_asked' => 'R&S application has been sent. Wait for an approval.',
 ];

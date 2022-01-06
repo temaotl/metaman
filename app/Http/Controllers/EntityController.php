@@ -17,6 +17,7 @@ use App\Jobs\GitDeleteFromFederation;
 use App\Jobs\GitDeleteFromHfd;
 use App\Jobs\GitDeleteFromRs;
 use App\Jobs\GitUpdateEntity;
+use App\Mail\AskRs;
 use App\Models\Category;
 use App\Models\Entity;
 use App\Models\Federation;
@@ -37,6 +38,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
@@ -924,5 +926,17 @@ class EntityController extends Controller
 
         return redirect('entities')
             ->with('status', trans_choice('entities.refreshed', $refreshed));
+    }
+
+    public function rs(Entity $entity)
+    {
+        $this->authorize('update', $entity);
+
+        Mail::to(config('mail.admin.address'))
+            ->send(new AskRs($entity));
+
+        return redirect()
+            ->back()
+            ->with('status', __('entities.rs_asked'));
     }
 }

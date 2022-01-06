@@ -72,6 +72,7 @@ Route::get('entities/{entity}/operators', [EntityController::class, 'operators']
 Route::get('entities/{entity}/federations', [EntityController::class, 'federations'])->name('entities.federations')->withTrashed();
 Route::post('entities/{entity}/join', [EntityController::class, 'join'])->name('entities.join');
 Route::post('entities/{entity}/leave', [EntityController::class, 'leave'])->name('entities.leave');
+Route::post('entities/{entity}/rs', [EntityController::class, 'rs'])->name('entities.rs');
 Route::resource('entities', EntityController::class);
 Route::get('entities/{entity}', [EntityController::class, 'show'])->name('entities.show')->withTrashed();
 Route::match(['put', 'patch'], 'entities/{entity}', [EntityController::class, 'update'])->name('entities.update')->withTrashed();

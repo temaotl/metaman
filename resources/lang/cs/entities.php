@@ -61,4 +61,6 @@ return [
     'no_metadata' => 'Zvolený soubor nebo URL adresa neobsahuje žádná metadata protokolu SAML.',
     'rs' => 'Entita je nyní členem kategorie entit R&S',
     'no_rs' => 'Entita již není členem kategorie entit R&S.',
+    'ask_rs' => 'Požádat o R&S',
+    'rs_asked' => 'Žádost o členství v R&S odeslána. Počkejte na schválení.',
 ];
