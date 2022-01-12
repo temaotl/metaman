@@ -75,12 +75,14 @@
                         @else
                             @if ($entity->type === 'sp')
                                 <x-pil linethrough="{{ !$entity->rs }}">{{ __('common.rs') }}</x-pil>
-                                @can('update', $entity)
-                                    <form class="inline-block" id="askrs" action="{{ route('entities.rs', $entity) }}" method="POST">
-                                        @csrf
-                                        <x-button color="gray">{{ __('entities.ask_rs') }}</x-button>
-                                    </form>
-                                @endcan
+                                @if ($entity->federations()->where('xml_name', 'https://eduid.cz/metadata')->count())
+                                    @can('update', $entity)
+                                        <form class="inline-block" id="askrs" action="{{ route('entities.rs', $entity) }}" method="POST">
+                                            @csrf
+                                            <x-button color="gray">{{ __('entities.ask_rs') }}</x-button>
+                                        </form>
+                                    @endcan
+                                @endif
                             @elseif ($entity->type === 'idp')
                                 <x-pil linethrough="{{ !$entity->hfd }}">{{ __('common.hfd') }}</x-pil>
                             @endif

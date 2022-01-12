@@ -63,4 +63,5 @@ return [
     'no_rs' => 'Entity is no longer a member of R&S entity category.',
     'ask_rs' => 'Ask R&S',
     'rs_asked' => 'R&S application has been sent. Wait for an approval.',
+    'rs_only_for_eduidcz_members' => 'R&S application is available only to eduID.cz members.',
 ];
