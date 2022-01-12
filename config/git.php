@@ -14,5 +14,5 @@ return [
     'hfd' => env('GIT_HFD_TAG'),
     'ec_rs' => env('GIT_EC_RS'),
     'ec_esi' => env('GIT_EC_ESI'),
-    'rs_federation' => env('GIT_RS_FEDERATION'),
+    'rs_federation' => env('GIT_RS_FEDERATION', 'ratamahatta'),
 ];
