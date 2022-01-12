@@ -75,7 +75,7 @@
                         @else
                             @if ($entity->type === 'sp')
                                 <x-pil linethrough="{{ !$entity->rs }}">{{ __('common.rs') }}</x-pil>
-                                @if ($entity->federations()->where('xml_name', 'https://eduid.cz/metadata')->count())
+                                @if ($entity->federations()->where('xml_name', Config::get('git.rs_federation'))->count())
                                     @can('update', $entity)
                                         <form class="inline-block" id="askrs" action="{{ route('entities.rs', $entity) }}" method="POST">
                                             @csrf

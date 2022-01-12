@@ -932,7 +932,7 @@ class EntityController extends Controller
     {
         $this->authorize('update', $entity);
 
-        abort_unless($entity->federations()->where('xml_name', 'https://eduid.cz/metadata')->count(), 403, __('entities.rs_only_for_eduidcz_members'));
+        abort_unless($entity->federations()->where('xml_name', config('git.rs_federation'))->count(), 403, __('entities.rs_only_for_eduidcz_members'));
 
         Mail::to(config('mail.admin.address'))
             ->send(new AskRs($entity));

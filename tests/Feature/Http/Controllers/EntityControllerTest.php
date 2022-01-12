@@ -943,4 +943,50 @@ class EntityControllerTest extends TestCase
         $this->assertEquals(route('home'), url()->current());
     }
 
+    /** @test */
+    public function ask_rs_isnt_shown_for_sp_entities_not_in_rs_federation()
+    {
+        $user = User::factory()->create();
+        $entity = Entity::factory()->create(['type' => 'sp']);
+        $user->entities()->attach($entity);
+
+        $this
+            ->actingAs($user)
+            ->get(route('entities.show', $entity))
+            ->assertDontSeeText(__('entities.ask_rs'));
+
+        $this
+            ->followingRedirects()
+            ->actingAs($user)
+            ->post(route('entities.rs', $entity))
+            ->assertStatus(403)
+            ->assertSeeText(__('entities.rs_only_for_eduidcz_members'));
+    }
+
+    /** @test */
+    public function ask_rs_is_shown_for_sp_entities_in_rs_federation()
+    {
+        $user = User::factory()->create();
+        $entity = Entity::factory()->create(['type' => 'sp']);
+        $user->entities()->attach($entity);
+        $federation = Federation::factory()->create(['xml_name' => config('git.rs_federation')]);
+        $federation->entities()->attach($entity, [
+            'requested_by' => $user->id,
+            'approved_by' => $user->id,
+            'approved' => true,
+            'explanation' => 'Test',
+        ]);
+
+        $this
+            ->actingAs($user)
+            ->get(route('entities.show', $entity))
+            ->assertSeeText(__('entities.ask_rs'));
+
+        $this
+            ->followingRedirects()
+            ->actingAs($user)
+            ->post(route('entities.rs', $entity))
+            ->assertStatus(200)
+            ->assertSeeText(__('entities.rs_asked'));
+    }
 }

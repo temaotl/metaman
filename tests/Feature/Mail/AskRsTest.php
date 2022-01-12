@@ -16,14 +16,14 @@ class AskRsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function email_is_queued_for_eduidcz_member()
+    public function email_is_queued_for_rs_federation_only()
     {
         Mail::fake();
 
         $user = User::factory()->create();
-        $entity = Entity::factory()->create();
+        $entity = Entity::factory()->create(['type' => 'sp']);
         $user->entities()->attach($entity);
-        $federation = Federation::factory()->create(['xml_name' => 'https://eduid.cz/metadata']);
+        $federation = Federation::factory()->create(['xml_name' => config('git.rs_federation')]);
         $federation->entities()->attach($entity, [
             'requested_by' => $user->id,
             'approved_by' => $user->id,
@@ -44,12 +44,12 @@ class AskRsTest extends TestCase
     }
 
     /** @test */
-    public function email_isnt_queued_for_entity_outside_eduidcz()
+    public function email_isnt_queued_for_non_rs_federation()
     {
         Mail::fake();
 
         $user = User::factory()->create();
-        $entity = Entity::factory()->create();
+        $entity = Entity::factory()->create(['type' => 'sp']);
         $user->entities()->attach($entity);
 
         $this
