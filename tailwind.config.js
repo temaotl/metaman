@@ -1,6 +1,6 @@
 module.exports = {
   content: ["./resources/**/*.blade.php",],
-  darkMode: 'media', // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {},
   },
