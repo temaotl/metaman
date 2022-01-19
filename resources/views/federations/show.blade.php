@@ -52,7 +52,7 @@
                         <ul>
                             @foreach (explode(', ', $federation->filters) as $filter)
                                 <li>
-                                    <a class="font-mono text-sm text-blue-500" href="{{ config('git.metadata_base_url') }}/{{ $filter }}">
+                                    <a class="font-mono text-sm text-blue-500" href="{{ config('git.metadata_base_url') }}/{{ $filter }}" target="_blank">
                                         {{ config('git.metadata_base_url') }}/{{ $filter }}
                                     </a>
                                 </li>
