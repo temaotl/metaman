@@ -59,6 +59,16 @@ trait ValidatorTrait
         $dom = new \DOMDocument();
         $dom->loadXML($metadata);
 
+        $result = null;
+        foreach(libxml_get_errors() as $error)
+        {
+            $result .= "Error on line {$error->line}: " . trim($error->message) . ". ";
+        }
+        if(!is_null($result))
+        {
+            $this->error = $result;
+        }
+
         if(!$dom->schemaValidate(dirname(__DIR__) . '/../xsd/saml-schema-metadata-2.0.xsd') or
            !$dom->schemaValidate(dirname(__DIR__) . '/../xsd/sstc-saml-metadata-ui-v1.0.xsd'))
         {

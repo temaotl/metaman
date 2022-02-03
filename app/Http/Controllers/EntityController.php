@@ -115,7 +115,7 @@ class EntityController extends Controller
         {
             return redirect()
                 ->back()
-                ->with('status', __('entities.no_metadata'))
+                ->with('status', __('entities.no_metadata') . ' ' . $result['error'])
                 ->with('color', 'red');
         }
 
