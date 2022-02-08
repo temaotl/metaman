@@ -33,6 +33,7 @@ return [
     'inactive' => 'Neaktivní',
     'description' => 'Popis',
     'approved' => 'Schváleno',
+    'approval_pending' => 'Čeká na schválení',
     'disapproved' => 'Neschváleno',
     'explanation' => 'Zdůvodnění',
     'approve' => 'Schválit',

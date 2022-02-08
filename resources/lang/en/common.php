@@ -33,6 +33,7 @@ return [
     'inactive' => 'Inactive',
     'description' => 'Description',
     'approved' => 'Approved',
+    'approval_pending' => 'Approval pending',
     'disapproved' => 'Disapproved',
     'explanation' => 'Explanation',
     'approve' => 'Approve',
