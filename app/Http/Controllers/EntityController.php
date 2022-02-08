@@ -147,6 +147,7 @@ class EntityController extends Controller
                 });
 
                 $admins = User::activeAdmins()->select('id', 'email')->get();
+                $admins = $admins->merge($federation->operators);
                 Notification::send($admins, new EntityRequested($entity, $federation));
 
                 return redirect('entities')
