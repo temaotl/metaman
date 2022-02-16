@@ -942,4 +942,10 @@ class EntityController extends Controller
             ->back()
             ->with('status', __('entities.rs_asked'));
     }
+
+    public function metadata(Entity $entity)
+    {
+        $this->authorize('view', $entity);
+        return Storage::download($entity->file);
+    }
 }

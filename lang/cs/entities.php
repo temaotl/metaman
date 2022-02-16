@@ -64,4 +64,5 @@ return [
     'ask_rs' => 'Požádat o R&S',
     'rs_asked' => 'Žádost o členství v R&S odeslána. Počkejte na schválení.',
     'rs_only_for_eduidcz_members' => 'Přihláška do R&S je určena pouze pro členy eduID.cz.',
+    'get_metadata' => 'Stáhnout metadata',
 ];
