@@ -58,6 +58,7 @@
                                     <x-pil linethrough="{{ !$entity->rs }}">{{ __('common.rs') }}</x-pil>
                                 @endif
                                 @if ($entity->active && $entity->approved && $entity->type === 'idp')
+                                    <x-pil linethrough="{{ !$entity->rs }}">{{ __('common.rs') }}</x-pil>
                                     <form class="inline-block" id="hfd" action="{{ route('entities.update', $entity) }}" method="POST">
                                         @csrf
                                         @method('patch')
