@@ -25,7 +25,6 @@ class AUserLoginTest extends DuskTestCase
                 ->assertDontSee(__('common.categories'))
                 ->assertDontSee(__('common.groups'))
                 ->assertSee(__('common.my_profile'))
-                ->assertDontSee(__('common.users'))
                 ->assertSee(__('common.logout'))
                 ->assertSee(__('common.dashboard'));
         });
