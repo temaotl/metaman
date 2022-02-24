@@ -18,14 +18,15 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
         "brianium/paratest": "^6.2",
-        "spatie/laravel-ignition": "^1.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/dusk": "^6.15",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/php-code-coverage": "^9.2",
-        "phpunit/phpunit": "^9.5.10"
+        "phpunit/phpunit": "^9.5.10",
+        "spatie/laravel-ignition": "^1.0",
+        "worksome/envy": "^0.3.1"
     },
     "config": {
         "optimize-autoloader": true,
