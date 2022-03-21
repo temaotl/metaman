@@ -60,7 +60,7 @@
                 </ul>
 
                 <p class="pt-6 sm:pt-10 text-center">
-                    <a class="px-6 py-3 block sm:inline bg-blue-500 hover:bg-blue-600 text-blue-50 font-bold rounded shadow hover:shadow-lg" href="{{ route('login') }}">{{ __('common.login') }}</a>
+                    <a class="px-6 py-3 block md:inline-block bg-blue-500 hover:bg-blue-600 text-blue-50 font-bold rounded shadow hover:shadow-lg" href="{{ route('login') }}">{{ __('common.login') }}</a>
                 </p>
             </main>
 
