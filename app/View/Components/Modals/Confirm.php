@@ -59,26 +59,26 @@ class Confirm extends Component
             case 'status':
                 return $this->model->active
                     ? __('common.deactivate_model', [
-                        'name' => $this->model->name ?? $this->model->name_en,
+                        'name' => $this->model->name ?? $this->model->name_en ?? $this->model->entityid,
                     ])
                     : __('common.activate_model', [
-                        'name' => $this->model->name ?? $this->model->name_en,
+                        'name' => $this->model->name ?? $this->model->name_en ?? $this->model->entityid,
                     ]);
                 break;
 
             case 'state':
                 return $this->model->trashed()
                     ? __('common.restore_model', [
-                        'name' => $this->model->name ?? $this->model->name_en,
+                        'name' => $this->model->name ?? $this->model->name_en ?? $this->model->entityid,
                     ])
                     : __('common.delete_model', [
-                        'name' => $this->model->name ?? $this->model->name_en,
+                        'name' => $this->model->name ?? $this->model->name_en ?? $this->model->entityid,
                     ]);
                 break;
 
             case 'destroy':
                 return __('common.destroy_model', [
-                    'name' => $this->model->name ?? $this->model->name_en,
+                    'name' => $this->model->name ?? $this->model->name_en ?? $this->model->entityid,
                 ]);
                 break;
 

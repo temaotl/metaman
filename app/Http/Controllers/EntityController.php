@@ -353,7 +353,7 @@ class EntityController extends Controller
 
                 return redirect()
                     ->route('entities.show', $entity)
-                    ->with('status', __("entities.$status", ['name' => $entity->name_en]))
+                    ->with('status', __("entities.$status", ['name' => $entity->name_en ?? $entity->entityid]))
                     ->with('color', $color);
 
                 break;
@@ -407,7 +407,7 @@ class EntityController extends Controller
 
                 return redirect()
                     ->route('entities.show', $entity)
-                    ->with('status', __("entities.$state", ['name' => $entity->name_en]))
+                    ->with('status', __("entities.$state", ['name' => $entity->name_en ?? $entity->entityid]))
                     ->with('color', $color);
 
                 break;
