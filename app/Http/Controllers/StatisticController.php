@@ -38,7 +38,7 @@ class StatisticController extends Controller
         $sps_cocov1 = $sp->filter(fn ($e) => $e['cocov1'] == 1)->count();
         $sps_sirtfi = $sp->filter(fn ($e) => $e['sirtfi'] == 1)->count();
 
-        return json_encode([
+        return response()->json([
             'federations' => [
                 'all' => $federations
             ],
