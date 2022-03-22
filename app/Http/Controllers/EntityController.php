@@ -948,4 +948,10 @@ class EntityController extends Controller
         $this->authorize('view', $entity);
         return Storage::download($entity->file);
     }
+
+    public function showmetadata(Entity $entity)
+    {
+        $this->authorize('view', $entity);
+        return response()->file(Storage::path($entity->file));
+    }
 }
