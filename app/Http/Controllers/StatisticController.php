@@ -11,7 +11,11 @@ class StatisticController extends Controller
 {
     public function index()
     {
-        $CACHE_TIME = now()->addHour();
+        $cache_time = now()->addHour();
+
+        $CACHE_TIME = Cache::remember('CACHE_TIME', $cache_time, function () use ($cache_time) {
+            return $cache_time;
+        });
 
         $federations = Cache::remember('federations', $CACHE_TIME, function () {
             return Federation::count();
@@ -47,7 +51,7 @@ class StatisticController extends Controller
         $sps_cocov1 = $sp->filter(fn ($e) => $e['cocov1'] == 1)->count();
         $sps_sirtfi = $sp->filter(fn ($e) => $e['sirtfi'] == 1)->count();
 
-        return response()->json([
+        return json_encode([
             'next_refresh_at' => $CACHE_TIME . ' (UTC)',
             'federations' => [
                 'all' => $federations
