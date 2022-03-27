@@ -147,6 +147,15 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => 'name',
+        'uniqueid' => 'UniqueID',
+        'email' => 'email address',
+        'description' => 'description',
+        'tagfile' => 'file',
+        'federation' => 'federation',
+        'explanation' => 'explanation',
+        'file' => 'file',
+    ],
 
 ];
