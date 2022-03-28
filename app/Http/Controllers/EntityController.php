@@ -952,6 +952,6 @@ class EntityController extends Controller
     public function showmetadata(Entity $entity)
     {
         $this->authorize('view', $entity);
-        return response()->file(Storage::path($entity->file));
+        return response()->file(Storage::path($entity->file), ['Content-Type' => 'text/xml']);
     }
 }
