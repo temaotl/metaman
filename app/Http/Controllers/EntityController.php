@@ -868,60 +868,60 @@ class EntityController extends Controller
         $refreshed = 0;
         foreach($xmlfiles as $xmlfile)
         {
-            if(in_array($xmlfile, $entities))
+            if(! in_array($xmlfile, $entities)) continue;
+
+            $metadata = Storage::get($xmlfile);
+            $refreshed_entity = json_decode($this->parseMetadata($metadata), true);
+            unset($refreshed_entity['rs']);
+
+            $entity = Entity::whereFile($xmlfile)->first();
+            $entity->update($refreshed_entity);
+
+            $edugain = Storage::get(config('git.edugain_tag'));
+            $pattern = preg_quote($refreshed_entity['entityid'], '/');
+            $pattern = "/^$pattern\$/m";
+            if(preg_match_all($pattern, $edugain))
             {
-                $metadata = Storage::get($xmlfile);
-                $refreshed_entity = json_decode($this->parseMetadata($metadata), true);
+                $entity->update(['edugain' => true]);
+            }
+            else
+            {
+                $entity->update(['edugain' => false]);
+            }
 
-                $entity = Entity::whereFile($xmlfile)->first();
-                $entity->update($refreshed_entity);
-
-                $edugain = Storage::get(config('git.edugain_tag'));
+            if($entity->type === 'idp')
+            {
+                $hfd = Storage::get(config('git.hfd'));
                 $pattern = preg_quote($refreshed_entity['entityid'], '/');
                 $pattern = "/^$pattern\$/m";
-                if(preg_match_all($pattern, $edugain))
+                if(preg_match_all($pattern, $hfd))
                 {
-                    $entity->update(['edugain' => true]);
+                    $entity->update(['hfd' => true]);
                 }
                 else
                 {
-                    $entity->update(['edugain' => false]);
+                    $entity->update(['hfd' => false]);
                 }
+            }
 
-                if($entity->type === 'idp')
+            if($entity->type === 'sp')
+            {
+                $rs = Storage::get(config('git.ec_rs'));
+                $pattern = preg_quote($refreshed_entity['entityid'], '/');
+                $pattern = "/^$pattern\$/m";
+                if(preg_match_all($pattern, $rs))
                 {
-                    $hfd = Storage::get(config('git.hfd'));
-                    $pattern = preg_quote($refreshed_entity['entityid'], '/');
-                    $pattern = "/^$pattern\$/m";
-                    if(preg_match_all($pattern, $hfd))
-                    {
-                        $entity->update(['hfd' => true]);
-                    }
-                    else
-                    {
-                        $entity->update(['hfd' => false]);
-                    }
+                    $entity->update(['rs' => true]);
                 }
+                else
+                {
+                    $entity->update(['rs' => false]);
+                }
+            }
 
-                if($entity->type === 'sp')
-                {
-                    $rs = Storage::get(config('git.ec_rs'));
-                    $pattern = preg_quote($refreshed_entity['entityid'], '/');
-                    $pattern = "/^$pattern\$/m";
-                    if(preg_match_all($pattern, $rs))
-                    {
-                        $entity->update(['rs' => true]);
-                    }
-                    else
-                    {
-                        $entity->update(['rs' => false]);
-                    }
-                }
-
-                if($entity->wasChanged())
-                {
-                    $refreshed++;
-                }
+            if($entity->wasChanged())
+            {
+                $refreshed++;
             }
         }
 
