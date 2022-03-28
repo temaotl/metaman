@@ -290,31 +290,167 @@ class EntityControllerTest extends TestCase
         $user = User::factory()->create();
         $federation = Federation::factory()->create();
 
-        // unreadable URL address with metadata
-        $this
-            ->followingRedirects()
-            ->actingAs($user)
-            ->post(route('entities.store', [
-                'url' => 'https://ratamahatta.cz/metadata.xml',
-                'federation' => $federation->id,
-                'explanation' => $this->faker->catchPhrase(),
-            ]))
-            ->assertSeeText(__('entities.metadata_couldnt_be_read'));
+        $whoami = '<?xml version="1.0" encoding="UTF-8"?>
 
+        <!-- Do not edit manualy! This file is managed by Ansible. -->
+        
+        <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:req-attr="urn:oasis:names:tc:SAML:protocol:ext:req-attr" entityID="https://whoami.cesnet.cz/idp/shibboleth">
+        
+          <Extensions>
+            <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
+              <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" Name="http://macedir.org/entity-category-support">
+                <!-- Research and Scholarship -->
+                <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
+                <!-- Code of Conduct -->
+                <saml:AttributeValue>http://www.geant.net/uri/dataprotection-code-of-conduct/v1</saml:AttributeValue>
+              </saml:Attribute>
+              <!-- Sirtfi -->
+              <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" Name="urn:oasis:names:tc:SAML:attribute:assurance-certification">
+                <saml:AttributeValue>https://refeds.org/sirtfi</saml:AttributeValue>
+              </saml:Attribute>
+            </mdattr:EntityAttributes>
+          </Extensions>
+        
+          <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+            <Extensions>
+              <shibmd:Scope regexp="false">cesnet.cz</shibmd:Scope>
+              <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">CESNET</mdui:DisplayName>
+                <mdui:DisplayName xml:lang="cs">CESNET</mdui:DisplayName>
+                <mdui:Description xml:lang="en">Identity Provider (IdP) for CESNET employees.</mdui:Description>
+                <mdui:Description xml:lang="cs">Poskytovatel identity (IdP) pro zaměstnance CESNETu.</mdui:Description>
+                <mdui:InformationURL xml:lang="en">https://www.ces.net/</mdui:InformationURL>
+                <mdui:InformationURL xml:lang="cs">https://www.cesnet.cz/</mdui:InformationURL>
+                <mdui:Logo height="40" width="99">https://whoami.cesnet.cz/idp/images/cesnet-logo-40.png</mdui:Logo>
+              </mdui:UIInfo>
+            </Extensions>
+        
+            <KeyDescriptor use="signing">
+              <ds:KeyInfo>
+                <ds:X509Data>
+                  <ds:X509Certificate>MIIEKzCCApOgAwIBAgIUfhycq2ciNJX9gaQvHYRcI7a+J2QwDQYJKoZIhvcNAQEL
+        BQAwGzEZMBcGA1UEAwwQd2hvYW1pLmNlc25ldC5jejAeFw0yMjAzMDEwNzQzNTJa
+        Fw0zMjAzMDEwNzQzNTJaMBsxGTAXBgNVBAMMEHdob2FtaS5jZXNuZXQuY3owggGi
+        MA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQCA+C/U7dOcl2dneqGpFi2AEVwa
+        sytgYWzMOWaGRBBVGJoTfIJbvwI/nyerCK+K/CPO3ChJ4DxG6nDH9FQnxvN3jjhf
+        JBH6yBzNew3rDDlFLg+iNOW/srAXvDmNrN5/V91orjZ4qlKViNqvtOZrTwVhSDtF
+        QSxAPX7Q6b7zqRkPD531eHxVHCjFyriLacihUBEAevOqxO8xdXseeyZzaEQw7KEK
+        EEYFIHvH8VAWV/S/vLXj3S8Vam3AE464u87mCIHkED9XfaZAPkGSBe0SwwGdxQnM
+        o72G56BrKgBArlKDd/m8zE/fsaP97pBLx9amNA9u0EVhV4W9de2hepJKQowrXoo1
+        3LDE/dpbAkSTdlcsrL/g1eN3ziiZ8yOulJaI3zcOmgxqXPlO+wgeYdRiDnSgnQmm
+        qxekeZ5LXQfwrroK96ZJaheTUopO17UKDv7lek+c11nPwJiEQkgDqqD2rbwkdmvR
+        JUj5jJSyefoIVhtVLGCiCypwKcZJZCDO3y3vsz0CAwEAAaNnMGUwHQYDVR0OBBYE
+        FJyrRUYHac3G6UhW8eibyuLAcn9rMEQGA1UdEQQ9MDuCEHdob2FtaS5jZXNuZXQu
+        Y3qGJ2h0dHBzOi8vd2hvYW1pLmNlc25ldC5jei9pZHAvc2hpYmJvbGV0aDANBgkq
+        hkiG9w0BAQsFAAOCAYEAGYBXQE8GNMhaPuDoWkH0oL2cI4qoneX9NPaUoSwQ+A7O
+        qLY+jMm/wUkLpu+Kh61tXMY5NPWMEZLc23nwILegUSzrNGJqMpHnz8Mv1Ab5Alv5
+        FyUIr52VGkyNnJpIiq2XCSjIOnmHUkUdymL8nZf8J3IadRZq8jN9BKJy1vaLThlG
+        aAsqC2lZiPMMllYhPaOLtIQtBFEyYO97evmVvVNTZgmmk8fuF6P3gM18LRxXRbpQ
+        cQ5VS5nL3LrLi/1cATO8Jz+ERv4zaSLd+2UM0Ft899Ucowjzvoq0vmE+pvvlneNl
+        aEorT6nbXFeEsxaYuidg1pxWeoBqruRA0I7iD/4YzVgRHIdwBufQK+x1L4Pihp9U
+        ySPhVJJXdEdlSt5MnAjBv/Icn/FlGV1u/X37FqIJ7O/Alb5jfwSu97cgwd4pB6/j
+        ao2BQ3zYrSsaVU9qtnv0lE5nzG2b3QyPPkIbUR3nV/n7XOoZmGN8k0jX5N0shAfJ
+        wc9tCLkBo8qkL9vQaFAu</ds:X509Certificate>
+                </ds:X509Data>
+              </ds:KeyInfo>
+            </KeyDescriptor>
+            <KeyDescriptor use="encryption">
+              <ds:KeyInfo>
+                <ds:X509Data>
+                  <ds:X509Certificate>MIIELDCCApSgAwIBAgIVAI6NHbEG2QoGwKTUzRSIXiHOnnw1MA0GCSqGSIb3DQEB
+        CwUAMBsxGTAXBgNVBAMMEHdob2FtaS5jZXNuZXQuY3owHhcNMjIwMzAxMDc0MzUw
+        WhcNMzIwMzAxMDc0MzUwWjAbMRkwFwYDVQQDDBB3aG9hbWkuY2VzbmV0LmN6MIIB
+        ojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAn5kgxiNoK5y44dK0j8j0jj1f
+        uB9mV2GWz2pZba6ytQoIdcDb8udlEcbrjaD41txziJDS7LD/+meZIU4E6B8p0qgn
+        5RnMtQq/HfkmSbxplgoZK+ZLqVoIO422wtX8xgSsBsui9boG6LGEYkrF2+oak1OM
+        dd20dlSumVcQuRfsRf1JAlI2c08UlinwhoBf4CPMOigDD8qu95sMCaCR920AfLCR
+        29R6U2qz5mvps08yFFpkrTErGKLY6SNPHjrbLhW8VU/lqUuVCdnaMnxz9wPWNhAt
+        eE9YZLtPlFhqLbqDCloELc/Ekk5/XhVY0vr+B0rBsXmFaolEi9PnGCkIK665YAwk
+        cyarO0gyawE3mcX22HBlH1ysHDA4dpXNXtkr4BAiVTIiJAP8T7EUk1z2BDOsDVWC
+        8EWvXU6hfnJUabXzpqMMn8b4lCP730nYxuzYlPXmoq+epQVA23blJ5aVA0WUKicV
+        EfIx1y3MW1tRTxM2Ze9ELR/+bIv+AHfJt3ox3P83AgMBAAGjZzBlMB0GA1UdDgQW
+        BBR49Q5oZ5TRFe96o82mUye8raq17jBEBgNVHREEPTA7ghB3aG9hbWkuY2VzbmV0
+        LmN6hidodHRwczovL3dob2FtaS5jZXNuZXQuY3ovaWRwL3NoaWJib2xldGgwDQYJ
+        KoZIhvcNAQELBQADggGBADyYeU0OkhTtG75cXza1ah1wlnrXpVOCM2EjC08PmVMH
+        LSWIPF7wfzFfirlXonmzh+aM7iwSsm+DmLfEj59mfm0qb/ZrH6rCM8HHa2gpbFk+
+        rIRSO3uYvrUvUnK83ZOJ7TQF5HUp4Wz5dzcHh3eQafT2AykclRd5vE3tASBKLDbc
+        Lg67ZG8feQePEOT5bEYaLBSDXKVB+5zcMK3YpIInZLgVlw/ukYdkbMoVPH0SLKC2
+        kzBv+3qEAtnytl/1uSmZ+YN9sNT5hCgMC53/+L8sABJaclLEvoOCRvUp6xiewrya
+        txSk/8c8JLteuzEWor7DXvQxxHco/Uv5nAfFeGWhML5v8RmBq47TdTTWe3PKw3uf
+        sC5E47G4vQh7z8a9zDXkkhN0E73Mv8cm4ArzYXJzW3tvYQSwos+Sdq4rQGnYXZ+1
+        3AX2GScvmuCyeA8YIKmW3jqzGtWH0iA7Ic6wCnnDZwXtK76x8FMX8cnU2qMC2aVz
+        zFAqLcxs7apHvItdRCAPnA==</ds:X509Certificate>
+                </ds:X509Data>
+              </ds:KeyInfo>
+            </KeyDescriptor>
+        
+            <!--
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST/SLO"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST-SimpleSign/SLO"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://whoami.cesnet.cz/idp/profile/SAML2/Redirect/SLO"/>
+            -->
+        
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/Redirect/SSO"/>
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST/SSO"/>
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST-SimpleSign/SSO"/>
+        
+          </IDPSSODescriptor>
+        
+          <Organization>
+            <OrganizationName xml:lang="en">CESNET, a. l. e.</OrganizationName>
+            <OrganizationName xml:lang="cs">CESNET, z. s. p. o.</OrganizationName>
+            <OrganizationDisplayName xml:lang="en">CESNET</OrganizationDisplayName>
+            <OrganizationDisplayName xml:lang="cs">CESNET</OrganizationDisplayName>
+            <OrganizationURL xml:lang="en">https://www.ces.net/</OrganizationURL>
+            <OrganizationURL xml:lang="cs">https://www.cesnet.cz/</OrganizationURL>
+          </Organization>
+        
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Oppolzer</SurName>
+            <EmailAddress>mailto:jan.oppolzer@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Tomášek</SurName>
+            <EmailAddress>mailto:jan.tomasek@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Chvojka</SurName>
+            <EmailAddress>mailto:jan.chvojka@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="other" xmlns:remd="http://refeds.org/metadata" remd:contactType="http://refeds.org/metadata/contactType/security">
+            <GivenName>CESNET-CERTS</GivenName>
+            <EmailAddress>mailto:abuse@cesnet.cz</EmailAddress>
+          </ContactPerson>
+        
+        </EntityDescriptor>';
+
+        // add an entity using wrong metadata content
+        // $this
+        //     ->followingRedirects()
+        //     ->actingAs($user)
+        //     ->post(route('entities.store', [
+        //         'metadata' => '',
+        //         'federation' => $federation->id,
+        //         'explanation' => $this->faker->catchPhrase(),
+        //     ]))
+        //     ->assertSeeText(__('entities.no_metadata'));
+            
         $this->assertEquals(0, Entity::count());
-        $this->assertEquals(route('entities.create'), url()->current());
 
-        // URL address with metadata
+        // add an entity using corrent metadata content
         $this
             ->followingRedirects()
             ->actingAs($user)
             ->post(route('entities.store', [
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
+                'metadata' => $whoami,
                 'federation' => $federation->id,
                 'explanation' => $this->faker->catchPhrase(),
             ]))
             ->assertSeeText(__('entities.entity_requested', ['name' => 'https://whoami.cesnet.cz/idp/shibboleth']));
-
+        
         $this->assertEquals(1, Entity::count());
         $this->assertEquals(route('entities.index'), url()->current());
 
@@ -323,7 +459,7 @@ class EntityControllerTest extends TestCase
             ->followingRedirects()
             ->actingAs($user)
             ->post(route('entities.store', [
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
+                'metadata' => $whoami,
                 'federation' => $federation->id,
                 'explanation' => $this->faker->catchPhrase(),
             ]))
@@ -331,6 +467,7 @@ class EntityControllerTest extends TestCase
 
         $this->assertEquals(1, Entity::count());
         $this->assertEquals(route('entities.show', Entity::find(1)), url()->current());
+
     }
 
     /** @test */
@@ -358,12 +495,149 @@ class EntityControllerTest extends TestCase
         $entity = Entity::factory()->create(['entityid' => 'https://whoami.cesnet.cz/idp/shibboleth']);
         $user->entities()->attach($entity);
 
+        $whoami = '<?xml version="1.0" encoding="UTF-8"?>
+
+        <!-- Do not edit manualy! This file is managed by Ansible. -->
+        
+        <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:req-attr="urn:oasis:names:tc:SAML:protocol:ext:req-attr" entityID="https://whoami.cesnet.cz/idp/shibboleth">
+        
+          <Extensions>
+            <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
+              <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" Name="http://macedir.org/entity-category-support">
+                <!-- Research and Scholarship -->
+                <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
+                <!-- Code of Conduct -->
+                <saml:AttributeValue>http://www.geant.net/uri/dataprotection-code-of-conduct/v1</saml:AttributeValue>
+              </saml:Attribute>
+              <!-- Sirtfi -->
+              <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" Name="urn:oasis:names:tc:SAML:attribute:assurance-certification">
+                <saml:AttributeValue>https://refeds.org/sirtfi</saml:AttributeValue>
+              </saml:Attribute>
+            </mdattr:EntityAttributes>
+          </Extensions>
+        
+          <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+            <Extensions>
+              <shibmd:Scope regexp="false">cesnet.cz</shibmd:Scope>
+              <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">CESNET</mdui:DisplayName>
+                <mdui:DisplayName xml:lang="cs">CESNET</mdui:DisplayName>
+                <mdui:Description xml:lang="en">Identity Provider (IdP) for CESNET employees.</mdui:Description>
+                <mdui:Description xml:lang="cs">Poskytovatel identity (IdP) pro zaměstnance CESNETu.</mdui:Description>
+                <mdui:InformationURL xml:lang="en">https://www.ces.net/</mdui:InformationURL>
+                <mdui:InformationURL xml:lang="cs">https://www.cesnet.cz/</mdui:InformationURL>
+                <mdui:Logo height="40" width="99">https://whoami.cesnet.cz/idp/images/cesnet-logo-40.png</mdui:Logo>
+              </mdui:UIInfo>
+            </Extensions>
+        
+            <KeyDescriptor use="signing">
+              <ds:KeyInfo>
+                <ds:X509Data>
+                  <ds:X509Certificate>MIIEKzCCApOgAwIBAgIUfhycq2ciNJX9gaQvHYRcI7a+J2QwDQYJKoZIhvcNAQEL
+        BQAwGzEZMBcGA1UEAwwQd2hvYW1pLmNlc25ldC5jejAeFw0yMjAzMDEwNzQzNTJa
+        Fw0zMjAzMDEwNzQzNTJaMBsxGTAXBgNVBAMMEHdob2FtaS5jZXNuZXQuY3owggGi
+        MA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQCA+C/U7dOcl2dneqGpFi2AEVwa
+        sytgYWzMOWaGRBBVGJoTfIJbvwI/nyerCK+K/CPO3ChJ4DxG6nDH9FQnxvN3jjhf
+        JBH6yBzNew3rDDlFLg+iNOW/srAXvDmNrN5/V91orjZ4qlKViNqvtOZrTwVhSDtF
+        QSxAPX7Q6b7zqRkPD531eHxVHCjFyriLacihUBEAevOqxO8xdXseeyZzaEQw7KEK
+        EEYFIHvH8VAWV/S/vLXj3S8Vam3AE464u87mCIHkED9XfaZAPkGSBe0SwwGdxQnM
+        o72G56BrKgBArlKDd/m8zE/fsaP97pBLx9amNA9u0EVhV4W9de2hepJKQowrXoo1
+        3LDE/dpbAkSTdlcsrL/g1eN3ziiZ8yOulJaI3zcOmgxqXPlO+wgeYdRiDnSgnQmm
+        qxekeZ5LXQfwrroK96ZJaheTUopO17UKDv7lek+c11nPwJiEQkgDqqD2rbwkdmvR
+        JUj5jJSyefoIVhtVLGCiCypwKcZJZCDO3y3vsz0CAwEAAaNnMGUwHQYDVR0OBBYE
+        FJyrRUYHac3G6UhW8eibyuLAcn9rMEQGA1UdEQQ9MDuCEHdob2FtaS5jZXNuZXQu
+        Y3qGJ2h0dHBzOi8vd2hvYW1pLmNlc25ldC5jei9pZHAvc2hpYmJvbGV0aDANBgkq
+        hkiG9w0BAQsFAAOCAYEAGYBXQE8GNMhaPuDoWkH0oL2cI4qoneX9NPaUoSwQ+A7O
+        qLY+jMm/wUkLpu+Kh61tXMY5NPWMEZLc23nwILegUSzrNGJqMpHnz8Mv1Ab5Alv5
+        FyUIr52VGkyNnJpIiq2XCSjIOnmHUkUdymL8nZf8J3IadRZq8jN9BKJy1vaLThlG
+        aAsqC2lZiPMMllYhPaOLtIQtBFEyYO97evmVvVNTZgmmk8fuF6P3gM18LRxXRbpQ
+        cQ5VS5nL3LrLi/1cATO8Jz+ERv4zaSLd+2UM0Ft899Ucowjzvoq0vmE+pvvlneNl
+        aEorT6nbXFeEsxaYuidg1pxWeoBqruRA0I7iD/4YzVgRHIdwBufQK+x1L4Pihp9U
+        ySPhVJJXdEdlSt5MnAjBv/Icn/FlGV1u/X37FqIJ7O/Alb5jfwSu97cgwd4pB6/j
+        ao2BQ3zYrSsaVU9qtnv0lE5nzG2b3QyPPkIbUR3nV/n7XOoZmGN8k0jX5N0shAfJ
+        wc9tCLkBo8qkL9vQaFAu</ds:X509Certificate>
+                </ds:X509Data>
+              </ds:KeyInfo>
+            </KeyDescriptor>
+            <KeyDescriptor use="encryption">
+              <ds:KeyInfo>
+                <ds:X509Data>
+                  <ds:X509Certificate>MIIELDCCApSgAwIBAgIVAI6NHbEG2QoGwKTUzRSIXiHOnnw1MA0GCSqGSIb3DQEB
+        CwUAMBsxGTAXBgNVBAMMEHdob2FtaS5jZXNuZXQuY3owHhcNMjIwMzAxMDc0MzUw
+        WhcNMzIwMzAxMDc0MzUwWjAbMRkwFwYDVQQDDBB3aG9hbWkuY2VzbmV0LmN6MIIB
+        ojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAn5kgxiNoK5y44dK0j8j0jj1f
+        uB9mV2GWz2pZba6ytQoIdcDb8udlEcbrjaD41txziJDS7LD/+meZIU4E6B8p0qgn
+        5RnMtQq/HfkmSbxplgoZK+ZLqVoIO422wtX8xgSsBsui9boG6LGEYkrF2+oak1OM
+        dd20dlSumVcQuRfsRf1JAlI2c08UlinwhoBf4CPMOigDD8qu95sMCaCR920AfLCR
+        29R6U2qz5mvps08yFFpkrTErGKLY6SNPHjrbLhW8VU/lqUuVCdnaMnxz9wPWNhAt
+        eE9YZLtPlFhqLbqDCloELc/Ekk5/XhVY0vr+B0rBsXmFaolEi9PnGCkIK665YAwk
+        cyarO0gyawE3mcX22HBlH1ysHDA4dpXNXtkr4BAiVTIiJAP8T7EUk1z2BDOsDVWC
+        8EWvXU6hfnJUabXzpqMMn8b4lCP730nYxuzYlPXmoq+epQVA23blJ5aVA0WUKicV
+        EfIx1y3MW1tRTxM2Ze9ELR/+bIv+AHfJt3ox3P83AgMBAAGjZzBlMB0GA1UdDgQW
+        BBR49Q5oZ5TRFe96o82mUye8raq17jBEBgNVHREEPTA7ghB3aG9hbWkuY2VzbmV0
+        LmN6hidodHRwczovL3dob2FtaS5jZXNuZXQuY3ovaWRwL3NoaWJib2xldGgwDQYJ
+        KoZIhvcNAQELBQADggGBADyYeU0OkhTtG75cXza1ah1wlnrXpVOCM2EjC08PmVMH
+        LSWIPF7wfzFfirlXonmzh+aM7iwSsm+DmLfEj59mfm0qb/ZrH6rCM8HHa2gpbFk+
+        rIRSO3uYvrUvUnK83ZOJ7TQF5HUp4Wz5dzcHh3eQafT2AykclRd5vE3tASBKLDbc
+        Lg67ZG8feQePEOT5bEYaLBSDXKVB+5zcMK3YpIInZLgVlw/ukYdkbMoVPH0SLKC2
+        kzBv+3qEAtnytl/1uSmZ+YN9sNT5hCgMC53/+L8sABJaclLEvoOCRvUp6xiewrya
+        txSk/8c8JLteuzEWor7DXvQxxHco/Uv5nAfFeGWhML5v8RmBq47TdTTWe3PKw3uf
+        sC5E47G4vQh7z8a9zDXkkhN0E73Mv8cm4ArzYXJzW3tvYQSwos+Sdq4rQGnYXZ+1
+        3AX2GScvmuCyeA8YIKmW3jqzGtWH0iA7Ic6wCnnDZwXtK76x8FMX8cnU2qMC2aVz
+        zFAqLcxs7apHvItdRCAPnA==</ds:X509Certificate>
+                </ds:X509Data>
+              </ds:KeyInfo>
+            </KeyDescriptor>
+        
+            <!--
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST/SLO"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST-SimpleSign/SLO"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://whoami.cesnet.cz/idp/profile/SAML2/Redirect/SLO"/>
+            -->
+        
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/Redirect/SSO"/>
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST/SSO"/>
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST-SimpleSign/SSO"/>
+        
+          </IDPSSODescriptor>
+        
+          <Organization>
+            <OrganizationName xml:lang="en">CESNET, a. l. e.</OrganizationName>
+            <OrganizationName xml:lang="cs">CESNET, z. s. p. o.</OrganizationName>
+            <OrganizationDisplayName xml:lang="en">CESNET</OrganizationDisplayName>
+            <OrganizationDisplayName xml:lang="cs">CESNET</OrganizationDisplayName>
+            <OrganizationURL xml:lang="en">https://www.ces.net/</OrganizationURL>
+            <OrganizationURL xml:lang="cs">https://www.cesnet.cz/</OrganizationURL>
+          </Organization>
+        
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Oppolzer</SurName>
+            <EmailAddress>mailto:jan.oppolzer@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Tomášek</SurName>
+            <EmailAddress>mailto:jan.tomasek@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Chvojka</SurName>
+            <EmailAddress>mailto:jan.chvojka@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="other" xmlns:remd="http://refeds.org/metadata" remd:contactType="http://refeds.org/metadata/contactType/security">
+            <GivenName>CESNET-CERTS</GivenName>
+            <EmailAddress>mailto:abuse@cesnet.cz</EmailAddress>
+          </ContactPerson>
+        
+        </EntityDescriptor>';
+
         $this
             ->followingRedirects()
             ->actingAs($user)
             ->patch(route('entities.update', $entity), [
                 'action' => 'update',
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
+                'metadata' => $whoami,
             ])
             ->assertSeeText(__('entities.entity_updated'));
 
@@ -668,29 +942,153 @@ class EntityControllerTest extends TestCase
         $admin = User::factory()->create(['admin' => true]);
         $federation = Federation::factory()->create();
 
-        // unreadable URL address with metadata
+        $whoami = '<?xml version="1.0" encoding="UTF-8"?>
+
+        <!-- Do not edit manualy! This file is managed by Ansible. -->
+        
+        <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:req-attr="urn:oasis:names:tc:SAML:protocol:ext:req-attr" entityID="https://whoami.cesnet.cz/idp/shibboleth">
+        
+          <Extensions>
+            <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
+              <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" Name="http://macedir.org/entity-category-support">
+                <!-- Research and Scholarship -->
+                <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
+                <!-- Code of Conduct -->
+                <saml:AttributeValue>http://www.geant.net/uri/dataprotection-code-of-conduct/v1</saml:AttributeValue>
+              </saml:Attribute>
+              <!-- Sirtfi -->
+              <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" Name="urn:oasis:names:tc:SAML:attribute:assurance-certification">
+                <saml:AttributeValue>https://refeds.org/sirtfi</saml:AttributeValue>
+              </saml:Attribute>
+            </mdattr:EntityAttributes>
+          </Extensions>
+        
+          <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+            <Extensions>
+              <shibmd:Scope regexp="false">cesnet.cz</shibmd:Scope>
+              <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">CESNET</mdui:DisplayName>
+                <mdui:DisplayName xml:lang="cs">CESNET</mdui:DisplayName>
+                <mdui:Description xml:lang="en">Identity Provider (IdP) for CESNET employees.</mdui:Description>
+                <mdui:Description xml:lang="cs">Poskytovatel identity (IdP) pro zaměstnance CESNETu.</mdui:Description>
+                <mdui:InformationURL xml:lang="en">https://www.ces.net/</mdui:InformationURL>
+                <mdui:InformationURL xml:lang="cs">https://www.cesnet.cz/</mdui:InformationURL>
+                <mdui:Logo height="40" width="99">https://whoami.cesnet.cz/idp/images/cesnet-logo-40.png</mdui:Logo>
+              </mdui:UIInfo>
+            </Extensions>
+        
+            <KeyDescriptor use="signing">
+              <ds:KeyInfo>
+                <ds:X509Data>
+                  <ds:X509Certificate>MIIEKzCCApOgAwIBAgIUfhycq2ciNJX9gaQvHYRcI7a+J2QwDQYJKoZIhvcNAQEL
+        BQAwGzEZMBcGA1UEAwwQd2hvYW1pLmNlc25ldC5jejAeFw0yMjAzMDEwNzQzNTJa
+        Fw0zMjAzMDEwNzQzNTJaMBsxGTAXBgNVBAMMEHdob2FtaS5jZXNuZXQuY3owggGi
+        MA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQCA+C/U7dOcl2dneqGpFi2AEVwa
+        sytgYWzMOWaGRBBVGJoTfIJbvwI/nyerCK+K/CPO3ChJ4DxG6nDH9FQnxvN3jjhf
+        JBH6yBzNew3rDDlFLg+iNOW/srAXvDmNrN5/V91orjZ4qlKViNqvtOZrTwVhSDtF
+        QSxAPX7Q6b7zqRkPD531eHxVHCjFyriLacihUBEAevOqxO8xdXseeyZzaEQw7KEK
+        EEYFIHvH8VAWV/S/vLXj3S8Vam3AE464u87mCIHkED9XfaZAPkGSBe0SwwGdxQnM
+        o72G56BrKgBArlKDd/m8zE/fsaP97pBLx9amNA9u0EVhV4W9de2hepJKQowrXoo1
+        3LDE/dpbAkSTdlcsrL/g1eN3ziiZ8yOulJaI3zcOmgxqXPlO+wgeYdRiDnSgnQmm
+        qxekeZ5LXQfwrroK96ZJaheTUopO17UKDv7lek+c11nPwJiEQkgDqqD2rbwkdmvR
+        JUj5jJSyefoIVhtVLGCiCypwKcZJZCDO3y3vsz0CAwEAAaNnMGUwHQYDVR0OBBYE
+        FJyrRUYHac3G6UhW8eibyuLAcn9rMEQGA1UdEQQ9MDuCEHdob2FtaS5jZXNuZXQu
+        Y3qGJ2h0dHBzOi8vd2hvYW1pLmNlc25ldC5jei9pZHAvc2hpYmJvbGV0aDANBgkq
+        hkiG9w0BAQsFAAOCAYEAGYBXQE8GNMhaPuDoWkH0oL2cI4qoneX9NPaUoSwQ+A7O
+        qLY+jMm/wUkLpu+Kh61tXMY5NPWMEZLc23nwILegUSzrNGJqMpHnz8Mv1Ab5Alv5
+        FyUIr52VGkyNnJpIiq2XCSjIOnmHUkUdymL8nZf8J3IadRZq8jN9BKJy1vaLThlG
+        aAsqC2lZiPMMllYhPaOLtIQtBFEyYO97evmVvVNTZgmmk8fuF6P3gM18LRxXRbpQ
+        cQ5VS5nL3LrLi/1cATO8Jz+ERv4zaSLd+2UM0Ft899Ucowjzvoq0vmE+pvvlneNl
+        aEorT6nbXFeEsxaYuidg1pxWeoBqruRA0I7iD/4YzVgRHIdwBufQK+x1L4Pihp9U
+        ySPhVJJXdEdlSt5MnAjBv/Icn/FlGV1u/X37FqIJ7O/Alb5jfwSu97cgwd4pB6/j
+        ao2BQ3zYrSsaVU9qtnv0lE5nzG2b3QyPPkIbUR3nV/n7XOoZmGN8k0jX5N0shAfJ
+        wc9tCLkBo8qkL9vQaFAu</ds:X509Certificate>
+                </ds:X509Data>
+              </ds:KeyInfo>
+            </KeyDescriptor>
+            <KeyDescriptor use="encryption">
+              <ds:KeyInfo>
+                <ds:X509Data>
+                  <ds:X509Certificate>MIIELDCCApSgAwIBAgIVAI6NHbEG2QoGwKTUzRSIXiHOnnw1MA0GCSqGSIb3DQEB
+        CwUAMBsxGTAXBgNVBAMMEHdob2FtaS5jZXNuZXQuY3owHhcNMjIwMzAxMDc0MzUw
+        WhcNMzIwMzAxMDc0MzUwWjAbMRkwFwYDVQQDDBB3aG9hbWkuY2VzbmV0LmN6MIIB
+        ojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAn5kgxiNoK5y44dK0j8j0jj1f
+        uB9mV2GWz2pZba6ytQoIdcDb8udlEcbrjaD41txziJDS7LD/+meZIU4E6B8p0qgn
+        5RnMtQq/HfkmSbxplgoZK+ZLqVoIO422wtX8xgSsBsui9boG6LGEYkrF2+oak1OM
+        dd20dlSumVcQuRfsRf1JAlI2c08UlinwhoBf4CPMOigDD8qu95sMCaCR920AfLCR
+        29R6U2qz5mvps08yFFpkrTErGKLY6SNPHjrbLhW8VU/lqUuVCdnaMnxz9wPWNhAt
+        eE9YZLtPlFhqLbqDCloELc/Ekk5/XhVY0vr+B0rBsXmFaolEi9PnGCkIK665YAwk
+        cyarO0gyawE3mcX22HBlH1ysHDA4dpXNXtkr4BAiVTIiJAP8T7EUk1z2BDOsDVWC
+        8EWvXU6hfnJUabXzpqMMn8b4lCP730nYxuzYlPXmoq+epQVA23blJ5aVA0WUKicV
+        EfIx1y3MW1tRTxM2Ze9ELR/+bIv+AHfJt3ox3P83AgMBAAGjZzBlMB0GA1UdDgQW
+        BBR49Q5oZ5TRFe96o82mUye8raq17jBEBgNVHREEPTA7ghB3aG9hbWkuY2VzbmV0
+        LmN6hidodHRwczovL3dob2FtaS5jZXNuZXQuY3ovaWRwL3NoaWJib2xldGgwDQYJ
+        KoZIhvcNAQELBQADggGBADyYeU0OkhTtG75cXza1ah1wlnrXpVOCM2EjC08PmVMH
+        LSWIPF7wfzFfirlXonmzh+aM7iwSsm+DmLfEj59mfm0qb/ZrH6rCM8HHa2gpbFk+
+        rIRSO3uYvrUvUnK83ZOJ7TQF5HUp4Wz5dzcHh3eQafT2AykclRd5vE3tASBKLDbc
+        Lg67ZG8feQePEOT5bEYaLBSDXKVB+5zcMK3YpIInZLgVlw/ukYdkbMoVPH0SLKC2
+        kzBv+3qEAtnytl/1uSmZ+YN9sNT5hCgMC53/+L8sABJaclLEvoOCRvUp6xiewrya
+        txSk/8c8JLteuzEWor7DXvQxxHco/Uv5nAfFeGWhML5v8RmBq47TdTTWe3PKw3uf
+        sC5E47G4vQh7z8a9zDXkkhN0E73Mv8cm4ArzYXJzW3tvYQSwos+Sdq4rQGnYXZ+1
+        3AX2GScvmuCyeA8YIKmW3jqzGtWH0iA7Ic6wCnnDZwXtK76x8FMX8cnU2qMC2aVz
+        zFAqLcxs7apHvItdRCAPnA==</ds:X509Certificate>
+                </ds:X509Data>
+              </ds:KeyInfo>
+            </KeyDescriptor>
+        
+            <!--
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST/SLO"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST-SimpleSign/SLO"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://whoami.cesnet.cz/idp/profile/SAML2/Redirect/SLO"/>
+            -->
+        
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/Redirect/SSO"/>
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST/SSO"/>
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST-SimpleSign/SSO"/>
+        
+          </IDPSSODescriptor>
+        
+          <Organization>
+            <OrganizationName xml:lang="en">CESNET, a. l. e.</OrganizationName>
+            <OrganizationName xml:lang="cs">CESNET, z. s. p. o.</OrganizationName>
+            <OrganizationDisplayName xml:lang="en">CESNET</OrganizationDisplayName>
+            <OrganizationDisplayName xml:lang="cs">CESNET</OrganizationDisplayName>
+            <OrganizationURL xml:lang="en">https://www.ces.net/</OrganizationURL>
+            <OrganizationURL xml:lang="cs">https://www.cesnet.cz/</OrganizationURL>
+          </Organization>
+        
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Oppolzer</SurName>
+            <EmailAddress>mailto:jan.oppolzer@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Tomášek</SurName>
+            <EmailAddress>mailto:jan.tomasek@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Chvojka</SurName>
+            <EmailAddress>mailto:jan.chvojka@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="other" xmlns:remd="http://refeds.org/metadata" remd:contactType="http://refeds.org/metadata/contactType/security">
+            <GivenName>CESNET-CERTS</GivenName>
+            <EmailAddress>mailto:abuse@cesnet.cz</EmailAddress>
+          </ContactPerson>
+        
+        </EntityDescriptor>';
+
+        // add an entity using wrong metadata content
+        // add an entity using correct metadata content
         $this
             ->followingRedirects()
             ->actingAs($admin)
             ->post(route('entities.store', [
-                'url' => 'https://ratamahatta.cz/metadata.xml',
+                'metadata' => $whoami,
                 'federation' => $federation->id,
                 'explanation' => $this->faker->catchPhrase(),
             ]))
-            ->assertSeeText(__('entities.metadata_couldnt_be_read'));
-
-        $this->assertEquals(0, Entity::count());
-        $this->assertEquals(route('entities.create'), url()->current());
-
-        // URL address with metadata
-        $this
-            ->followingRedirects()
-            ->actingAs($admin)
-            ->post(route('entities.store'), [
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
-                'federation' => $federation->id,
-                'explanation' => $this->faker->catchPhrase(),
-            ])
             ->assertSeeText(__('entities.entity_requested', ['name' => 'https://whoami.cesnet.cz/idp/shibboleth']));
 
         $this->assertEquals(1, Entity::count());
@@ -700,11 +1098,11 @@ class EntityControllerTest extends TestCase
         $this
             ->followingRedirects()
             ->actingAs($admin)
-            ->post(route('entities.store'), [
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
+            ->post(route('entities.store', [
+                'metadata' => $whoami,
                 'federation' => $federation->id,
                 'explanation' => $this->faker->catchPhrase(),
-            ])
+            ]))
             ->assertSeeText(__('entities.existing_already'));
 
         $this->assertEquals(1, Entity::count());
@@ -735,12 +1133,149 @@ class EntityControllerTest extends TestCase
         $admin = User::factory()->create(['admin' => true]);
         $entity = Entity::factory()->create(['entityid' => 'https://whoami.cesnet.cz/idp/shibboleth']);
 
+        $whoami = '<?xml version="1.0" encoding="UTF-8"?>
+
+        <!-- Do not edit manualy! This file is managed by Ansible. -->
+        
+        <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:req-attr="urn:oasis:names:tc:SAML:protocol:ext:req-attr" entityID="https://whoami.cesnet.cz/idp/shibboleth">
+        
+          <Extensions>
+            <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
+              <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" Name="http://macedir.org/entity-category-support">
+                <!-- Research and Scholarship -->
+                <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
+                <!-- Code of Conduct -->
+                <saml:AttributeValue>http://www.geant.net/uri/dataprotection-code-of-conduct/v1</saml:AttributeValue>
+              </saml:Attribute>
+              <!-- Sirtfi -->
+              <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" Name="urn:oasis:names:tc:SAML:attribute:assurance-certification">
+                <saml:AttributeValue>https://refeds.org/sirtfi</saml:AttributeValue>
+              </saml:Attribute>
+            </mdattr:EntityAttributes>
+          </Extensions>
+        
+          <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+            <Extensions>
+              <shibmd:Scope regexp="false">cesnet.cz</shibmd:Scope>
+              <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">CESNET</mdui:DisplayName>
+                <mdui:DisplayName xml:lang="cs">CESNET</mdui:DisplayName>
+                <mdui:Description xml:lang="en">Identity Provider (IdP) for CESNET employees.</mdui:Description>
+                <mdui:Description xml:lang="cs">Poskytovatel identity (IdP) pro zaměstnance CESNETu.</mdui:Description>
+                <mdui:InformationURL xml:lang="en">https://www.ces.net/</mdui:InformationURL>
+                <mdui:InformationURL xml:lang="cs">https://www.cesnet.cz/</mdui:InformationURL>
+                <mdui:Logo height="40" width="99">https://whoami.cesnet.cz/idp/images/cesnet-logo-40.png</mdui:Logo>
+              </mdui:UIInfo>
+            </Extensions>
+        
+            <KeyDescriptor use="signing">
+              <ds:KeyInfo>
+                <ds:X509Data>
+                  <ds:X509Certificate>MIIEKzCCApOgAwIBAgIUfhycq2ciNJX9gaQvHYRcI7a+J2QwDQYJKoZIhvcNAQEL
+        BQAwGzEZMBcGA1UEAwwQd2hvYW1pLmNlc25ldC5jejAeFw0yMjAzMDEwNzQzNTJa
+        Fw0zMjAzMDEwNzQzNTJaMBsxGTAXBgNVBAMMEHdob2FtaS5jZXNuZXQuY3owggGi
+        MA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQCA+C/U7dOcl2dneqGpFi2AEVwa
+        sytgYWzMOWaGRBBVGJoTfIJbvwI/nyerCK+K/CPO3ChJ4DxG6nDH9FQnxvN3jjhf
+        JBH6yBzNew3rDDlFLg+iNOW/srAXvDmNrN5/V91orjZ4qlKViNqvtOZrTwVhSDtF
+        QSxAPX7Q6b7zqRkPD531eHxVHCjFyriLacihUBEAevOqxO8xdXseeyZzaEQw7KEK
+        EEYFIHvH8VAWV/S/vLXj3S8Vam3AE464u87mCIHkED9XfaZAPkGSBe0SwwGdxQnM
+        o72G56BrKgBArlKDd/m8zE/fsaP97pBLx9amNA9u0EVhV4W9de2hepJKQowrXoo1
+        3LDE/dpbAkSTdlcsrL/g1eN3ziiZ8yOulJaI3zcOmgxqXPlO+wgeYdRiDnSgnQmm
+        qxekeZ5LXQfwrroK96ZJaheTUopO17UKDv7lek+c11nPwJiEQkgDqqD2rbwkdmvR
+        JUj5jJSyefoIVhtVLGCiCypwKcZJZCDO3y3vsz0CAwEAAaNnMGUwHQYDVR0OBBYE
+        FJyrRUYHac3G6UhW8eibyuLAcn9rMEQGA1UdEQQ9MDuCEHdob2FtaS5jZXNuZXQu
+        Y3qGJ2h0dHBzOi8vd2hvYW1pLmNlc25ldC5jei9pZHAvc2hpYmJvbGV0aDANBgkq
+        hkiG9w0BAQsFAAOCAYEAGYBXQE8GNMhaPuDoWkH0oL2cI4qoneX9NPaUoSwQ+A7O
+        qLY+jMm/wUkLpu+Kh61tXMY5NPWMEZLc23nwILegUSzrNGJqMpHnz8Mv1Ab5Alv5
+        FyUIr52VGkyNnJpIiq2XCSjIOnmHUkUdymL8nZf8J3IadRZq8jN9BKJy1vaLThlG
+        aAsqC2lZiPMMllYhPaOLtIQtBFEyYO97evmVvVNTZgmmk8fuF6P3gM18LRxXRbpQ
+        cQ5VS5nL3LrLi/1cATO8Jz+ERv4zaSLd+2UM0Ft899Ucowjzvoq0vmE+pvvlneNl
+        aEorT6nbXFeEsxaYuidg1pxWeoBqruRA0I7iD/4YzVgRHIdwBufQK+x1L4Pihp9U
+        ySPhVJJXdEdlSt5MnAjBv/Icn/FlGV1u/X37FqIJ7O/Alb5jfwSu97cgwd4pB6/j
+        ao2BQ3zYrSsaVU9qtnv0lE5nzG2b3QyPPkIbUR3nV/n7XOoZmGN8k0jX5N0shAfJ
+        wc9tCLkBo8qkL9vQaFAu</ds:X509Certificate>
+                </ds:X509Data>
+              </ds:KeyInfo>
+            </KeyDescriptor>
+            <KeyDescriptor use="encryption">
+              <ds:KeyInfo>
+                <ds:X509Data>
+                  <ds:X509Certificate>MIIELDCCApSgAwIBAgIVAI6NHbEG2QoGwKTUzRSIXiHOnnw1MA0GCSqGSIb3DQEB
+        CwUAMBsxGTAXBgNVBAMMEHdob2FtaS5jZXNuZXQuY3owHhcNMjIwMzAxMDc0MzUw
+        WhcNMzIwMzAxMDc0MzUwWjAbMRkwFwYDVQQDDBB3aG9hbWkuY2VzbmV0LmN6MIIB
+        ojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAn5kgxiNoK5y44dK0j8j0jj1f
+        uB9mV2GWz2pZba6ytQoIdcDb8udlEcbrjaD41txziJDS7LD/+meZIU4E6B8p0qgn
+        5RnMtQq/HfkmSbxplgoZK+ZLqVoIO422wtX8xgSsBsui9boG6LGEYkrF2+oak1OM
+        dd20dlSumVcQuRfsRf1JAlI2c08UlinwhoBf4CPMOigDD8qu95sMCaCR920AfLCR
+        29R6U2qz5mvps08yFFpkrTErGKLY6SNPHjrbLhW8VU/lqUuVCdnaMnxz9wPWNhAt
+        eE9YZLtPlFhqLbqDCloELc/Ekk5/XhVY0vr+B0rBsXmFaolEi9PnGCkIK665YAwk
+        cyarO0gyawE3mcX22HBlH1ysHDA4dpXNXtkr4BAiVTIiJAP8T7EUk1z2BDOsDVWC
+        8EWvXU6hfnJUabXzpqMMn8b4lCP730nYxuzYlPXmoq+epQVA23blJ5aVA0WUKicV
+        EfIx1y3MW1tRTxM2Ze9ELR/+bIv+AHfJt3ox3P83AgMBAAGjZzBlMB0GA1UdDgQW
+        BBR49Q5oZ5TRFe96o82mUye8raq17jBEBgNVHREEPTA7ghB3aG9hbWkuY2VzbmV0
+        LmN6hidodHRwczovL3dob2FtaS5jZXNuZXQuY3ovaWRwL3NoaWJib2xldGgwDQYJ
+        KoZIhvcNAQELBQADggGBADyYeU0OkhTtG75cXza1ah1wlnrXpVOCM2EjC08PmVMH
+        LSWIPF7wfzFfirlXonmzh+aM7iwSsm+DmLfEj59mfm0qb/ZrH6rCM8HHa2gpbFk+
+        rIRSO3uYvrUvUnK83ZOJ7TQF5HUp4Wz5dzcHh3eQafT2AykclRd5vE3tASBKLDbc
+        Lg67ZG8feQePEOT5bEYaLBSDXKVB+5zcMK3YpIInZLgVlw/ukYdkbMoVPH0SLKC2
+        kzBv+3qEAtnytl/1uSmZ+YN9sNT5hCgMC53/+L8sABJaclLEvoOCRvUp6xiewrya
+        txSk/8c8JLteuzEWor7DXvQxxHco/Uv5nAfFeGWhML5v8RmBq47TdTTWe3PKw3uf
+        sC5E47G4vQh7z8a9zDXkkhN0E73Mv8cm4ArzYXJzW3tvYQSwos+Sdq4rQGnYXZ+1
+        3AX2GScvmuCyeA8YIKmW3jqzGtWH0iA7Ic6wCnnDZwXtK76x8FMX8cnU2qMC2aVz
+        zFAqLcxs7apHvItdRCAPnA==</ds:X509Certificate>
+                </ds:X509Data>
+              </ds:KeyInfo>
+            </KeyDescriptor>
+        
+            <!--
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST/SLO"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST-SimpleSign/SLO"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://whoami.cesnet.cz/idp/profile/SAML2/Redirect/SLO"/>
+            -->
+        
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/Redirect/SSO"/>
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST/SSO"/>
+            <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" req-attr:supportsRequestedAttributes="true" Location="https://whoami.cesnet.cz/idp/profile/SAML2/POST-SimpleSign/SSO"/>
+        
+          </IDPSSODescriptor>
+        
+          <Organization>
+            <OrganizationName xml:lang="en">CESNET, a. l. e.</OrganizationName>
+            <OrganizationName xml:lang="cs">CESNET, z. s. p. o.</OrganizationName>
+            <OrganizationDisplayName xml:lang="en">CESNET</OrganizationDisplayName>
+            <OrganizationDisplayName xml:lang="cs">CESNET</OrganizationDisplayName>
+            <OrganizationURL xml:lang="en">https://www.ces.net/</OrganizationURL>
+            <OrganizationURL xml:lang="cs">https://www.cesnet.cz/</OrganizationURL>
+          </Organization>
+        
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Oppolzer</SurName>
+            <EmailAddress>mailto:jan.oppolzer@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Tomášek</SurName>
+            <EmailAddress>mailto:jan.tomasek@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="technical">
+            <GivenName>Jan</GivenName>
+            <SurName>Chvojka</SurName>
+            <EmailAddress>mailto:jan.chvojka@cesnet.cz</EmailAddress>
+          </ContactPerson>
+          <ContactPerson contactType="other" xmlns:remd="http://refeds.org/metadata" remd:contactType="http://refeds.org/metadata/contactType/security">
+            <GivenName>CESNET-CERTS</GivenName>
+            <EmailAddress>mailto:abuse@cesnet.cz</EmailAddress>
+          </ContactPerson>
+        
+        </EntityDescriptor>';
+
         $this
             ->followingRedirects()
             ->actingAs($admin)
             ->patch(route('entities.update', $entity), [
                 'action' => 'update',
-                'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
+                'metadata' => $whoami,
             ])
             ->assertSeeText(__('entities.entity_updated'));
 

@@ -24,8 +24,8 @@ class StoreEntity extends FormRequest
     public function rules()
     {
         return [
-            'url' => 'nullable|url',
-            'file' => 'required_without:url|file',
+            'file' => 'required_without:metadata|file',
+            'metadata' => 'nullable|string',
             'federation' => 'required|numeric',
             'explanation' => 'required|max:255',
         ];

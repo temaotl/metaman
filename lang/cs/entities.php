@@ -58,7 +58,7 @@ return [
     'confirm_add_hfd_body' => 'Opravdu chcete přidat Hide from Discovery?',
     'hfd' => 'Entita má nyní nastaveno Hide from Discovery.',
     'no_hfd' => 'Entita již nemá nastaveno Hide from Discovery.',
-    'no_metadata' => 'Zvolený soubor nebo URL adresa neobsahuje žádná metadata protokolu SAML.',
+    'no_metadata' => 'Zvolený soubor nebo vložený text neobsahuje žádná metadata protokolu SAML.',
     'rs' => 'Entita je nyní členem kategorie entit R&S',
     'no_rs' => 'Entita již není členem kategorie entit R&S.',
     'ask_rs' => 'Požádat o R&S',
@@ -66,4 +66,5 @@ return [
     'rs_only_for_eduidcz_members' => 'Přihláška do R&S je určena pouze pro členy eduID.cz.',
     'get_metadata' => 'Stáhnout metadata',
     'show_metadata' => 'Zobrazit metadata',
+    'metadata_placeholder' => 'Vložte SAML metadata své entitu.',
 ];

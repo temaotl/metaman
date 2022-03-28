@@ -127,4 +127,5 @@ return [
     'delete_rs_body' => 'Opravdu chcete smazat R&S entitě :name?',
     'add_rs' => 'Přidat R&S?',
     'add_rs_body' => 'Opravdu chcete přidat R&S entitě :name?',
+    'metadata' => 'Metadata',
 ];

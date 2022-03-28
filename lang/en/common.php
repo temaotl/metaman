@@ -127,4 +127,5 @@ return [
     'delete_rs_body' => 'Would you like to delete R&S from :name?',
     'add_rs' => 'Add R&S?',
     'add_rs_body' => 'Would you like to add R&S to :name?',
+    'metadata' => 'Metadata',
 ];

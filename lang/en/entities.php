@@ -58,7 +58,7 @@ return [
     'confirm_add_hfd_body' => 'Would you really like to add Hide from Discovery?',
     'hfd' => 'Entity is now Hidden from Discovery.',
     'no_hfd' => 'Entity is not Hidden from Discovery anymore.',
-    'no_metadata' => 'The supplied file or URL does not contain any SAML metadata.',
+    'no_metadata' => 'The supplied file or text does not contain any SAML metadata.',
     'rs' => 'Entity is now a member of R&S entity category.',
     'no_rs' => 'Entity is no longer a member of R&S entity category.',
     'ask_rs' => 'Ask R&S',
@@ -66,4 +66,5 @@ return [
     'rs_only_for_eduidcz_members' => 'R&S application is available only to eduID.cz members.',
     'get_metadata' => 'Get metadata',
     'show_metadata' => 'Show metadata',
+    'metadata_placeholder' => 'Enter SAML metadata for your entity.',
 ];

@@ -15,18 +15,7 @@
             </div>
             <div class="border-t border-gray-200">
                 <dl>
-                    <div class="px-4 py-5 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm text-gray-500">
-                            <label class="text-sm" for="url">
-                                {{ __('entities.metadata_url') }}
-                            </label>
-                        </dt>
-                        <dd class="sm:col-span-2">
-                            {!! $errors->first('url', '<div class="text-red-600 text-sm font-semibold float-right">:message</div>') !!}
-                            <input class="text-sm @error('url') border-red-500 border @else @if(old('url') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 rounded-md" type="text" name="url" id="url" placeholder="{{ __('entities.url_placeholder') }}" value="{{ old('url') }}">
-                        </dd>
-                    </div>
-                    <div class="px-4 py-5 bg-white sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="px-4 py-5 odd:bg-gray-50 even:bg-white sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm text-gray-500">
                             <label class="text-sm" for="file">
                                 {{ __('entities.metadata_file') }}
@@ -35,6 +24,17 @@
                         <dd class="sm:col-span-2">
                             {!! $errors->first('file', '<div class="text-red-600 text-sm font-semibold float-right">:message</div>') !!}
                             <input class="text-sm focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 rounded-md" type="file" name="file" id="file">
+                        </dd>
+                    </div>
+                    <div class="px-4 py-5 odd:bg-gray-50 even:bg-white sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm text-gray-500">
+                            <label class="text-sm" for="metadata">
+                                {{ __('common.metadata') }}
+                            </label>
+                        </dt>
+                        <dd class="sm:col-span-2">
+                            {!! $errors->first('metadata', '<div class="text-red-600 text-sm font-semibold float-right">:message</div>') !!}
+                            <textarea class="text-sm @error('metadata') border-red-500 border @else @if(old('metadata') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 rounded-md" name="metadata" id="metadata" rows="10" placeholder="{{ __('entities.metadata_placeholder') }}">{{ old('metadata') }}</textarea>
                         </dd>
                     </div>
                 </dl>

@@ -15,18 +15,6 @@ trait ValidatorTrait
     // //////////////////////////////////////////////////
     public function getMetadata(Request $request): string
     {
-        if($request->input('url'))
-        {
-            try
-            {
-                return file_get_contents($request->input('url'));
-            }
-            catch(\Throwable $t)
-            {
-                return false;
-            }
-        }
-
         if($request->hasFile('file'))
         {
             try
@@ -37,6 +25,11 @@ trait ValidatorTrait
             {
                 return false;
             }
+        }
+
+        if($request->input('metadata'))
+        {
+            return $request->input('metadata');
         }
     }
 

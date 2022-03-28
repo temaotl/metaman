@@ -253,8 +253,8 @@ class EntityController extends Controller
                 $this->authorize('update', $entity);
 
                 $validated = $request->validate([
-                    'url' => 'nullable|url',
-                    'file' => 'required_without:url|file',
+                    'metadata' => 'nullable|string',
+                    'file' => 'required_without:metadata|file',
                 ]);
 
                 $metadata = $this->getMetadata($request);
