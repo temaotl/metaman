@@ -456,18 +456,17 @@ class FederationController extends Controller
         $unknown = array();
         foreach($cfgfiles as $cfgfile)
         {
-            if(!in_array($cfgfile, $federations))
-            {
-                $content = Storage::get($cfgfile);
-                preg_match('/\[(.*)\]/', $content, $xml_id);
-                preg_match('/filters\s*=\s*(.*)/', $content, $filters);
-                preg_match('/name\s*=\s*(.*)/', $content, $name);
+            if(in_array($cfgfile, $federations)) continue;
 
-                $unknown[$cfgfile]['cfgfile'] = $cfgfile;
-                $unknown[$cfgfile]['xml_id'] = $xml_id[1];
-                $unknown[$cfgfile]['filters'] = $filters[1];
-                $unknown[$cfgfile]['name'] = $name[1];
-            }
+            $content = Storage::get($cfgfile);
+            preg_match('/\[(.*)\]/', $content, $xml_id);
+            preg_match('/filters\s*=\s*(.*)/', $content, $filters);
+            preg_match('/name\s*=\s*(.*)/', $content, $name);
+
+            $unknown[$cfgfile]['cfgfile'] = $cfgfile;
+            $unknown[$cfgfile]['xml_id'] = $xml_id[1];
+            $unknown[$cfgfile]['filters'] = $filters[1];
+            $unknown[$cfgfile]['name'] = $name[1];
         }
 
         return view('federations.import', [
@@ -552,24 +551,23 @@ class FederationController extends Controller
         $refreshed = 0;
         foreach($cfgfiles as $cfgfile)
         {
-            if(in_array($cfgfile, $federations))
+            if(! in_array($cfgfile, $federations)) continue;
+
+            $content = Storage::get($cfgfile);
+            preg_match('/\[(.*)\]/', $content, $xml_id);
+            preg_match('/filters\s*=\s*(.*)/', $content, $filters);
+            preg_match('/name\s*=\s*(.*)/', $content, $xml_name);
+
+            $federation = Federation::whereCfgfile($cfgfile)->first();
+            $federation->update([
+                'xml_id' => $xml_id[1],
+                'xml_name' => $xml_name[1],
+                'filters' => $filters[1],
+            ]);
+
+            if($federation->wasChanged())
             {
-                $content = Storage::get($cfgfile);
-                preg_match('/\[(.*)\]/', $content, $xml_id);
-                preg_match('/filters\s*=\s*(.*)/', $content, $filters);
-                preg_match('/name\s*=\s*(.*)/', $content, $xml_name);
-
-                $federation = Federation::whereCfgfile($cfgfile)->first();
-                $federation->update([
-                    'xml_id' => $xml_id[1],
-                    'xml_name' => $xml_name[1],
-                    'filters' => $filters[1],
-                ]);
-
-                if($federation->wasChanged())
-                {
-                    $refreshed++;
-                }
+                $refreshed++;
             }
         }
 
