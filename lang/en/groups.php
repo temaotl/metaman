@@ -16,11 +16,11 @@ return [
     'updated' => ':name group has been successfully updated.',
     'delete_empty' => 'Deleting a group with member entities is forbidden.',
     'deleted' => ':name group has been successfully deleted.',
-    'no_groups' => 'There are no groups.',
+    'no_groups' => 'There are no groups. Import or create them first.',
     'no_group_selected' => 'No group selected.',
     'import' => 'Groups import',
     'nothing_to_import' => 'There are no groups to import.',
     'empty_import' => 'No groups to import selected.',
-    'imported' => '{0} No group has been imported.|{1} One group has been imported and needs to be activated.|[2,*] :count groups have been imported and need to be activated.',
+    'imported' => '{0} No group has been imported.|{1} One group has been imported.|[2,*] :count groups have been imported.',
     'refreshed' => 'Groups have been refreshed.',
 ];

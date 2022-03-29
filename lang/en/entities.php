@@ -67,4 +67,6 @@ return [
     'get_metadata' => 'Get metadata',
     'show_metadata' => 'Show metadata',
     'metadata_placeholder' => 'Enter SAML metadata for your entity.',
+    'missing_federations' => 'It is required to import all federations before importing entities.',
+    'nothing_to_import' => 'There are no missing entities to import.',
 ];

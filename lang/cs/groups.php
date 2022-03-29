@@ -16,11 +16,11 @@ return [
     'updated' => 'Skupina :name byla úspěšně aktualizována.',
     'delete_empty' => 'Není povoleno smazat skupinu obsahující entity.',
     'deleted' => 'Skupina :name byla úspěšně smazána.',
-    'no_groups' => 'Neexistují žádné skupiny.',
+    'no_groups' => 'Neexistují žádné skupiny. Nejprve je importujte nebo vytvořte.',
     'no_group_selected' => 'Nebyla zvolena žádná skupina.',
     'import' => 'Importovat skupiny',
     'nothing_to_import' => 'Neexistují žádné skupiny k importování.',
     'empty_import' => 'Nebyly zvoleny žádné skupiny k importování.',
-    'imported' => '{0} Nebyla importována žádná skupina.|{1} Jedna skupina byla importována a potřebuje být aktivována.|[2,4] :count skupiny byly importovány a potřebují být aktivovány.|[5,*] :count skupin bylo importováno a potřebuje být aktivováno.',
+    'imported' => '{0} Nebyla importována žádná skupina.|{1} Jedna skupina byla importována.|[2,4] :count skupiny byly importovány.|[5,*] :count skupin bylo importováno.',
     'refreshed' => 'Skupiny byly obnoveny.',
 ];

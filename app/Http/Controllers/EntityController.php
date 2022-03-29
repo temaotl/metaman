@@ -688,33 +688,23 @@ class EntityController extends Controller
 
         $xmlfiles = array();
         $tagfiles = array();
-        $missing_federations = array();
         foreach(Storage::files() as $file)
         {
             if(preg_match('/\.xml$/', $file))
-            {
                 $xmlfiles[] = $file;
-            }
 
             if(preg_match('/\.tag$/', $file))
             {
-                if(preg_match('/^' . config('git.edugain_tag') . '$/', $file))
-                {
-                    continue;
-                }
+                if(preg_match('/^' . config('git.edugain_tag') . '$/', $file)) continue;
 
                 $federation = Federation::whereTagfile($file)->first();
-                if($federation === null)
-                {
-                    if(Storage::exists(preg_replace('/\.tag/', '.cfg', $file)))
-                    {
-                        $missing_federations[] = $file;
-                    }
-                }
+                if($federation === null && Storage::exists(preg_replace('/\.tag/', '.cfg', $file)))
+                    return redirect()
+                        ->route('entities.index')
+                        ->with('status', __('entities.missing_federations'))
+                        ->with('color', 'red');
                 else
-                {
                     $tagfiles[] = $file;
-                }
             }
         }
 
@@ -725,77 +715,20 @@ class EntityController extends Controller
         $unknown = array();
         foreach($xmlfiles as $xmlfile)
         {
-            if(!in_array($xmlfile, $entities))
-            {
-                $metadata = Storage::get($xmlfile);
-                $metadata = $this->parseMetadata($metadata);
-                $entity = json_decode($metadata, true);
+            if(in_array($xmlfile, $entities)) continue;
 
-                $unknown[$xmlfile]['type'] = $entity['type'];
-                $unknown[$xmlfile]['entityid'] = $entity['entityid'];
-                $unknown[$xmlfile]['file'] = $xmlfile;
-                $unknown[$xmlfile]['name_en'] = $entity['name_en'];
-                $unknown[$xmlfile]['name_cs'] = $entity['name_cs'];
-                $unknown[$xmlfile]['description_en'] = $entity['description_en'];
-                $unknown[$xmlfile]['description_cs'] = $entity['description_cs'];
-
-                foreach($tagfiles as $tagfile)
-                {
-                    $content = Storage::get($tagfile);
-                    $pattern = preg_quote($entity['entityid'], '/');
-                    $pattern = "/^$pattern\$/m";
-
-                    if(preg_match_all($pattern, $content))
-                    {
-                        if(strcmp($tagfile, config('git.edugain_tag')) === 0)
-                        {
-                            $unknown[$xmlfile]['federations'][] = 'eduGAIN';
-                            continue;
-                        }
-
-                        $federation = Federation::whereTagfile($tagfile)->first();
-                        $unknown[$xmlfile]['federations'][] = $federation->name ?? null;
-                    }
-                }
-            }
-        }
-
-        return view('entities.import', [
-            'entities' => $unknown,
-            'missing_federations' => $missing_federations,
-        ]);
-    }
-
-    public function import(Request $request)
-    {
-        $this->authorize('do-everything');
-
-        if(empty(request('entities')))
-        {
-            return back()
-                ->with('status', __('entities.empty_import'))
-                ->with('color', 'red');
-        }
-
-        $tagfiles = array();
-        foreach(Storage::files() as $file)
-        {
-            if(preg_match('/\.tag$/', $file))
-            {
-                $tagfiles[] = $file;
-            }
-        }
-
-        $imported = 0;
-        foreach(request('entities') as $xmlfile)
-        {
             $metadata = Storage::get($xmlfile);
             $metadata = $this->parseMetadata($metadata);
-            $entity = json_decode($metadata, JSON_FORCE_OBJECT);
+            $entity = json_decode($metadata, true);
 
-            $edugain = false;
-            $hfd = false;
-            $rs = $entity['rs'];
+            $unknown[$xmlfile]['type'] = $entity['type'];
+            $unknown[$xmlfile]['entityid'] = $entity['entityid'];
+            $unknown[$xmlfile]['file'] = $xmlfile;
+            $unknown[$xmlfile]['name_en'] = $entity['name_en'];
+            $unknown[$xmlfile]['name_cs'] = $entity['name_cs'];
+            $unknown[$xmlfile]['description_en'] = $entity['description_en'];
+            $unknown[$xmlfile]['description_cs'] = $entity['description_cs'];
+
             foreach($tagfiles as $tagfile)
             {
                 $content = Storage::get($tagfile);
@@ -806,42 +739,95 @@ class EntityController extends Controller
                 {
                     if(strcmp($tagfile, config('git.edugain_tag')) === 0)
                     {
-                        $edugain = true;
-                    }
-
-                    if(strcmp($tagfile, config('git.hfd')) === 0)
-                    {
-                        $hfd = true;
-                    }
-
-                    if(strcmp($tagfile, config('git.ec_rs')) === 0)
-                    {
-                        $rs = true;
+                        $unknown[$xmlfile]['federations'][] = 'eduGAIN';
+                        continue;
                     }
 
                     $federation = Federation::whereTagfile($tagfile)->first();
-
-                    DB::transaction(function() use($entity, $federation, $edugain, $hfd, $rs) {
-                        $entity = Entity::updateOrCreate($entity, [
-                            'edugain' => $edugain,
-                            'hfd' => $hfd,
-                            'rs' => $rs,
-                        ]);
-                        $entity->federations()->attach($federation, [
-                            'requested_by' => Auth::id(),
-                            'approved_by' => Auth::id(),
-                            'approved' => true,
-                            'explanation' => 'Imported from Git repository.',
-                        ]);
-
-                        $entity->approved = true;
-                        $entity->active = false;
-                        $entity->update();
-                    });
+                    $unknown[$xmlfile]['federations'][] = $federation->name ?? null;
                 }
             }
+        }
+
+        if(empty($unknown))
+            return redirect()
+                ->route('entities.index')
+                ->with('status', __('entities.nothing_to_import'));
+
+        return view('entities.import', [
+            'entities' => $unknown,
+        ]);
+    }
+
+    public function import(Request $request)
+    {
+        $this->authorize('do-everything');
+
+        if(empty(request('entities')))
+            return back()
+                ->with('status', __('entities.empty_import'))
+                ->with('color', 'red');
+
+        // ADD SELECTED ENTITIES FROM XML FILES TO DATABASE
+        $imported = 0;
+        foreach(request('entities') as $xmlfile)
+        {
+            $xml_entity = $this->parseMetadata(Storage::get($xmlfile));
+            $new_entity = json_decode($xml_entity, true);
+
+            DB::transaction(function() use($new_entity) {
+                $entity = Entity::create($new_entity);
+
+                $entity->approved = true;
+                $entity->active = false;
+                $entity->update();
+            });
 
             $imported++;
+        }
+
+        // FIX FEDERATIONS MEMBERSHIP
+        foreach(request('entities') as $xmlfile)
+        {
+            $entity = Entity::whereFile($xmlfile)->first();
+
+            foreach(Federation::select('id', 'tagfile')->get() as $federation)
+            {
+                $members = Storage::get($federation->tagfile);
+                $pattern = preg_quote($entity->entityid, '/');
+                $pattern = "/^$pattern\$/m";
+
+                if(! preg_match_all($pattern, $members)) continue;
+
+                $entity->federations()->attach($federation, [
+                    'requested_by' => Auth::id(),
+                    'approved_by' => Auth::id(),
+                    'approved' => true,
+                    'explanation' => 'Imported from Git repository.',
+                ]);
+            }
+
+        }
+
+        // FIX HIDE FROM DISCOVERY MEMBERSHIP
+        $hfd = array_filter(preg_split("/\r\n|\r|\n/", Storage::get(config('git.hfd'))));
+        foreach($hfd as $entityid)
+        {
+            Entity::whereEntityid($entityid)->update(['hfd' => true]);
+        }
+
+        // FIX EDUGAIN MEMBERSHIP
+        $edugain = array_filter(preg_split("/\r\n|\r|\n/", Storage::get(config('git.edugain_tag'))));
+        foreach($edugain as $entityid)
+        {
+            Entity::whereEntityid($entityid)->update(['edugain' => true]);
+        }
+
+        // FIX RESEARCH AND EDUCATION MEMBERSHIP
+        $rs = array_filter(preg_split("/\r\n|\r|\n/", Storage::get(config('git.ec_rs'))));
+        foreach($rs as $entityid)
+        {
+            Entity::whereEntityid($entityid)->update(['rs' => true]);
         }
 
         return redirect('entities')
@@ -858,9 +844,7 @@ class EntityController extends Controller
         foreach(Storage::files() as $file)
         {
             if(preg_match('/\.xml/', $file))
-            {
                 $xmlfiles[] = $file;
-            }
         }
 
         $entities = Entity::select('file')->get()->pluck('file')->toArray();
@@ -880,28 +864,22 @@ class EntityController extends Controller
             $edugain = Storage::get(config('git.edugain_tag'));
             $pattern = preg_quote($refreshed_entity['entityid'], '/');
             $pattern = "/^$pattern\$/m";
+
             if(preg_match_all($pattern, $edugain))
-            {
                 $entity->update(['edugain' => true]);
-            }
             else
-            {
                 $entity->update(['edugain' => false]);
-            }
 
             if($entity->type === 'idp')
             {
                 $hfd = Storage::get(config('git.hfd'));
                 $pattern = preg_quote($refreshed_entity['entityid'], '/');
                 $pattern = "/^$pattern\$/m";
+
                 if(preg_match_all($pattern, $hfd))
-                {
                     $entity->update(['hfd' => true]);
-                }
                 else
-                {
                     $entity->update(['hfd' => false]);
-                }
             }
 
             if($entity->type === 'sp')
@@ -909,20 +887,15 @@ class EntityController extends Controller
                 $rs = Storage::get(config('git.ec_rs'));
                 $pattern = preg_quote($refreshed_entity['entityid'], '/');
                 $pattern = "/^$pattern\$/m";
+
                 if(preg_match_all($pattern, $rs))
-                {
                     $entity->update(['rs' => true]);
-                }
                 else
-                {
                     $entity->update(['rs' => false]);
-                }
             }
 
             if($entity->wasChanged())
-            {
                 $refreshed++;
-            }
         }
 
         return redirect('entities')

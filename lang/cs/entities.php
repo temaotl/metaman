@@ -67,4 +67,6 @@ return [
     'get_metadata' => 'Stáhnout metadata',
     'show_metadata' => 'Zobrazit metadata',
     'metadata_placeholder' => 'Vložte SAML metadata své entitu.',
+    'missing_federations' => 'Před importováním entit je vyžadované importovat nejprve všechny federace.',
+    'nothing_to_import' => 'Neexistují žádné entity k importu.',
 ];

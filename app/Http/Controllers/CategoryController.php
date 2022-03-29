@@ -180,25 +180,11 @@ class CategoryController extends Controller
         $tagfiles = array();
         foreach(Storage::files() as $file)
         {
-            if(preg_match('/^' . config('git.edugain_tag') . '$/', $file))
-            {
-                continue;
-            }
+            if(preg_match('/^' . config('git.edugain_tag') . '$/', $file)) continue;
+            if(preg_match('/^' . config('git.hfd') . '$/', $file)) continue;
+            if(preg_match('/^' . config('git.ec_rs') . '$/', $file)) continue;
 
-            if(preg_match('/^' . config('git.hfd') . '$/', $file))
-            {
-                continue;
-            }
-
-            if(preg_match('/^' . config('git.ec_rs') . '$/', $file))
-            {
-                continue;
-            }
-
-            if(preg_match('/\.tag$/', $file))
-            {
-                $tagfiles[] = $file;
-            }
+            if(preg_match('/\.tag$/', $file)) $tagfiles[] = $file;
         }
 
         $categories = Category::select('tagfile')->get()->pluck('tagfile')->toArray();
@@ -207,15 +193,16 @@ class CategoryController extends Controller
         $unknown = array();
         foreach($tagfiles as $tagfile)
         {
-            if(!in_array($tagfile, $categories) && !in_array($tagfile, $groups))
-            {
-                $cfgfile = preg_replace('/\.tag$/', '.cfg', $tagfile);
-                if(!Storage::exists($cfgfile))
-                {
-                    $unknown[] = $tagfile;
-                }
-            }
+            if(in_array($tagfile, $categories) || in_array($tagfile, $groups)) continue;
+
+            $cfgfile = preg_replace('/\.tag$/', '.cfg', $tagfile);
+            if(!Storage::exists($cfgfile)) $unknown[] = $tagfile;
         }
+
+        if(empty($unknown))
+            return redirect()
+                ->route('categories.index')
+                ->with('status', __('categories.nothing_to_import'));
 
         return view('categories.import', [
             'categories' => $unknown,
@@ -227,28 +214,20 @@ class CategoryController extends Controller
         $this->authorize('do-everything');
 
         if(empty(request('categories')))
-        {
             return back()
                 ->with('status', __('categories.empty_import'))
                 ->with('color', 'red');
-        }
 
         $imported = 0;
         $names = request('names');
         $descriptions = request('descriptions');
         foreach(request('categories') as $category)
         {
-            $content = Storage::get($category);
-
             if(empty($names[$category]))
-            {
                 $names[$category] = preg_replace('/\.tag/', '', $category);
-            }
 
             if(empty($descriptions[$category]))
-            {
                 $descriptions[$category] = preg_replace('/\.tag/', '', $category);
-            }
 
             DB::transaction(function() use($category, $names, $descriptions) {
                 Category::create([
@@ -271,24 +250,20 @@ class CategoryController extends Controller
 
         $this->initializeGit();
 
-        $categories = Category::select('tagfile')->get()->pluck('tagfile')->toArray();
-
-        foreach($categories as $category)
+        if(! Category::count())
+            return redirect()
+                ->route('categories.index')
+                ->with('status', __('categories.no_categories'))
+                ->with('color', 'red');
+        
+        foreach(Category::select('id','tagfile')->get() as $category)
         {
-            $content = trim(Storage::get($category));
-            $content = explode("\n", $content);
+            $members = explode("\n", trim(Storage::get($category->tagfile)));
 
-            $category = Category::whereTagfile($category)->first();
+            if(! count($members)) continue;
 
-            if(count($content) >= 1)
-            {
-                foreach($content as $entityid)
-                {
-                    $entity = Entity::whereEntityid($entityid)->first();
-                    $entity->category()->associate($category);
-                    $entity->save();
-                }
-            }
+            foreach($members as $entityid)
+                Entity::whereEntityid($entityid)->first()->category()->associate($category)->save();
         }
 
         return redirect('categories')

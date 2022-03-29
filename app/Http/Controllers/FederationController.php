@@ -440,15 +440,9 @@ class FederationController extends Controller
         $cfgfiles = array();
         foreach(Storage::files() as $file)
         {
-            if(preg_match('/^'.config('git.edugain_cfg').'$/', $file))
-            {
-                continue;
-            }
+            if(preg_match('/^'.config('git.edugain_cfg').'$/', $file)) continue;
 
-            if(preg_match('/\.cfg$/', $file))
-            {
-                $cfgfiles[] = $file;
-            }
+            if(preg_match('/\.cfg$/', $file)) $cfgfiles[] = $file;
         }
 
         $federations = Federation::select('cfgfile')->get()->pluck('cfgfile')->toArray();
@@ -469,6 +463,11 @@ class FederationController extends Controller
             $unknown[$cfgfile]['name'] = $name[1];
         }
 
+        if(empty($unknown))
+            return redirect()
+                ->route('federations.index')
+                ->with('status', __('federations.nothing_to_import'));
+
         return view('federations.import', [
             'federations' => $unknown,
         ]);
@@ -479,11 +478,9 @@ class FederationController extends Controller
         $this->authorize('do-everything');
 
         if(empty(request('federations')))
-        {
             return back()
                 ->with('status', __('federations.empty_import'))
                 ->with('color', 'red');
-        }
 
         $imported = 0;
         $names = request('names');
@@ -496,14 +493,10 @@ class FederationController extends Controller
             preg_match('/name\s*=\s*(.*)/', $content, $xml_name);
 
             if(empty($names[$cfgfile]))
-            {
                 $names[$cfgfile] = preg_replace('/\.cfg$/', '', $cfgfile);
-            }
 
             if(empty($descriptions[$cfgfile]))
-            {
                 $descriptions[$cfgfile] = preg_replace('/\.cfg$/', '', $cfgfile);
-            }
 
             DB::transaction(function() use($cfgfile, $names, $descriptions, $xml_id, $xml_name, $filters) {
                 $federation = Federation::create([
@@ -541,9 +534,7 @@ class FederationController extends Controller
         foreach(Storage::files() as $file)
         {
             if(preg_match('/\.cfg/', $file))
-            {
                 $cfgfiles[] = $file;
-            }
         }
 
         $federations = Federation::select('cfgfile')->get()->pluck('cfgfile')->toArray();
@@ -565,10 +556,7 @@ class FederationController extends Controller
                 'filters' => $filters[1],
             ]);
 
-            if($federation->wasChanged())
-            {
-                $refreshed++;
-            }
+            if($federation->wasChanged()) $refreshed++;
         }
 
         return redirect('federations')
