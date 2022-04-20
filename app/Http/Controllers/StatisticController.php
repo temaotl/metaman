@@ -11,7 +11,7 @@ class StatisticController extends Controller
 {
     public function index()
     {
-        $cache_time = now()->addHour();
+        $cache_time = now('Europe/Prague')->addHour();
 
         $CACHE_TIME = Cache::remember('CACHE_TIME', $cache_time, function () use ($cache_time) {
             return $cache_time;
@@ -52,7 +52,7 @@ class StatisticController extends Controller
         $sps_sirtfi = $sp->filter(fn ($e) => $e['sirtfi'] == 1)->count();
 
         return response()->json([
-            'next_refresh_at' => $CACHE_TIME . ' (UTC)',
+            'next_refresh_at' => $CACHE_TIME . ' (Europe/Prague)',
             'federations' => [
                 'all' => $federations
             ],
