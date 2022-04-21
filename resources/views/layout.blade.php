@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,16 +8,18 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
+
 <body class="bg-gray-50 dark:bg-gray-900 dark:text-gray-400 antialiased text-gray-700">
 
     @include('partials.header')
 
     <main class="md:p-8 max-w-screen-xl p-4 mx-auto">
-        <x-flash-message/>
+        <x-flash-message />
         @yield('content')
     </main>
 
     @include('partials.footer')
 
 </body>
+
 </html>

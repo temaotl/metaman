@@ -43,7 +43,8 @@
                         <ul class="list-decimal list-inside">
                             @forelse ($group->entities as $entity)
                                 <li>
-                                    <a class="hover:underline text-blue-500" href="{{ route('entities.show', $entity) }}">{{ $entity->name_en ?: $entity->entityid }}</a>
+                                    <a class="hover:underline text-blue-500"
+                                        href="{{ route('entities.show', $entity) }}">{{ $entity->name_en ?: $entity->entityid }}</a>
                                 </li>
                             @empty
                                 {{ __('groups.no_entities') }}
@@ -54,10 +55,11 @@
             </dl>
         </div>
         <div class="px-6 py-3 bg-gray-100">
-            <x-buttons.back href="{{ route('groups.index') }}"/>
-            <a class="hover:bg-yellow-200 inline-block px-4 py-2 text-yellow-600 bg-yellow-300 rounded shadow" href="{{ route('groups.edit', $group) }}">{{ __('common.edit') }}</a>
+            <x-buttons.back href="{{ route('groups.index') }}" />
+            <a class="hover:bg-yellow-200 inline-block px-4 py-2 text-yellow-600 bg-yellow-300 rounded shadow"
+                href="{{ route('groups.edit', $group) }}">{{ __('common.edit') }}</a>
 
-            <x-forms.destroy-group :group="$group"/>
+            <x-forms.destroy-group :group="$group" />
 
         </div>
     </div>

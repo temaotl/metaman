@@ -4,27 +4,33 @@
 @section('content')
 
     <form action="{{ route('federations.import') }}" method="post">
-    @csrf
+        @csrf
         <div class="dark:bg-transparent overflow-x-auto bg-white border rounded-lg">
             <table class="min-w-full border-b border-gray-300">
                 <thead>
                     <tr>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             &nbsp;
                         </th>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('common.name') }}
                         </th>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('common.description') }}
                         </th>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('federations.xml_id') }}
                         </th>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('federations.xml_name') }}
                         </th>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('federations.filters') }}
                         </th>
                     </tr>
@@ -33,13 +39,15 @@
                     @foreach ($federations as $federation)
                         <tr class="hover:bg-blue-50 dark:hover:bg-gray-700" role="button">
                             <td class="px-6 py-3 text-sm">
-                                <input class="rounded" type="checkbox" name="federations[]" value="{{ $federation['cfgfile'] }}">
+                                <input class="rounded" type="checkbox" name="federations[]"
+                                    value="{{ $federation['cfgfile'] }}">
                             </td>
                             <td class="px-6 py-3 text-sm">
                                 <input class="rounded" type="text" name="names[{{ $federation['cfgfile'] }}]">
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                <input class="rounded" type="text" name="descriptions[{{ $federation['cfgfile'] }}]">
+                                <input class="rounded" type="text"
+                                    name="descriptions[{{ $federation['cfgfile'] }}]">
                             </td>
                             <td class="px-6 py-3 text-sm">
                                 {{ $federation['xml_id'] }}

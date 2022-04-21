@@ -19,17 +19,22 @@
                     <table class="min-w-full border-b border-gray-300">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">&nbsp;</th>
-                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.name') }}</th>
-                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.description') }}</th>
-                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.status') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">&nbsp;
+                                </th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                                    {{ __('common.name') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                                    {{ __('common.description') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                                    {{ __('common.status') }}</th>
                             </tr>
                         </thead>
                         <tbody class="checkable divide-y divide-gray-200">
                             @forelse ($members->sortBy('name_en') as $entity)
                                 <tr class="hover:bg-blue-50" role="button">
                                     <td class="px-6 py-3 text-sm">
-                                        <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity->id }}">
+                                        <input class="rounded" type="checkbox" name="entities[]"
+                                            value="{{ $entity->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $entity->name_en }}
@@ -41,9 +46,9 @@
                                         {{ $entity->description_en ?: __('entities.no_description') }}
                                     </td>
                                     <td class="px-6 py-3 text-sm">
-                                        <x-pils.approved :model="$entity"/>
-                                        <x-pils.status :model="$entity"/>
-                                        <x-pils.state :model="$entity"/>        
+                                        <x-pils.approved :model="$entity" />
+                                        <x-pils.status :model="$entity" />
+                                        <x-pils.state :model="$entity" />
                                     </td>
                                 </tr>
                             @empty
@@ -58,8 +63,9 @@
                     {{ $members->links() }}
                     @if (count($members))
                         <div class="px-4 py-2 bg-gray-100">
-                            <x-button color="red" target="true" data-target="delete_members">{{ __('common.delete_members') }}</x-button>
-                            <x-modals.confirm :model="$federation" form="delete_members"/>
+                            <x-button color="red" target="true" data-target="delete_members">
+                                {{ __('common.delete_members') }}</x-button>
+                            <x-modals.confirm :model="$federation" form="delete_members" />
                         </div>
                     @endif
                 </div>
@@ -73,7 +79,8 @@
             <div class="mb-4">
                 <form>
                     <label class="sr-only" for="search">{{ __('common.search') }}</label>
-                    <input class="dark:bg-transparent w-full px-4 py-2 border rounded-lg" type="text" name="search" id="search" value="{{ request('search') }}" placeholder="{{ __('entities.searchbox') }}">
+                    <input class="dark:bg-transparent w-full px-4 py-2 border rounded-lg" type="text" name="search" id="search"
+                        value="{{ request('search') }}" placeholder="{{ __('entities.searchbox') }}">
                 </form>
             </div>
             <form id="add_members" action="{{ route('federations.update', $federation) }}" method="post">
@@ -84,17 +91,22 @@
                     <table class="min-w-full border-b border-gray-300">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">&nbsp;</th>
-                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.name') }}</th>
-                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.description') }}</th>
-                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.status') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">&nbsp;
+                                </th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                                    {{ __('common.name') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                                    {{ __('common.description') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                                    {{ __('common.status') }}</th>
                             </tr>
                         </thead>
                         <tbody class="checkable divide-y divide-gray-200">
                             @forelse ($entities as $entity)
                                 <tr class="hover:bg-blue-50" role="button">
                                     <td class="px-6 py-3 text-sm">
-                                        <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity->id }}">
+                                        <input class="rounded" type="checkbox" name="entities[]"
+                                            value="{{ $entity->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $entity->name_en }}
@@ -106,17 +118,17 @@
                                         {{ $entity->description_en ?: __('entities.no_description') }}
                                     </td>
                                     <td class="px-6 py-3 text-sm">
-                                        <x-pils.approved :model="$entity"/>
-                                        <x-pils.status :model="$entity"/>
-                                        <x-pils.state :model="$entity"/>        
+                                        <x-pils.approved :model="$entity" />
+                                        <x-pils.status :model="$entity" />
+                                        <x-pils.state :model="$entity" />
                                     </td>
-                                </tr>    
+                                </tr>
                             @empty
                                 <tr class="hover:bg-blue-50">
                                     <td class="px-6 py-3 font-bold text-center">
                                         {{ __('federations.empty') }}
                                     </td>
-                                </tr>    
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -124,23 +136,24 @@
                     @if (count($entities))
                         <div class="px-4 py-2 bg-gray-100">
                             <x-button target="true" data-target="add_members">{{ __('common.add_members') }}</x-button>
-                            <x-modals.confirm :model="$federation" form="add_members"/>
+                            <x-modals.confirm :model="$federation" form="add_members" />
                         </div>
                     @endif
                 </div>
             </form>
         </div>
-
     @else
-
         <h3 class="text-lg font-semibold">{{ __('common.entities_list') }}</h3>
         <div class="overflow-x-auto bg-gray-100 border rounded-lg">
             <table class="min-w-full border-b border-gray-300">
                 <thead>
                     <tr>
-                        <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100">{{ __('common.name') }}</th>
-                        <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100">{{ __('common.description') }}</th>
-                        <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100">{{ __('common.status') }}</th>
+                        <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100">{{ __('common.name') }}
+                        </th>
+                        <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100">
+                            {{ __('common.description') }}</th>
+                        <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100">
+                            {{ __('common.status') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -153,9 +166,9 @@
                                 {{ $entity->description_en }}
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                <x-pils.approved :model="$entity"/>
-                                <x-pils.status :model="$entity"/>
-                                <x-pils.state :model="$entity"/>
+                                <x-pils.approved :model="$entity" />
+                                <x-pils.status :model="$entity" />
+                                <x-pils.state :model="$entity" />
                             </td>
                         </tr>
                     @empty

@@ -13,9 +13,9 @@
                     <dt class="text-sm text-gray-500">{{ __('common.name') }}</dt>
                     <dd class="sm:col-span-2">
                         <span class="pr-4">{{ $federation->name }}</span>
-                        <x-pils.approved :model="$federation"/>
-                        <x-pils.status :model="$federation"/>
-                        <x-pils.state :model="$federation"/>
+                        <x-pils.approved :model="$federation" />
+                        <x-pils.status :model="$federation" />
+                        <x-pils.state :model="$federation" />
                     </dd>
                 </div>
                 <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
@@ -52,7 +52,9 @@
                         <ul>
                             @foreach (explode(', ', $federation->filters) as $filter)
                                 <li>
-                                    <a class="font-mono text-sm text-blue-500" href="{{ config('git.metadata_base_url') }}/{{ $filter }}" target="_blank">
+                                    <a class="font-mono text-sm text-blue-500"
+                                        href="{{ config('git.metadata_base_url') }}/{{ $filter }}"
+                                        target="_blank">
                                         {{ config('git.metadata_base_url') }}/{{ $filter }}
                                     </a>
                                 </li>
@@ -90,7 +92,7 @@
                         </dd>
                     </div>
                 @endcan
-                @unless ($federation->approved)
+                @unless($federation->approved)
                     <div class="bg-green-50 dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 font-bold">
                         <dt class="text-sm text-gray-500">
                             {{ __('common.explanation') }}
@@ -103,19 +105,20 @@
             </dl>
         </div>
         <div class="px-6 py-3 bg-gray-100">
-            <x-buttons.back href="{{ route('federations.index') }}"/>
-    
+            <x-buttons.back href="{{ route('federations.index') }}" />
+
             @can('update', $federation)
-                @unless ($federation->trashed())
-                    <a class="hover:bg-yellow-200 inline-block px-4 py-2 text-yellow-600 bg-yellow-300 rounded shadow" href="{{ route('federations.edit', $federation) }}">{{ __('common.edit') }}</a>
+                @unless($federation->trashed())
+                    <a class="hover:bg-yellow-200 inline-block px-4 py-2 text-yellow-600 bg-yellow-300 rounded shadow"
+                        href="{{ route('federations.edit', $federation) }}">{{ __('common.edit') }}</a>
                 @endunless
             @endcan
 
-            <x-forms.cancel route="federations" :model="$federation"/>
-            <x-forms.approve route="federations" :model="$federation"/>
-            <x-forms.change-status route="federations" :model="$federation"/>
-            <x-forms.change-state route="federations" :model="$federation"/>
-            <x-forms.destroy route="federations" :model="$federation"/>
+            <x-forms.cancel route="federations" :model="$federation" />
+            <x-forms.approve route="federations" :model="$federation" />
+            <x-forms.change-status route="federations" :model="$federation" />
+            <x-forms.change-state route="federations" :model="$federation" />
+            <x-forms.destroy route="federations" :model="$federation" />
 
         </div>
     </div>

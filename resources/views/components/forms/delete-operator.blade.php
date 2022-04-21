@@ -3,5 +3,5 @@
     @method('patch')
     <input type="hidden" name="action" value="delete_operator">
     <input type="hidden" name="operator" value="{{ $user }}">
-    <x-buttons.delete/>
+    <x-buttons.delete />
 </form>

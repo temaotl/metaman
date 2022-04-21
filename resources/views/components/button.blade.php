@@ -8,7 +8,6 @@
         'bg-red-600 hover:bg-red-700 text-red-50' => $color === 'red',
         'bg-gray-600 hover:bg-gray-700 text-gray-50' => $color === 'gray',
     ]) }}
-    type="submit"
->
+    type="submit">
     {{ $slot }}
 </button>

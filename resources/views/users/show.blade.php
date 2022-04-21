@@ -17,7 +17,9 @@
                     </dt>
                     <dd class="sm:col-span-2">
                         <span class="pr-4">{{ $user->name }}</span>
-                        <span class="pr-4"><x-pils.status :model="$user" /></span>
+                        <span class="pr-4">
+                            <x-pils.status :model="$user" />
+                        </span>
                         <x-pils.user-role role="{{ $user->admin }}" />
                     </dd>
                 </div>
@@ -35,31 +37,30 @@
                     </dt>
                     <dd class="sm:col-span-2">
                         <div>
-                            <a class="hover:underline text-blue-500" href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                            <a class="hover:underline text-blue-500"
+                                href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                         </div>
                         @if (count($emails) > 1)
-                        @can('update', $user)
-                            <div class="p-4 mt-4 bg-white border rounded-lg shadow">
-                                <p class="mb-4 text-gray-500">
-                                    {{ __('users.select_different_email') }}
-                                </p>
-                                <form action="{{ route('users.update', $user) }}" method="post">
-                                    @csrf
-                                    @method('patch')
-                                    <input type="hidden" name="action" value="email">
-                                    <select class="mr-4 rounded" name="email">
-                                        @foreach ($emails as $email)
-                                            <option value="{{ $email }}"
-                                                @if ($email === $user->email)
-                                                    selected
-                                                @endif
-                                            >{{ $email }}</option>
-                                        @endforeach
-                                    </select>
-                                    <x-button>{{ __('users.update_email') }}</x-button>
-                                </form>
-                            </div>
-                        @endcan
+                            @can('update', $user)
+                                <div class="p-4 mt-4 bg-white border rounded-lg shadow">
+                                    <p class="mb-4 text-gray-500">
+                                        {{ __('users.select_different_email') }}
+                                    </p>
+                                    <form action="{{ route('users.update', $user) }}" method="post">
+                                        @csrf
+                                        @method('patch')
+                                        <input type="hidden" name="action" value="email">
+                                        <select class="mr-4 rounded" name="email">
+                                            @foreach ($emails as $email)
+                                                <option value="{{ $email }}"
+                                                    @if ($email === $user->email) selected @endif>{{ $email }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <x-button>{{ __('users.update_email') }}</x-button>
+                                    </form>
+                                </div>
+                            @endcan
                         @endif
                     </dd>
                 </div>
@@ -72,7 +73,8 @@
                             <ul class="list-decimal list-inside">
                                 @foreach ($user->federations as $federation)
                                     <li>
-                                        <a class="hover:underline text-blue-500" href="{{ route('federations.show', $federation) }}">{{ $federation->name }}</a>
+                                        <a class="hover:underline text-blue-500"
+                                            href="{{ route('federations.show', $federation) }}">{{ $federation->name }}</a>
                                     </li>
                                 @endforeach
                             </ul>
@@ -90,7 +92,8 @@
                             <ul class="list-decimal list-inside">
                                 @foreach ($user->entities as $entity)
                                     <li>
-                                        <a class="hover:underline text-blue-500" href="{{ route('entities.show', $entity) }}">{{ $entity->name_en ?: $entity->entityid }}</a>
+                                        <a class="hover:underline text-blue-500"
+                                            href="{{ route('entities.show', $entity) }}">{{ $entity->name_en ?: $entity->entityid }}</a>
                                     </li>
                                 @endforeach
                             </ul>
@@ -106,8 +109,8 @@
     <div>
         <x-buttons.back href="{{ URL::previous() }}" />
 
-        <x-forms.change-user-status route="users" :user="$user"/>
-        <x-forms.change-role :user="$user"/>
+        <x-forms.change-user-status route="users" :user="$user" />
+        <x-forms.change-role :user="$user" />
     </div>
 
 @endsection

@@ -40,7 +40,9 @@
                     <dd class="sm:col-span-2">
                         <ul class="list-decimal list-inside">
                             @forelse ($category->entities as $entity)
-                                <li><a class="hover:underline text-blue-500" href="{{ route('entities.show', $entity) }}">{{ $entity->name_en ?: $entity->entityid }}</a></li>
+                                <li><a class="hover:underline text-blue-500"
+                                        href="{{ route('entities.show', $entity) }}">{{ $entity->name_en ?: $entity->entityid }}</a>
+                                </li>
                             @empty
                                 {{ __('categories.no_entities') }}
                             @endforelse
@@ -50,10 +52,11 @@
             </dl>
         </div>
         <div class="px-6 py-3 bg-gray-100">
-            <x-buttons.back href="{{ route('categories.index') }}"/>
-            <a class="hover:bg-yellow-200 inline-block px-4 py-2 text-yellow-600 bg-yellow-300 rounded shadow" href="{{ route('categories.edit', $category) }}">{{ __('common.edit') }}</a>
+            <x-buttons.back href="{{ route('categories.index') }}" />
+            <a class="hover:bg-yellow-200 inline-block px-4 py-2 text-yellow-600 bg-yellow-300 rounded shadow"
+                href="{{ route('categories.edit', $category) }}">{{ __('common.edit') }}</a>
 
-            <x-forms.destroy-category :category="$category"/>
+            <x-forms.destroy-category :category="$category" />
 
         </div>
     </div>

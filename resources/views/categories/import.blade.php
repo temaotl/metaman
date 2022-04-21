@@ -9,16 +9,20 @@
             <table class="min-w-full border-b border-gray-300">
                 <thead>
                     <tr>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             &nbsp;
                         </th>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('common.file') }}
                         </th>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('common.name') }}
                         </th>
-                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
+                        <th
+                            class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('common.description') }}
                         </th>
                     </tr>
@@ -27,7 +31,8 @@
                     @foreach ($categories as $category)
                         <tr class="hover:bg-blue-50 dark:hover:bg-gray-700">
                             <td class="px-6 py-3 text-sm">
-                                <input class="rounded" type="checkbox" name="categories[]" value="{{ $category }}">
+                                <input class="rounded" type="checkbox" name="categories[]"
+                                    value="{{ $category }}">
                             </td>
                             <td class="px-6 py-3 text-sm">
                                 <code class="text-sm text-pink-500">

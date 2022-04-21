@@ -3,8 +3,10 @@
         <div class="dark:bg-red-900 text-red-50 py-4 font-bold bg-red-700">
             <div class="flex items-center max-w-screen-xl px-4 mx-auto space-x-4">
                 <div class="dark:bg-red-700 p-2 bg-red-900 rounded">
-                    <svg class="text-red-50 w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                    <svg class="text-red-50 w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
                     </svg>
                 </div>
                 <p>
@@ -24,23 +26,29 @@
                         <a class="inline-block px-4 py-2 text-lg font-bold" href="/">{{ config('app.name') }}</a>
                     </p>
                     <ul class="md:flex md:flex-row flex-col hidden" id="navigation">
-                        <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2" href="{{ route('federations.index') }}">{{ __('common.federations') }}</a></li>
-                        <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2" href="{{ route('entities.index') }}">{{ __('common.entities') }}</a></li>
+                        <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2"
+                                href="{{ route('federations.index') }}">{{ __('common.federations') }}</a></li>
+                        <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2"
+                                href="{{ route('entities.index') }}">{{ __('common.entities') }}</a></li>
                         @can('do-everything')
-                            <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2" href="{{ route('categories.index') }}">{{ __('common.categories') }}</a></li>
-                            <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2" href="{{ route('groups.index') }}">{{ __('common.groups') }}</a></li>
+                            <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2"
+                                    href="{{ route('categories.index') }}">{{ __('common.categories') }}</a></li>
+                            <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2"
+                                    href="{{ route('groups.index') }}">{{ __('common.groups') }}</a></li>
                         @endcan
-                        <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2" href="{{ route('users.show', Auth::id()) }}">{{ __('common.my_profile') }}</a></li>
+                        <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2"
+                                href="{{ route('users.show', Auth::id()) }}">{{ __('common.my_profile') }}</a>
+                        </li>
                         @can('viewAny', App\Models\User::class)
-                            <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2" href="{{ route('users.index') }}">{{ __('common.users') }}</a></li>
+                            <li><a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2"
+                                    href="{{ route('users.index') }}">{{ __('common.users') }}</a></li>
                         @endcan
                     </ul>
                 </div>
 
                 <div class="md:flex-row flex flex-col">
                     <ul class="md:pr-4 md:flex md:flex-row md:text-sm md:items-center flex-col hidden" id="profile">
-                        {{--
-                        <li>
+                        {{-- <li>
                             <a class="dark:hover:text-white hover:text-gray-700 whitespace-nowrap" href="{{ route('notifications') }}">
                                 <div class="md:hidden hover:bg-gray-300 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:text-gray-400 md:hover:bg-transparent px-4 py-2 rounded-md">Notifications ({{ $notifications}})</div>
                                 <div class="md:flex items-center justify-center hidden">
@@ -50,32 +58,35 @@
                                     </svg>
                                 </div>
                             </a>
-                        </li>
-                        --}}
+                        </li> --}}
                         <li>
                             @if (App::currentLocale() == 'cs')
-                                <a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2" href="/language/en" title="Switch to English">EN</a>
+                                <a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2"
+                                    href="/language/en" title="Switch to English">EN</a>
                             @else
-                                <a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2" href="/language/cs" title="Přepnout do češtiny">CS</a>
+                                <a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 block px-4 py-2"
+                                    href="/language/cs" title="Přepnout do češtiny">CS</a>
                             @endif
 
                             <a class="md:inline-block md:rounded hover:bg-gray-400 hover:text-gray-900 whitespace-nowrap block px-4 py-2"
-                            @env(['local', 'testing'])
-                                href="/fakelogout"
+                                @env(['local', 'testing']) href="/fakelogout"
                             @else
-                                href="{{ route('logout') }}"
-                            @endenv>{{ __('common.logout') }}</a>
+                                href="{{ route('logout') }}" @endenv>{{ __('common.logout') }}</a>
                         </li>
                     </ul>
                 </div>
 
                 <div class="md:hidden top-3 right-4 absolute block">
                     <button class="hover:bg-gray-300 dark:hover:bg-gray-700 p-2 rounded-lg" id="menu">
-                        <svg class="block w-6 h-6" id="open-menu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <svg class="block w-6 h-6" id="open-menu" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
-                        <svg class="hidden w-6 h-6" id="close-menu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <svg class="hidden w-6 h-6" id="close-menu" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
