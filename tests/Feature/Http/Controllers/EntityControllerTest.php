@@ -265,7 +265,7 @@ class EntityControllerTest extends TestCase
             ->assertSeeText($entity->name)
             ->assertSeeText($entity->description)
             ->assertSeeText($entity->entityid)
-            ->assertSeeText($entity->kind);
+            ->assertSeeText($entity->type->name);
 
         $this->assertEquals(1, Entity::count());
         $this->assertEquals(route('entities.show', $entity), url()->current());
@@ -917,7 +917,7 @@ class EntityControllerTest extends TestCase
             ->assertSeeText($entity->name)
             ->assertSeeText($entity->description)
             ->assertSeeText($entity->entityid)
-            ->assertSeeText($entity->kind);
+            ->assertSeeText($entity->type->name);
 
         $this->assertEquals(1, Entity::count());
         $this->assertEquals(route('entities.show', $entity), url()->current());

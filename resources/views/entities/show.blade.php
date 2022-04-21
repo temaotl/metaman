@@ -28,7 +28,7 @@
                 </div>
                 <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm text-gray-500">{{ __('common.type') }}</dt>
-                    <dd class="sm:col-span-2">{{ $entity->kind }}</dd>
+                    <dd class="sm:col-span-2">{{ $entity->type->name }}</dd>
                 </div>
                 <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt class="text-sm text-gray-500">{{ __('common.entity_categories_selfasserted') }}</dt>
@@ -42,7 +42,7 @@
                     <dd class="sm:col-span-2">
                         @can('do-everything')
                             @unless ($entity->trashed())
-                                @if ($entity->active && $entity->approved && $entity->type === 'sp')
+                                @if ($entity->active && $entity->approved && $entity->type->value === 'sp')
                                     <form class="inline-block" id="rs" action="{{ route('entities.update', $entity) }}" method="POST">
                                         @csrf
                                         @method('patch')
@@ -57,7 +57,7 @@
                                     <x-modals.confirm :model="$entity" form="rs"/>
                                     <x-pil linethrough="{{ !$entity->rs }}">{{ __('common.rs') }}</x-pil>
                                 @endif
-                                @if ($entity->active && $entity->approved && $entity->type === 'idp')
+                                @if ($entity->active && $entity->approved && $entity->type->value === 'idp')
                                     <x-pil linethrough="{{ !$entity->rs }}">{{ __('common.rs') }}</x-pil>
                                     <form class="inline-block" id="hfd" action="{{ route('entities.update', $entity) }}" method="POST">
                                         @csrf
@@ -74,7 +74,7 @@
                                 @endif
                             @endunless
                         @else
-                            @if ($entity->type === 'sp')
+                            @if ($entity->type->value === 'sp')
                                 <x-pil linethrough="{{ !$entity->rs }}">{{ __('common.rs') }}</x-pil>
                                 @if ($entity->federations()->where('xml_name', Config::get('git.rs_federation'))->count())
                                     @can('update', $entity)
@@ -84,7 +84,7 @@
                                         </form>
                                     @endcan
                                 @endif
-                            @elseif ($entity->type === 'idp')
+                            @elseif ($entity->type->value === 'idp')
                                 <x-pil linethrough="{{ !$entity->hfd }}">{{ __('common.hfd') }}</x-pil>
                             @endif
                         @endcan
@@ -119,7 +119,7 @@
                     </dd>
                 </div>
                 @can('do-everything')
-                    @if ($entity->type === 'idp')
+                    @if ($entity->type->value === 'idp')
                         <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm text-gray-500">
                                 {{ __('common.eduidcz_category') }}

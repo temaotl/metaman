@@ -506,7 +506,7 @@ class EntityController extends Controller
             case 'rs':
                 $this->authorize('do-everything');
 
-                if($entity->type !== 'sp')
+                if($entity->type->value !== 'sp')
                 {
                     return redirect()
                         ->back()
@@ -575,7 +575,7 @@ class EntityController extends Controller
             case 'hfd':
                 $this->authorize('do-everything');
 
-                if($entity->type !== 'idp')
+                if($entity->type->value !== 'idp')
                 {
                     return redirect()
                         ->back()
@@ -870,7 +870,7 @@ class EntityController extends Controller
             else
                 $entity->update(['edugain' => false]);
 
-            if($entity->type === 'idp')
+            if($entity->type->value === 'idp')
             {
                 $hfd = Storage::get(config('git.hfd'));
                 $pattern = preg_quote($refreshed_entity['entityid'], '/');
@@ -882,7 +882,7 @@ class EntityController extends Controller
                     $entity->update(['hfd' => false]);
             }
 
-            if($entity->type === 'sp')
+            if($entity->type->value === 'sp')
             {
                 $rs = Storage::get(config('git.ec_rs'));
                 $pattern = preg_quote($refreshed_entity['entityid'], '/');

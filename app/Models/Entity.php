@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EntityType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,6 +28,7 @@ class Entity extends Model
     ];
 
     protected $casts = [
+        'type' => EntityType::class,
         'edugain' => 'boolean',
         'hfd' => 'boolean',
         'rs' => 'boolean',
@@ -88,10 +90,5 @@ class Entity extends Model
             ->orWhere('name_cs', 'like', "%$search%")
             ->orWhere('description_en', 'like', "%$search%")
             ->orWhere('description_cs', 'like', "%$search%");
-    }
-
-    public function getKindAttribute()
-    {
-        return $this->type === 'idp' ? 'IdP' : 'SP';
     }
 }
