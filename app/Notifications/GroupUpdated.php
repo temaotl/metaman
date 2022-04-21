@@ -42,10 +42,10 @@ class GroupUpdated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.group_updated_subject'))
-                    ->line(__('notifications.group_updated_body', [
-                        'name' => $this->group->name,
-                    ]));
+            ->subject(__('notifications.group_updated_subject'))
+            ->line(__('notifications.group_updated_body', [
+                'name' => $this->group->name,
+            ]));
     }
 
     /**

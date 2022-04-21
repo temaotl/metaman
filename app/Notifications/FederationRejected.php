@@ -41,10 +41,10 @@ class FederationRejected extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.federation_rejected_subject'))
-                    ->line(__('notifications.federation_rejected_body', [
-                        'name' => $this->name,
-                    ]));
+            ->subject(__('notifications.federation_rejected_subject'))
+            ->line(__('notifications.federation_rejected_body', [
+                'name' => $this->name,
+            ]));
     }
 
     /**

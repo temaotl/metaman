@@ -1,7 +1,6 @@
 <?php
 
-if(!function_exists('generateFederationID'))
-{
+if (!function_exists('generateFederationID')) {
     function generateFederationID(string $name)
     {
         setlocale(LC_ALL, 'en_US.utf8');

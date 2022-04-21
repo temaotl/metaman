@@ -46,11 +46,10 @@ class GitDeleteGroup implements ShouldQueue
 
         $git->rm($this->group);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->commit(
                 $this->committer() . ": {$this->group} (delete)\n\n"
-                . "Deleted by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Deleted by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

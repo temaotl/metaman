@@ -6,10 +6,10 @@
     @include('federations.navigation')
 
     <h3 class="text-lg font-semibold">{{ __('federations.profile') }}</h3>
-    <div class="mb-6 bg-white dark:bg-gray-800 sm:rounded-lg shadow overflow-hidden">
+    <div class="dark:bg-gray-800 sm:rounded-lg mb-6 overflow-hidden bg-white shadow">
         <div>
             <dl>
-                <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                     <dt class="text-sm text-gray-500">{{ __('common.name') }}</dt>
                     <dd class="sm:col-span-2">
                         <span class="pr-4">{{ $federation->name }}</span>
@@ -18,7 +18,7 @@
                         <x-pils.state :model="$federation"/>
                     </dd>
                 </div>
-                <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
                     <dt class="text-sm text-gray-500">
                         {{ __('common.description') }}
                     </dt>
@@ -26,7 +26,7 @@
                         {{ $federation->description }}
                     </dd>
                 </div>
-                <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                     <dt class="text-sm text-gray-500">
                         {{ __('federations.xml_id') }}
                     </dt>
@@ -34,7 +34,7 @@
                         {{ $federation->xml_id }}
                     </dd>
                 </div>
-                <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
                     <dt class="text-sm text-gray-500">
                         {{ __('federations.xml_name') }}
                     </dt>
@@ -44,7 +44,7 @@
                         </code>
                     </dd>
                 </div>
-                <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                     <dt class="text-sm text-gray-500">
                         {{ __('federations.metadata_url') }}
                     </dt>
@@ -61,7 +61,7 @@
                     </dd>
                 </div>
                 @can('do-everything')
-                    <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
                         <dt class="text-sm text-gray-500">
                             {{ __('federations.tagfile') }}
                         </dt>
@@ -71,7 +71,7 @@
                             </code>
                         </dd>
                     </div>
-                    <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                         <dt class="text-sm text-gray-500">
                             {{ __('federations.cfgfile') }}
                         </dt>
@@ -81,7 +81,7 @@
                             </code>
                         </dd>
                     </div>
-                    <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
                         <dt class="text-sm text-gray-500">
                             {{ __('federations.filters') }}
                         </dt>
@@ -91,7 +91,7 @@
                     </div>
                 @endcan
                 @unless ($federation->approved)
-                    <div class="px-4 py-5 bg-green-50 dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 font-bold">
+                    <div class="bg-green-50 dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 font-bold">
                         <dt class="text-sm text-gray-500">
                             {{ __('common.explanation') }}
                         </dt>
@@ -107,7 +107,7 @@
     
             @can('update', $federation)
                 @unless ($federation->trashed())
-                    <a class="inline-block px-4 py-2 bg-yellow-300 text-yellow-600 hover:bg-yellow-200 rounded shadow" href="{{ route('federations.edit', $federation) }}">{{ __('common.edit') }}</a>
+                    <a class="hover:bg-yellow-200 inline-block px-4 py-2 text-yellow-600 bg-yellow-300 rounded shadow" href="{{ route('federations.edit', $federation) }}">{{ __('common.edit') }}</a>
                 @endunless
             @endcan
 

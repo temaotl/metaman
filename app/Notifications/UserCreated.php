@@ -42,10 +42,10 @@ class UserCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.user_created_subject'))
-                    ->line(__('notifications.user_created_body', [
-                        'name' => $this->user->name,
-                    ]));
+            ->subject(__('notifications.user_created_subject'))
+            ->line(__('notifications.user_created_body', [
+                'name' => $this->user->name,
+            ]));
     }
 
     /**

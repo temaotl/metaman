@@ -41,10 +41,10 @@ class CategoryDeleted extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.category_deleted_subject'))
-                    ->line(__('notifications.category_deleted_body', [
-                        'name' => $this->category,
-                    ]));
+            ->subject(__('notifications.category_deleted_subject'))
+            ->line(__('notifications.category_deleted_body', [
+                'name' => $this->category,
+            ]));
     }
 
     /**

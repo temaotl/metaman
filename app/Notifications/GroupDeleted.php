@@ -41,10 +41,10 @@ class GroupDeleted extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.group_deleted_subject'))
-                    ->line(__('notifications.group_deleted_body', [
-                        'name' => $this->group,
-                    ]));
+            ->subject(__('notifications.group_deleted_subject'))
+            ->line(__('notifications.group_deleted_body', [
+                'name' => $this->group,
+            ]));
     }
 
     /**

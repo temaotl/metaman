@@ -54,13 +54,11 @@ class FederationPolicy
      */
     public function update(User $user, Federation $federation)
     {
-        if($user->admin)
-        {
+        if ($user->admin) {
             return true;
         }
 
-        if(in_array(Auth::id(), $federation->operators->pluck('id')->toArray()))
-        {
+        if (in_array(Auth::id(), $federation->operators->pluck('id')->toArray())) {
             return $user->active;
         }
     }
@@ -74,13 +72,11 @@ class FederationPolicy
      */
     public function delete(User $user, Federation $federation)
     {
-        if($user->admin)
-        {
+        if ($user->admin) {
             return true;
         }
 
-        if(in_array(Auth::id(), $federation->operators->pluck('id')->toArray()))
-        {
+        if (in_array(Auth::id(), $federation->operators->pluck('id')->toArray())) {
             return $user->active;
         }
     }

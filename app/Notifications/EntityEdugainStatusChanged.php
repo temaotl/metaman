@@ -42,11 +42,11 @@ class EntityEdugainStatusChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_edugain_status_changed_subject'))
-                    ->line(__('notifications.entity_edugain_status_changed_body', [
-                        'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
-                        'status' => $this->entity->edugain ? __('common.edugain_is_member') : __('common.edugain_is_no_longer_member'),
-                    ]));
+            ->subject(__('notifications.entity_edugain_status_changed_subject'))
+            ->line(__('notifications.entity_edugain_status_changed_body', [
+                'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
+                'status' => $this->entity->edugain ? __('common.edugain_is_member') : __('common.edugain_is_no_longer_member'),
+            ]));
     }
 
     /**

@@ -44,11 +44,11 @@ class EntityRequested extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_requested_subject'))
-                    ->line(__('notifications.entity_requested_body', [
-                        'name' => $this->entity->name_en,
-                        'federation' => $this->federation->name,
-                    ]));
+            ->subject(__('notifications.entity_requested_subject'))
+            ->line(__('notifications.entity_requested_body', [
+                'name' => $this->entity->name_en,
+                'federation' => $this->federation->name,
+            ]));
     }
 
     /**

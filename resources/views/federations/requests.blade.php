@@ -6,18 +6,18 @@
     @include('federations.navigation')
 
     @forelse ($joins as $join)
-        <div class="mb-4 bg-white sm:rounded-lg shadow overflow-hidden">
+        <div class="sm:rounded-lg mb-4 overflow-hidden bg-white shadow">
             <div>
                 <dl>
-                    <div class="px-4 py-5 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                         <dt class="text-sm text-gray-500">{{ __('common.entity') }}</dt>
-                        <dd><a class="text-blue-500 hover:underline" href="{{ route('entities.show', $join->entity) }}">{{ $join->entity->name_en }}</a></dd>
+                        <dd><a class="hover:underline text-blue-500" href="{{ route('entities.show', $join->entity) }}">{{ $join->entity->name_en }}</a></dd>
                     </div>
-                    <div class="px-4 py-5 bg-white sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
                         <dt class="text-sm text-gray-500">{{ __('common.requester') }}</dt>
-                        <dd><a class="text-blue-500 hover:underline" href="{{ route('users.show', $join->requested_by) }}">{{ $join->requester->name }}</a></dd>
+                        <dd><a class="hover:underline text-blue-500" href="{{ route('users.show', $join->requested_by) }}">{{ $join->requester->name }}</a></dd>
                     </div>
-                    <div class="px-4 py-5 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                         <dt class="text-sm text-gray-500">{{ __('common.explanation') }}</dt>
                         <dd>{{ $join->explanation }}</dd>
                     </div>

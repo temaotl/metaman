@@ -15,23 +15,23 @@
                 @csrf
                 @method('patch')
                 <input type="hidden" name="action" value="delete_entities">
-                <div class="bg-white border rounded-lg overflow-x-auto">
+                <div class="overflow-x-auto bg-white border rounded-lg">
                     <table class="min-w-full border-b border-gray-300">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 border-b bg-gray-100 text-left text-xs tracking-widest uppercase">&nbsp;</th>
-                                <th class="px-6 py-3 border-b bg-gray-100 text-left text-xs tracking-widest uppercase">{{ __('common.name') }}</th>
-                                <th class="px-6 py-3 border-b bg-gray-100 text-left text-xs tracking-widest uppercase">{{ __('common.description') }}</th>
-                                <th class="px-6 py-3 border-b bg-gray-100 text-left text-xs tracking-widest uppercase">{{ __('common.status') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">&nbsp;</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.name') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.description') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.status') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 checkable">
+                        <tbody class="checkable divide-y divide-gray-200">
                             @forelse ($members->sortBy('name_en') as $entity)
                                 <tr class="hover:bg-blue-50" role="button">
                                     <td class="px-6 py-3 text-sm">
                                         <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity->id }}">
                                     </td>
-                                    <td class="px-6 py-3 text-sm whitespace-nowrap">
+                                    <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $entity->name_en }}
                                         <div class="text-gray-500">
                                             {{ $entity->entityid }}
@@ -48,7 +48,7 @@
                                 </tr>
                             @empty
                                 <tr class="hover:bg-blue-50">
-                                    <td class="px-6 py-3 text-center font-bold" colspan="4">
+                                    <td class="px-6 py-3 font-bold text-center" colspan="4">
                                         {{ __('federations.no_members') }}
                                     </td>
                                 </tr>
@@ -73,30 +73,30 @@
             <div class="mb-4">
                 <form>
                     <label class="sr-only" for="search">{{ __('common.search') }}</label>
-                    <input class="px-4 py-2 w-full border rounded-lg dark:bg-transparent" type="text" name="search" id="search" value="{{ request('search') }}" placeholder="{{ __('entities.searchbox') }}">
+                    <input class="dark:bg-transparent w-full px-4 py-2 border rounded-lg" type="text" name="search" id="search" value="{{ request('search') }}" placeholder="{{ __('entities.searchbox') }}">
                 </form>
             </div>
             <form id="add_members" action="{{ route('federations.update', $federation) }}" method="post">
                 @csrf
                 @method('patch')
                 <input type="hidden" name="action" value="add_entities">
-                <div class="bg-white border rounded-lg overflow-x-auto">
+                <div class="overflow-x-auto bg-white border rounded-lg">
                     <table class="min-w-full border-b border-gray-300">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 border-b bg-gray-100 text-left text-xs tracking-widest uppercase">&nbsp;</th>
-                                <th class="px-6 py-3 border-b bg-gray-100 text-left text-xs tracking-widest uppercase">{{ __('common.name') }}</th>
-                                <th class="px-6 py-3 border-b bg-gray-100 text-left text-xs tracking-widest uppercase">{{ __('common.description') }}</th>
-                                <th class="px-6 py-3 border-b bg-gray-100 text-left text-xs tracking-widest uppercase">{{ __('common.status') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">&nbsp;</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.name') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.description') }}</th>
+                                <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.status') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 checkable">
+                        <tbody class="checkable divide-y divide-gray-200">
                             @forelse ($entities as $entity)
                                 <tr class="hover:bg-blue-50" role="button">
                                     <td class="px-6 py-3 text-sm">
                                         <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity->id }}">
                                     </td>
-                                    <td class="px-6 py-3 text-sm whitespace-nowrap">
+                                    <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $entity->name_en }}
                                         <div class="text-gray-500">
                                             {{ $entity->entityid }}
@@ -113,7 +113,7 @@
                                 </tr>    
                             @empty
                                 <tr class="hover:bg-blue-50">
-                                    <td class="px-6 py-3 text-center font-bold">
+                                    <td class="px-6 py-3 font-bold text-center">
                                         {{ __('federations.empty') }}
                                     </td>
                                 </tr>    
@@ -134,18 +134,18 @@
     @else
 
         <h3 class="text-lg font-semibold">{{ __('common.entities_list') }}</h3>
-        <div class="bg-gray-100 border rounded-lg overflow-x-auto">
+        <div class="overflow-x-auto bg-gray-100 border rounded-lg">
             <table class="min-w-full border-b border-gray-300">
                 <thead>
                     <tr>
-                        <th class="px-6 py-3 bg-gray-100 text-left text-xs tracking-widest uppercase">{{ __('common.name') }}</th>
-                        <th class="px-6 py-3 bg-gray-100 text-left text-xs tracking-widest uppercase">{{ __('common.description') }}</th>
-                        <th class="px-6 py-3 bg-gray-100 text-left text-xs tracking-widest uppercase">{{ __('common.status') }}</th>
+                        <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100">{{ __('common.name') }}</th>
+                        <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100">{{ __('common.description') }}</th>
+                        <th class="px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100">{{ __('common.status') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse ($members as $entity)
-                        <tr class="bg-white hover:bg-blue-50">
+                        <tr class="hover:bg-blue-50 bg-white">
                             <td class="px-6 py-3 text-sm">
                                 {{ $entity->name_en }}
                             </td>

@@ -6,11 +6,11 @@
 
             @if ($model->active)
 
-                <span class="px-2 bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100 text-xs font-semibold rounded-full">{{ __('common.active') }}</span>
+                <span class="dark:bg-green-800 dark:text-green-100 px-2 text-xs font-semibold text-green-800 bg-green-100 rounded-full">{{ __('common.active') }}</span>
 
             @else
 
-                <span class="px-2 bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100 text-xs font-semibold rounded-full">{{ __('common.inactive') }}</span>
+                <span class="dark:bg-red-800 dark:text-red-100 px-2 text-xs font-semibold text-red-800 bg-red-100 rounded-full">{{ __('common.inactive') }}</span>
 
             @endif
 
@@ -22,11 +22,11 @@
 
     @if ($model->active)
 
-    <span class="px-2 bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100 text-xs font-semibold rounded-full">{{ __('common.active') }}</span>
+    <span class="dark:bg-green-800 dark:text-green-100 px-2 text-xs font-semibold text-green-800 bg-green-100 rounded-full">{{ __('common.active') }}</span>
 
     @else
 
-    <span class="px-2 bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100 text-xs font-semibold rounded-full">{{ __('common.inactive') }}</span>
+    <span class="dark:bg-red-800 dark:text-red-100 px-2 text-xs font-semibold text-red-800 bg-red-100 rounded-full">{{ __('common.inactive') }}</span>
 
     @endif
 

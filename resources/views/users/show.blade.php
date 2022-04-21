@@ -3,15 +3,15 @@
 
 @section('content')
 
-    <div class="mb-6 bg-white dark:bg-gray-800 sm:rounded-lg shadow overflow-hidden">
-        <div class="px-4 py-5 sm:px-6">
+    <div class="dark:bg-gray-800 sm:rounded-lg mb-6 overflow-hidden bg-white shadow">
+        <div class="sm:px-6 px-4 py-5">
             <h3 class="text-lg font-semibold">
                 {{ __('users.profile') }}
             </h3>
         </div>
-        <div class="border-t border-gray-200 dark:border-gray-500">
+        <div class="dark:border-gray-500 border-t border-gray-200">
             <dl>
-                <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                     <dt class="text-sm text-gray-500">
                         {{ __('common.full_name') }}
                     </dt>
@@ -21,7 +21,7 @@
                         <x-pils.user-role role="{{ $user->admin }}" />
                     </dd>
                 </div>
-                <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
                     <dt class="text-sm text-gray-500">
                         {{ __('common.uniqueid_attribute') }}
                     </dt>
@@ -29,17 +29,17 @@
                         {{ $user->uniqueid }}
                     </dd>
                 </div>
-                <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                     <dt class="text-sm text-gray-500">
                         {{ __('common.email_address') }}
                     </dt>
                     <dd class="sm:col-span-2">
                         <div>
-                            <a class="text-blue-500 hover:underline" href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                            <a class="hover:underline text-blue-500" href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                         </div>
                         @if (count($emails) > 1)
                         @can('update', $user)
-                            <div class="mt-4 p-4 bg-white border rounded-lg shadow">
+                            <div class="p-4 mt-4 bg-white border rounded-lg shadow">
                                 <p class="mb-4 text-gray-500">
                                     {{ __('users.select_different_email') }}
                                 </p>
@@ -47,7 +47,7 @@
                                     @csrf
                                     @method('patch')
                                     <input type="hidden" name="action" value="email">
-                                    <select class="rounded mr-4" name="email">
+                                    <select class="mr-4 rounded" name="email">
                                         @foreach ($emails as $email)
                                             <option value="{{ $email }}"
                                                 @if ($email === $user->email)
@@ -63,7 +63,7 @@
                         @endif
                     </dd>
                 </div>
-                <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
                     <dt class="text-sm text-gray-500">
                         {{ __('common.federations') }}
                     </dt>
@@ -72,7 +72,7 @@
                             <ul class="list-decimal list-inside">
                                 @foreach ($user->federations as $federation)
                                     <li>
-                                        <a class="text-blue-500 hover:underline" href="{{ route('federations.show', $federation) }}">{{ $federation->name }}</a>
+                                        <a class="hover:underline text-blue-500" href="{{ route('federations.show', $federation) }}">{{ $federation->name }}</a>
                                     </li>
                                 @endforeach
                             </ul>
@@ -81,7 +81,7 @@
                         @endif
                     </dd>
                 </div>
-                <div class="px-4 py-5 bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div class="bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                     <dt class="text-sm text-gray-500">
                         {{ __('common.entities') }}
                     </dt>
@@ -90,7 +90,7 @@
                             <ul class="list-decimal list-inside">
                                 @foreach ($user->entities as $entity)
                                     <li>
-                                        <a class="text-blue-500 hover:underline" href="{{ route('entities.show', $entity) }}">{{ $entity->name_en ?: $entity->entityid }}</a>
+                                        <a class="hover:underline text-blue-500" href="{{ route('entities.show', $entity) }}">{{ $entity->name_en ?: $entity->entityid }}</a>
                                     </li>
                                 @endforeach
                             </ul>

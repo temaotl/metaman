@@ -43,10 +43,10 @@ class YourEntityRightsChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__("notifications.your_entity_rights_{$this->action}_subject"))
-                    ->line(__("notifications.your_entity_rights_{$this->action}_body", [
-                        'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
-                    ]));
+            ->subject(__("notifications.your_entity_rights_{$this->action}_subject"))
+            ->line(__("notifications.your_entity_rights_{$this->action}_body", [
+                'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
+            ]));
     }
 
     /**

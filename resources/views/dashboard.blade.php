@@ -7,6 +7,6 @@
     </p>
 
     <p>
-        {!! __('welcome.contact') !!} <a class="text-blue-500 hover:underline" href="mailto:info@eduid.cz">info@eduid.cz</a>.
+        {!! __('welcome.contact') !!} <a class="hover:underline text-blue-500" href="mailto:info@eduid.cz">info@eduid.cz</a>.
     </p>
 @endsection

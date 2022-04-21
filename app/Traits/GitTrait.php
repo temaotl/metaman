@@ -12,12 +12,9 @@ trait GitTrait
         $gitWrapper = new GitWrapper(config('git.binary'));
         $gitWrapper->setPrivateKey(config('git.ssh_key'));
 
-        if (! is_dir(config('git.local')))
-        {
+        if (!is_dir(config('git.local'))) {
             $git = $gitWrapper->cloneRepository(config('git.remote'), config('git.local'), ['b' => config('git.remote_branch')]);
-        }
-        else
-        {
+        } else {
             $git = $gitWrapper->workingCopy(config('git.local'));
             $git->pull();
         }
@@ -40,12 +37,9 @@ trait GitTrait
     {
         $part = preg_replace('#^https?://#', '', $uri);
         $slash = strpos($part, '/');
-        if($slash)
-        {
+        if ($slash) {
             return substr($part, 0, $slash);
-        }
-        else
-        {
+        } else {
             return $part;
         }
     }

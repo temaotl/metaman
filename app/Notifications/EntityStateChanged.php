@@ -42,11 +42,11 @@ class EntityStateChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_state_changed_subject'))
-                    ->line(__('notifications.entity_state_changed_body', [
-                        'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
-                        'state' => $this->entity->trashed() ? strtolower(__('common.deleted')) : strtolower(__('common.restored')),
-                    ]));
+            ->subject(__('notifications.entity_state_changed_subject'))
+            ->line(__('notifications.entity_state_changed_body', [
+                'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
+                'state' => $this->entity->trashed() ? strtolower(__('common.deleted')) : strtolower(__('common.restored')),
+            ]));
     }
 
     /**

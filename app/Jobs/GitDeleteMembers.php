@@ -50,20 +50,18 @@ class GitDeleteMembers implements ShouldQueue
         $git = $this->initializeGit();
 
         $tagfile = Storage::get($this->federation->tagfile);
-        foreach($this->entities as $entity)
-        {
+        foreach ($this->entities as $entity) {
             $tagfile = preg_replace('#' . $entity->entityid . '#', '', $tagfile);
         }
         Storage::put($this->federation->tagfile, $tagfile);
         $this->trimWhiteSpaces($this->federation->tagfile);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->add($this->federation->tagfile);
 
             $git->commit(
                 $this->committer() . ": {$this->federation->tagfile} (update)\n\n"
-                . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

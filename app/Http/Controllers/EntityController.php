@@ -100,8 +100,7 @@ class EntityController extends Controller
         $validated = $request->validated();
 
         $metadata = $this->getMetadata($request);
-        if(!$metadata)
-        {
+        if (!$metadata) {
             return redirect()
                 ->route('entities.create')
                 ->with('status', __('entities.metadata_couldnt_be_read'))
@@ -111,8 +110,7 @@ class EntityController extends Controller
         $result = json_decode($this->validateMetadata($metadata), true);
         $new_entity = json_decode($this->parseMetadata($metadata), true);
 
-        if(array_key_exists('result', $new_entity) && !is_null($new_entity['result']))
-        {
+        if (array_key_exists('result', $new_entity) && !is_null($new_entity['result'])) {
             return redirect()
                 ->back()
                 ->with('status', __('entities.no_metadata') . ' ' . $result['error'])
@@ -120,21 +118,18 @@ class EntityController extends Controller
         }
 
         $existing = Entity::whereEntityid($new_entity['entityid'])->first();
-        if($existing)
-        {
+        if ($existing) {
             return redirect()
                 ->route('entities.show', $existing)
                 ->with('status', __('entities.existing_already'))
                 ->with('color', 'yellow');
         }
 
-        switch($result['code'])
-        {
+        switch ($result['code']) {
             case '0':
                 $federation = Federation::findOrFail($validated['federation']);
-                $entity = DB::transaction(function() use($new_entity, $federation, $request) {
-                    if($new_entity['type'] === 'idp')
-                    {
+                $entity = DB::transaction(function () use ($new_entity, $federation, $request) {
+                    if ($new_entity['type'] === 'idp') {
                         $new_entity = array_merge($new_entity, ['hfd' => true]);
                     }
                     $entity = Entity::create($new_entity);
@@ -247,8 +242,7 @@ class EntityController extends Controller
      */
     public function update(Request $request, Entity $entity)
     {
-        switch(request('action'))
-        {
+        switch (request('action')) {
             case 'update':
                 $this->authorize('update', $entity);
 
@@ -258,8 +252,7 @@ class EntityController extends Controller
                 ]);
 
                 $metadata = $this->getMetadata($request);
-                if(!$metadata)
-                {
+                if (!$metadata) {
                     return redirect()
                         ->back()
                         ->with('status', __('entities.metadata_couldnt_be_read'))
@@ -269,24 +262,21 @@ class EntityController extends Controller
                 $result = json_decode($this->validateMetadata($metadata), true);
                 $updated_entity = json_decode($this->parseMetadata($metadata), true);
 
-                if(array_key_exists('result', $updated_entity) && !is_null($updated_entity['result']))
-                {
+                if (array_key_exists('result', $updated_entity) && !is_null($updated_entity['result'])) {
                     return redirect()
                         ->back()
                         ->with('status', __('entities.no_metadata'))
                         ->with('color', 'red');
                 }
 
-                if($entity->entityid !== $updated_entity['entityid'])
-                {
+                if ($entity->entityid !== $updated_entity['entityid']) {
                     return redirect()
                         ->back()
                         ->with('status', __('entities.different_entityid'))
                         ->with('color', 'red');
                 }
 
-                switch($result['code'])
-                {
+                switch ($result['code']) {
                     case '0':
 
                         $entity->update([
@@ -297,8 +287,7 @@ class EntityController extends Controller
                             'metadata' => $updated_entity['metadata'],
                         ]);
 
-                        if(!$entity->wasChanged())
-                        {
+                        if (!$entity->wasChanged()) {
                             return redirect()
                                 ->back()
                                 ->with('status', __('entities.not_changed'));
@@ -306,7 +295,7 @@ class EntityController extends Controller
 
                         Bus::chain([
                             new GitUpdateEntity($entity, Auth::user()),
-                            function() use($entity) {
+                            function () use ($entity) {
                                 $admins = User::activeAdmins()->select('id', 'email')->get();
                                 Notification::send($entity->operators, new EntityUpdated($entity));
                                 Notification::send($admins, new EntityUpdated($entity));
@@ -361,40 +350,36 @@ class EntityController extends Controller
             case 'state':
                 $this->authorize('delete', $entity);
 
-                if($entity->trashed())
-                {
+                if ($entity->trashed()) {
                     $entity->restore();
 
                     Bus::chain([
                         new GitAddEntity($entity, Auth::user()),
                         new GitAddToHfd($entity, Auth::user()),
-                        function() use($entity) {
+                        function () use ($entity) {
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityStateChanged($entity));
                             Notification::send($admins, new EntityStateChanged($entity));
                         },
                     ])->dispatch();
 
-                    foreach($entity->federations as $federation)
-                    {
+                    foreach ($entity->federations as $federation) {
                         Bus::chain([
                             new GitAddMember($federation, $entity, Auth::user()),
-                            function() use($federation, $entity) {
+                            function () use ($federation, $entity) {
                                 $admins = User::activeAdmins()->select('id', 'email')->get();
                                 Notification::send($federation->operators, new FederationMemberChanged($federation, $entity, 'added'));
                                 Notification::send($admins, new FederationMemberChanged($federation, $entity, 'added'));
                             },
                         ])->dispatch();
                     }
-                }
-                else
-                {
+                } else {
                     $entity->delete();
 
                     Bus::chain([
                         new GitDeleteEntity($entity, Auth::user()),
                         new GitDeleteFromHfd($entity, Auth::user()),
-                        function() use($entity) {
+                        function () use ($entity) {
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityStateChanged($entity));
                             Notification::send($admins, new EntityStateChanged($entity));
@@ -415,8 +400,7 @@ class EntityController extends Controller
             case 'add_operators':
                 $this->authorize('update', $entity);
 
-                if(!request('operators'))
-                {
+                if (!request('operators')) {
                     return redirect()
                         ->route('entities.show', $entity)
                         ->with('status', __('entities.add_empty_operators'))
@@ -441,8 +425,7 @@ class EntityController extends Controller
             case 'delete_operators':
                 $this->authorize('update', $entity);
 
-                if(!request('operators'))
-                {
+                if (!request('operators')) {
                     return redirect()
                         ->back()
                         ->with('status', __('entities.delete_empty_operators'))
@@ -473,22 +456,19 @@ class EntityController extends Controller
                 $status = $entity->edugain ? 'edugain' : 'no_edugain';
                 $color = $entity->edugain ? 'green' : 'red';
 
-                if($entity->edugain)
-                {
+                if ($entity->edugain) {
                     Bus::chain([
                         new GitAddToEdugain($entity, Auth::user()),
-                        function() use($entity) {
+                        function () use ($entity) {
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityEdugainStatusChanged($entity));
                             Notification::send($admins, new EntityEdugainStatusChanged($entity));
                         },
                     ])->dispatch();
-                }
-                else
-                {
+                } else {
                     Bus::chain([
                         new GitDeleteFromEdugain($entity, Auth::user()),
-                        function() use($entity) {
+                        function () use ($entity) {
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityEdugainStatusChanged($entity));
                             Notification::send($admins, new EntityEdugainStatusChanged($entity));
@@ -506,8 +486,7 @@ class EntityController extends Controller
             case 'rs':
                 $this->authorize('do-everything');
 
-                if($entity->type->value !== 'sp')
-                {
+                if ($entity->type->value !== 'sp') {
                     return redirect()
                         ->back()
                         ->with('status', __('categories.rs_controlled_for_sps_only'));
@@ -519,12 +498,9 @@ class EntityController extends Controller
                 $status = $entity->rs ? 'rs' : 'no_rs';
                 $color = $entity->rs ? 'green' : 'red';
 
-                if($entity->rs)
-                {
+                if ($entity->rs) {
                     GitAddToRs::dispatch($entity, Auth::user());
-                }
-                else
-                {
+                } else {
                     GitDeleteFromRs::dispatch($entity, Auth::user());
                 }
 
@@ -538,8 +514,7 @@ class EntityController extends Controller
             case 'category':
                 $this->authorize('do-everything');
 
-                if(empty(request('category')))
-                {
+                if (empty(request('category'))) {
                     return redirect()
                         ->back()
                         ->with('status', __('categories.no_category_selected'))
@@ -554,14 +529,13 @@ class EntityController extends Controller
                 Bus::chain([
                     new GitDeleteFromCategory($old_category, $entity, Auth::user()),
                     new GitAddToCategory($category, $entity, Auth::user()),
-                    function() use($entity, $category) {
+                    function () use ($entity, $category) {
                         $admins = User::activeAdmins()->select('id', 'email')->get();
                         Notification::send($admins, new IdpCategoryChanged($entity, $category));
                     },
                 ])->dispatch();
 
-                if(!$entity->wasChanged())
-                {
+                if (!$entity->wasChanged()) {
                     return redirect()
                         ->back();
                 }
@@ -575,8 +549,7 @@ class EntityController extends Controller
             case 'hfd':
                 $this->authorize('do-everything');
 
-                if($entity->type->value !== 'idp')
-                {
+                if ($entity->type->value !== 'idp') {
                     return redirect()
                         ->back()
                         ->with('status', __('categories.hfd_controlled_for_idps_only'));
@@ -588,12 +561,9 @@ class EntityController extends Controller
                 $status = $entity->hfd ? 'hfd' : 'no_hfd';
                 $color = $entity->hfd ? 'red' : 'green';
 
-                if($entity->hfd)
-                {
+                if ($entity->hfd) {
                     GitAddToHfd::dispatch($entity, Auth::user());
-                }
-                else
-                {
+                } else {
                     GitDeleteFromHfd::dispatch($entity, Auth::user());
                 }
 
@@ -613,8 +583,7 @@ class EntityController extends Controller
     {
         $this->authorize('update', $entity);
 
-        if(empty(request('federation')))
-        {
+        if (empty(request('federation'))) {
             return back()
                 ->with('status', __('entities.join_empty_federations'))
                 ->with('color', 'red');
@@ -638,8 +607,7 @@ class EntityController extends Controller
     {
         $this->authorize('update', $entity);
 
-        if(empty(request('federations')))
-        {
+        if (empty(request('federations'))) {
             return back()
                 ->with('status', __('entities.leave_empty_federations'))
                 ->with('color', 'red');
@@ -649,8 +617,7 @@ class EntityController extends Controller
             ->federations()
             ->detach($request->input('federations'));
 
-        foreach(request('federations') as $f)
-        {
+        foreach (request('federations') as $f) {
             $federation = Federation::find($f);
             GitDeleteFromFederation::dispatch($entity, $federation, Auth::user());
         }
@@ -688,17 +655,15 @@ class EntityController extends Controller
 
         $xmlfiles = array();
         $tagfiles = array();
-        foreach(Storage::files() as $file)
-        {
-            if(preg_match('/\.xml$/', $file))
+        foreach (Storage::files() as $file) {
+            if (preg_match('/\.xml$/', $file))
                 $xmlfiles[] = $file;
 
-            if(preg_match('/\.tag$/', $file))
-            {
-                if(preg_match('/^' . config('git.edugain_tag') . '$/', $file)) continue;
+            if (preg_match('/\.tag$/', $file)) {
+                if (preg_match('/^' . config('git.edugain_tag') . '$/', $file)) continue;
 
                 $federation = Federation::whereTagfile($file)->first();
-                if($federation === null && Storage::exists(preg_replace('/\.tag/', '.cfg', $file)))
+                if ($federation === null && Storage::exists(preg_replace('/\.tag/', '.cfg', $file)))
                     return redirect()
                         ->route('entities.index')
                         ->with('status', __('entities.missing_federations'))
@@ -713,9 +678,8 @@ class EntityController extends Controller
         $entities = Entity::select('file')->get()->pluck('file')->toArray();
 
         $unknown = array();
-        foreach($xmlfiles as $xmlfile)
-        {
-            if(in_array($xmlfile, $entities)) continue;
+        foreach ($xmlfiles as $xmlfile) {
+            if (in_array($xmlfile, $entities)) continue;
 
             $metadata = Storage::get($xmlfile);
             $metadata = $this->parseMetadata($metadata);
@@ -729,16 +693,13 @@ class EntityController extends Controller
             $unknown[$xmlfile]['description_en'] = $entity['description_en'];
             $unknown[$xmlfile]['description_cs'] = $entity['description_cs'];
 
-            foreach($tagfiles as $tagfile)
-            {
+            foreach ($tagfiles as $tagfile) {
                 $content = Storage::get($tagfile);
                 $pattern = preg_quote($entity['entityid'], '/');
                 $pattern = "/^$pattern\$/m";
 
-                if(preg_match_all($pattern, $content))
-                {
-                    if(strcmp($tagfile, config('git.edugain_tag')) === 0)
-                    {
+                if (preg_match_all($pattern, $content)) {
+                    if (strcmp($tagfile, config('git.edugain_tag')) === 0) {
                         $unknown[$xmlfile]['federations'][] = 'eduGAIN';
                         continue;
                     }
@@ -749,7 +710,7 @@ class EntityController extends Controller
             }
         }
 
-        if(empty($unknown))
+        if (empty($unknown))
             return redirect()
                 ->route('entities.index')
                 ->with('status', __('entities.nothing_to_import'));
@@ -763,19 +724,18 @@ class EntityController extends Controller
     {
         $this->authorize('do-everything');
 
-        if(empty(request('entities')))
+        if (empty(request('entities')))
             return back()
                 ->with('status', __('entities.empty_import'))
                 ->with('color', 'red');
 
         // ADD SELECTED ENTITIES FROM XML FILES TO DATABASE
         $imported = 0;
-        foreach(request('entities') as $xmlfile)
-        {
+        foreach (request('entities') as $xmlfile) {
             $xml_entity = $this->parseMetadata(Storage::get($xmlfile));
             $new_entity = json_decode($xml_entity, true);
 
-            DB::transaction(function() use($new_entity) {
+            DB::transaction(function () use ($new_entity) {
                 $entity = Entity::create($new_entity);
 
                 $entity->approved = true;
@@ -787,17 +747,15 @@ class EntityController extends Controller
         }
 
         // FIX FEDERATIONS MEMBERSHIP
-        foreach(request('entities') as $xmlfile)
-        {
+        foreach (request('entities') as $xmlfile) {
             $entity = Entity::whereFile($xmlfile)->first();
 
-            foreach(Federation::select('id', 'tagfile')->get() as $federation)
-            {
+            foreach (Federation::select('id', 'tagfile')->get() as $federation) {
                 $members = Storage::get($federation->tagfile);
                 $pattern = preg_quote($entity->entityid, '/');
                 $pattern = "/^$pattern\$/m";
 
-                if(! preg_match_all($pattern, $members)) continue;
+                if (!preg_match_all($pattern, $members)) continue;
 
                 $entity->federations()->attach($federation, [
                     'requested_by' => Auth::id(),
@@ -806,27 +764,23 @@ class EntityController extends Controller
                     'explanation' => 'Imported from Git repository.',
                 ]);
             }
-
         }
 
         // FIX HIDE FROM DISCOVERY MEMBERSHIP
         $hfd = array_filter(preg_split("/\r\n|\r|\n/", Storage::get(config('git.hfd'))));
-        foreach($hfd as $entityid)
-        {
+        foreach ($hfd as $entityid) {
             Entity::whereEntityid($entityid)->update(['hfd' => true]);
         }
 
         // FIX EDUGAIN MEMBERSHIP
         $edugain = array_filter(preg_split("/\r\n|\r|\n/", Storage::get(config('git.edugain_tag'))));
-        foreach($edugain as $entityid)
-        {
+        foreach ($edugain as $entityid) {
             Entity::whereEntityid($entityid)->update(['edugain' => true]);
         }
 
         // FIX RESEARCH AND EDUCATION MEMBERSHIP
         $rs = array_filter(preg_split("/\r\n|\r|\n/", Storage::get(config('git.ec_rs'))));
-        foreach($rs as $entityid)
-        {
+        foreach ($rs as $entityid) {
             Entity::whereEntityid($entityid)->update(['rs' => true]);
         }
 
@@ -841,18 +795,16 @@ class EntityController extends Controller
         $this->initializeGit();
 
         $xmlfiles = array();
-        foreach(Storage::files() as $file)
-        {
-            if(preg_match('/\.xml/', $file))
+        foreach (Storage::files() as $file) {
+            if (preg_match('/\.xml/', $file))
                 $xmlfiles[] = $file;
         }
 
         $entities = Entity::select('file')->get()->pluck('file')->toArray();
 
         $refreshed = 0;
-        foreach($xmlfiles as $xmlfile)
-        {
-            if(! in_array($xmlfile, $entities)) continue;
+        foreach ($xmlfiles as $xmlfile) {
+            if (!in_array($xmlfile, $entities)) continue;
 
             $metadata = Storage::get($xmlfile);
             $refreshed_entity = json_decode($this->parseMetadata($metadata), true);
@@ -865,36 +817,34 @@ class EntityController extends Controller
             $pattern = preg_quote($refreshed_entity['entityid'], '/');
             $pattern = "/^$pattern\$/m";
 
-            if(preg_match_all($pattern, $edugain))
+            if (preg_match_all($pattern, $edugain))
                 $entity->update(['edugain' => true]);
             else
                 $entity->update(['edugain' => false]);
 
-            if($entity->type->value === 'idp')
-            {
+            if ($entity->type->value === 'idp') {
                 $hfd = Storage::get(config('git.hfd'));
                 $pattern = preg_quote($refreshed_entity['entityid'], '/');
                 $pattern = "/^$pattern\$/m";
 
-                if(preg_match_all($pattern, $hfd))
+                if (preg_match_all($pattern, $hfd))
                     $entity->update(['hfd' => true]);
                 else
                     $entity->update(['hfd' => false]);
             }
 
-            if($entity->type->value === 'sp')
-            {
+            if ($entity->type->value === 'sp') {
                 $rs = Storage::get(config('git.ec_rs'));
                 $pattern = preg_quote($refreshed_entity['entityid'], '/');
                 $pattern = "/^$pattern\$/m";
 
-                if(preg_match_all($pattern, $rs))
+                if (preg_match_all($pattern, $rs))
                     $entity->update(['rs' => true]);
                 else
                     $entity->update(['rs' => false]);
             }
 
-            if($entity->wasChanged())
+            if ($entity->wasChanged())
                 $refreshed++;
         }
 

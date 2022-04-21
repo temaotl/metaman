@@ -47,16 +47,14 @@ class GitUpdateCategory implements ShouldQueue
     {
         $git = $this->initializeGit();
 
-        if($this->old_category !== $this->category->tagfile)
-        {
+        if ($this->old_category !== $this->category->tagfile) {
             $git->mv($this->old_category, $this->category->tagfile);
         }
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->commit(
                 $this->committer() . ": {$this->category->tagfile} (update)\n\n"
-                . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

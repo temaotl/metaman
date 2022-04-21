@@ -22,8 +22,7 @@ class Confirm extends Component
 
     public function title()
     {
-        switch($this->form)
-        {
+        switch ($this->form) {
             case 'add_operators':
                 return __('common.confirm_add_operators');
                 break;
@@ -98,8 +97,7 @@ class Confirm extends Component
 
     public function text()
     {
-        switch($this->form)
-        {
+        switch ($this->form) {
             case 'add_operators':
                 return __('common.confirm_add_operators_body');
                 break;
@@ -191,8 +189,7 @@ class Confirm extends Component
 
     public function action()
     {
-        switch($this->form)
-        {
+        switch ($this->form) {
             case 'add_operators':
                 return __('common.add');
                 break;

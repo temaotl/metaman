@@ -45,11 +45,11 @@ class FederationMemberChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__("notifications.federation_member_{$this->action}_subject"))
-                    ->line(__("notifications.federation_member_{$this->action}_body", [
-                        'name' => $this->federation->name,
-                        'entity' => $this->entity->name_en,
-                    ]));
+            ->subject(__("notifications.federation_member_{$this->action}_subject"))
+            ->line(__("notifications.federation_member_{$this->action}_body", [
+                'name' => $this->federation->name,
+                'entity' => $this->entity->name_en,
+            ]));
     }
 
     /**

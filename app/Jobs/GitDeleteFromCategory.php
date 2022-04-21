@@ -45,8 +45,7 @@ class GitDeleteFromCategory implements ShouldQueue
      */
     public function handle()
     {
-        if(!is_null($this->category))
-        {
+        if (!is_null($this->category)) {
             $git = $this->initializeGit();
 
             $tagfile = Storage::get($this->category->tagfile);
@@ -54,13 +53,12 @@ class GitDeleteFromCategory implements ShouldQueue
             Storage::put($this->category->tagfile, $tagfile);
             $this->trimWhiteSpaces($this->category->tagfile);
 
-            if($git->hasChanges())
-            {
+            if ($git->hasChanges()) {
                 $git->add($this->category->tagfile);
 
                 $git->commit(
                     $this->committer() . ": {$this->category->tagfile} (update)\n\n"
-                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                        . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
                 );
 
                 $git->push();

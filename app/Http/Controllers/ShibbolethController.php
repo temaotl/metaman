@@ -10,8 +10,7 @@ class ShibbolethController extends Controller
 {
     public function create()
     {
-        if(is_null(request()->server('Shib-Handler')))
-        {
+        if (is_null(request()->server('Shib-Handler'))) {
             return 'login';
         }
 
@@ -39,7 +38,7 @@ class ShibbolethController extends Controller
 
         $user->refresh();
 
-        if (! $user->active) return redirect('blocked');
+        if (!$user->active) return redirect('blocked');
 
         Auth::login($user);
         Session::regenerate();

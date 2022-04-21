@@ -52,13 +52,12 @@ class GitUpdateFederation implements ShouldQueue
 
         Storage::put($this->federation->cfgfile, $content);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->add($this->federation->cfgfile);
 
             $git->commit(
                 $this->committer() . ": {$this->federation->cfgfile} (update)\n\n"
-                . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

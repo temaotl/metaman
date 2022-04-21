@@ -42,11 +42,11 @@ class EntityStatusChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_status_changed_subject'))
-                    ->line(__('notifications.entity_status_changed_body', [
-                        'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
-                        'status' => $this->entity->active ? strtolower(__('common.active')) : strtolower(__('common.inactive')),
-                    ]));
+            ->subject(__('notifications.entity_status_changed_subject'))
+            ->line(__('notifications.entity_status_changed_body', [
+                'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
+                'status' => $this->entity->active ? strtolower(__('common.active')) : strtolower(__('common.inactive')),
+            ]));
     }
 
     /**

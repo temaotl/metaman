@@ -42,11 +42,11 @@ class UserRoleChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.user_role_changed_subject'))
-                    ->line(__('notifications.user_role_changed_body', [
-                        'name' => $this->user->name,
-                        'role' => $this->user->admin ? strtolower(__('common.administrator')) : strtolower(__('common.regular_user')),
-                    ]));
+            ->subject(__('notifications.user_role_changed_subject'))
+            ->line(__('notifications.user_role_changed_body', [
+                'name' => $this->user->name,
+                'role' => $this->user->admin ? strtolower(__('common.administrator')) : strtolower(__('common.regular_user')),
+            ]));
     }
 
     /**

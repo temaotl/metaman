@@ -46,13 +46,12 @@ class GitAddEntity implements ShouldQueue
 
         Storage::put($this->entity->file, $this->entity->metadata);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->add($this->entity->file);
 
             $git->commit(
                 $this->committer() . ": {$this->fqdn($this->entity->entityid)} (add)\n\n"
-                . "Added by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Added by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

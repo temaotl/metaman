@@ -41,10 +41,10 @@ class FederationDestroyed extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.federation_destroyed_subject'))
-                    ->line(__('notifications.federation_destroyed_body', [
-                        'name' => $this->name,
-                    ]));
+            ->subject(__('notifications.federation_destroyed_subject'))
+            ->line(__('notifications.federation_destroyed_body', [
+                'name' => $this->name,
+            ]));
     }
 
     /**

@@ -41,10 +41,10 @@ class FederationCancelled extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.federation_cancelled_subject'))
-                    ->line(__('notifications.federation_cancelled_body', [
-                        'name' => $this->name,
-                    ]));
+            ->subject(__('notifications.federation_cancelled_subject'))
+            ->line(__('notifications.federation_cancelled_body', [
+                'name' => $this->name,
+            ]));
     }
 
     /**

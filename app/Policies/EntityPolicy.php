@@ -54,13 +54,11 @@ class EntityPolicy
      */
     public function update(User $user, Entity $entity)
     {
-        if($user->admin)
-        {
+        if ($user->admin) {
             return true;
         }
 
-        if(in_array(Auth::id(), $entity->operators->pluck('id')->toArray()))
-        {
+        if (in_array(Auth::id(), $entity->operators->pluck('id')->toArray())) {
             return $user->active;
         }
     }
@@ -74,13 +72,11 @@ class EntityPolicy
      */
     public function delete(User $user, Entity $entity)
     {
-        if($user->admin)
-        {
+        if ($user->admin) {
             return true;
         }
 
-        if(in_array(Auth::id(), $entity->operators->pluck('id')->toArray()))
-        {
+        if (in_array(Auth::id(), $entity->operators->pluck('id')->toArray())) {
             return $user->active;
         }
     }
@@ -94,8 +90,7 @@ class EntityPolicy
      */
     public function restore(User $user, Entity $entity)
     {
-        if($user->admin)
-        {
+        if ($user->admin) {
             return true;
         }
 

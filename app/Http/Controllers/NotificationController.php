@@ -14,8 +14,7 @@ class NotificationController extends Controller
 
     public function index()
     {
-        switch(strtolower(request('show')))
-        {
+        switch (strtolower(request('show'))) {
             case 'unread':
                 $show = 'unreadNotifications';
                 $query = 'unread';
@@ -41,12 +40,9 @@ class NotificationController extends Controller
     public function update($id)
     {
         $notification = Auth::user()->notifications()->findOrFail($id);
-        if(is_null($notification->read_at))
-        {
+        if (is_null($notification->read_at)) {
             $notification->markAsRead();
-        }
-        else
-        {
+        } else {
             $notification->markAsUnread();
         }
 
@@ -56,7 +52,7 @@ class NotificationController extends Controller
     public function destroy($id)
     {
         $notification = Auth::user()->notifications()->findOrFail($id);
-        if($notification) $notification->delete();
+        if ($notification) $notification->delete();
 
         return redirect('notifications?page=' . request('page'));
     }

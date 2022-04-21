@@ -42,11 +42,11 @@ class MembershipAccepted extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.membership_accepted_subject'))
-                    ->line(__('notifications.membership_accepted_body', [
-                        'entity' => $this->membership->entity->name_en,
-                        'federation' => $this->membership->federation->name,
-                    ]));
+            ->subject(__('notifications.membership_accepted_subject'))
+            ->line(__('notifications.membership_accepted_body', [
+                'entity' => $this->membership->entity->name_en,
+                'federation' => $this->membership->federation->name,
+            ]));
     }
 
     /**

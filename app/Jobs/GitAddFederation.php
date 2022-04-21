@@ -56,22 +56,20 @@ class GitAddFederation implements ShouldQueue
         Storage::put($this->federation->cfgfile, $content);
         Storage::put($this->federation->tagfile, "");
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->add($this->federation->cfgfile);
             $git->add($this->federation->tagfile);
 
             $git->commit(
                 $this->committer() . ": {$this->federation->xml_id} (add)\n\n"
-                . "Requested by: {$this->federation->operators[0]->name} ({$this->federation->operators[0]->uniqueid})\n"
-                . wordwrap("Explanation: {$this->federation->explanation}", 72) . "\n\n"
-                . "Approved by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Requested by: {$this->federation->operators[0]->name} ({$this->federation->operators[0]->uniqueid})\n"
+                    . wordwrap("Explanation: {$this->federation->explanation}", 72) . "\n\n"
+                    . "Approved by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();
 
-            switch($this->action)
-            {
+            switch ($this->action) {
                 case 'approve':
                     Notification::send($this->federation->operators, new FederationApproved($this->federation));
                     Notification::send(User::activeAdmins()->select('id', 'email')->get(), new FederationApproved($this->federation));

@@ -50,13 +50,12 @@ class GitAddToCategory implements ShouldQueue
         Storage::append($this->category->tagfile, $this->entity->entityid);
         $this->trimWhiteSpaces($this->category->tagfile);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->add($this->category->tagfile);
 
             $git->commit(
                 $this->committer() . ": {$this->category->tagfile} (update)\n\n"
-                . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

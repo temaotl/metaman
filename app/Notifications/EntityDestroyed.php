@@ -41,10 +41,10 @@ class EntityDestroyed extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_destroyed_subject'))
-                    ->line(__('notifications.entity_destroyed_body', [
-                        'name' => $this->name,
-                    ]));
+            ->subject(__('notifications.entity_destroyed_subject'))
+            ->line(__('notifications.entity_destroyed_body', [
+                'name' => $this->name,
+            ]));
     }
 
     /**

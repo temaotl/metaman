@@ -42,11 +42,11 @@ class UserStatusChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.user_status_changed_subject'))
-                    ->line(__('notifications.user_status_changed_body', [
-                        'name' => $this->user->name,
-                        'status' => $this->user->active ? strtolower(__('common.active')) : strtolower(__('common.inactive')),
-                    ]));
+            ->subject(__('notifications.user_status_changed_subject'))
+            ->line(__('notifications.user_status_changed_body', [
+                'name' => $this->user->name,
+                'status' => $this->user->active ? strtolower(__('common.active')) : strtolower(__('common.inactive')),
+            ]));
     }
 
     /**

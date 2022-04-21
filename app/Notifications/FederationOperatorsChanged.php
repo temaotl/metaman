@@ -45,12 +45,12 @@ class FederationOperatorsChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__("notifications.federation_operators_{$this->action}_subject"))
-                    ->markdown('emails.notifications.FederationOperatorsChanged', [
-                        'action' => $this->action,
-                        'name' => $this->federation->name,
-                        'operators' => $this->operators,
-                    ]);
+            ->subject(__("notifications.federation_operators_{$this->action}_subject"))
+            ->markdown('emails.notifications.FederationOperatorsChanged', [
+                'action' => $this->action,
+                'name' => $this->federation->name,
+                'operators' => $this->operators,
+            ]);
     }
 
     /**

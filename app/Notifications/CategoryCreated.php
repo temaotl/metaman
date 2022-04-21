@@ -42,10 +42,10 @@ class CategoryCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.category_created_subject'))
-                    ->line(__('notifications.category_created_body', [
-                        'name' => $this->category->name,
-                    ]));
+            ->subject(__('notifications.category_created_subject'))
+            ->line(__('notifications.category_created_body', [
+                'name' => $this->category->name,
+            ]));
     }
 
     /**

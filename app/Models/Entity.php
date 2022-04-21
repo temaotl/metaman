@@ -76,8 +76,7 @@ class Entity extends Model
 
     public function scopeVisibleTo($query, User $user)
     {
-        if($user->admin)
-        {
+        if ($user->admin) {
             return $query->withTrashed();
         }
     }

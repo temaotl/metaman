@@ -45,12 +45,12 @@ class EntityOperatorsChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__("notifications.entity_operators_{$this->action}_subject"))
-                    ->markdown('emails.notifications.EntityOperatorsChanged', [
-                        'action' => $this->action,
-                        'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
-                        'operators' => $this->operators,
-                    ]);
+            ->subject(__("notifications.entity_operators_{$this->action}_subject"))
+            ->markdown('emails.notifications.EntityOperatorsChanged', [
+                'action' => $this->action,
+                'name' => is_null($this->entity->name_en) ? $this->entity->entityid : $this->entity->name_en,
+                'operators' => $this->operators,
+            ]);
     }
 
     /**

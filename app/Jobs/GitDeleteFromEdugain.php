@@ -50,13 +50,12 @@ class GitDeleteFromEdugain implements ShouldQueue
         Storage::put($tagfile, $content);
         $this->trimWhiteSpaces($tagfile);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->add($tagfile);
 
             $git->commit(
                 $this->committer() . ": $tagfile (update)\n\n"
-                . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

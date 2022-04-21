@@ -47,15 +47,14 @@ class GitAddMembership implements ShouldQueue
         Storage::append($this->membership->federation->tagfile, $this->membership->entity->entityid);
         $this->trimWhiteSpaces($this->membership->federation->tagfile);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->add($this->membership->federation->tagfile);
 
             $git->commit(
                 $this->committer() . ": {$this->membership->federation->tagfile} (update)\n\n"
-                . "Requested by: {$this->membership->requester->name} ({$this->membership->requester->uniqueid})\n"
-                . wordwrap("Explanation: {$this->membership->explanation}", 72) . "\n\n"
-                . "Approved by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Requested by: {$this->membership->requester->name} ({$this->membership->requester->uniqueid})\n"
+                    . wordwrap("Explanation: {$this->membership->explanation}", 72) . "\n\n"
+                    . "Approved by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

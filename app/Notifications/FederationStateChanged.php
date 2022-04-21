@@ -42,11 +42,11 @@ class FederationStateChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.federation_state_changed_subject'))
-                    ->line(__('notifications.federation_state_changed_body', [
-                        'name' => $this->federation->name,
-                        'state' => $this->federation->trashed() ? strtolower(__('common.deleted')) : strtolower(__('common.restored')),
-                    ]));
+            ->subject(__('notifications.federation_state_changed_subject'))
+            ->line(__('notifications.federation_state_changed_body', [
+                'name' => $this->federation->name,
+                'state' => $this->federation->trashed() ? strtolower(__('common.deleted')) : strtolower(__('common.restored')),
+            ]));
     }
 
     /**

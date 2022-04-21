@@ -24,9 +24,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/language/{locale}', function($locale = null) {
-    if(isset($locale) && in_array($locale, config('app.locales')))
-    {
+Route::get('/language/{locale}', function ($locale = null) {
+    if (isset($locale) && in_array($locale, config('app.locales'))) {
         app()->setLocale($locale);
         session()->put('locale', $locale);
     }
@@ -37,12 +36,11 @@ Route::get('/', function () {
     return auth()->user() ? view('dashboard') : view('welcome');
 })->name('home');
 
-Route::get('blocked', function() {
+Route::get('blocked', function () {
     return auth()->user() ? redirect('/') : view('blocked');
 });
 
-if(App::environment(['local', 'testing']))
-{
+if (App::environment(['local', 'testing'])) {
     Route::match(['get', 'post'], '/fakelogin/{id?}', [FakeController::class, 'login']);
     Route::get('fakelogout', [FakeController::class, 'logout']);
 }

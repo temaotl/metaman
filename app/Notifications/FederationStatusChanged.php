@@ -42,14 +42,14 @@ class FederationStatusChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.federation_status_changed_subject'))
-                    ->line(__('notifications.federation_status_changed_body', [
-                        'name' => $this->federation->name,
-                        'status' => $this->federation->active ? strtolower(__('common.active')) : strtolower(__('common.inactive')),
-                    ]))
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject(__('notifications.federation_status_changed_subject'))
+            ->line(__('notifications.federation_status_changed_body', [
+                'name' => $this->federation->name,
+                'status' => $this->federation->active ? strtolower(__('common.active')) : strtolower(__('common.inactive')),
+            ]))
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**

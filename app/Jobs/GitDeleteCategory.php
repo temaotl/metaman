@@ -46,11 +46,10 @@ class GitDeleteCategory implements ShouldQueue
 
         $git->rm($this->category);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->commit(
                 $this->committer() . ": {$this->category} (delete)\n\n"
-                . "Deleted by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Deleted by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

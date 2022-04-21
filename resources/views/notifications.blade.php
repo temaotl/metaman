@@ -4,21 +4,21 @@
 @section('content')
 
 <div>
-    <ul class="pb-4 sm:flex sm:space-x-4 space-y-3 sm:space-y-0 justify-center font-semibold">
+    <ul class="sm:flex sm:space-x-4 sm:space-y-0 justify-center pb-4 space-y-3 font-semibold">
         <li><a class="px-3 py-1 @if (Request('show') === 'unread') bg-gray-500 text-gray-50 @else bg-gray-300 hover:bg-gray-200 @endif rounded-full shadow" href="?show=unread">{{ __('notifications.unread_notifications')}}</a></li>
         <li><a class="px-3 py-1 @if (Request('show') === 'read') bg-gray-500 text-gray-50 @else bg-gray-300 hover:bg-gray-200 @endif rounded-full shadow" href="?show=read">{{ __('notifications.read_notifications')}}</a></li>
         <li><a class="px-3 py-1 @if (Request('show') !== 'unread' and Request('show') !== 'read') bg-gray-500 text-gray-50 @else bg-gray-300 hover:bg-gray-200 @endif rounded-full shadow" href="?show=all">{{ __('notifications.all_notifications')}}</a></li>
     </ul>
-    <div class="bg-white dark:bg-transparent border rounded-lg overflow-x-auto">
+    <div class="dark:bg-transparent overflow-x-auto bg-white border rounded-lg">
         <table class="min-w-full border-b border-gray-300">
             <thead>
                 <tr>
-                    <th class="px-6 py-3 border-b bg-gray-100 dark:bg-gray-700 text-left text-xs tracking-widest uppercase">{{ __('common.notification') }}</th>
-                    <th class="px-6 py-3 border-b bg-gray-100 dark:bg-gray-700 text-left text-xs tracking-widest uppercase">{{ __('common.created') }}</th>
-                    <th class="px-6 py-3 border-b bg-gray-100 dark:bg-gray-700 text-left text-xs tracking-widest uppercase">&nbsp;</th>
+                    <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.notification') }}</th>
+                    <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">{{ __('common.created') }}</th>
+                    <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">&nbsp;</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 clickable">
+            <tbody class="clickable divide-y divide-gray-200">
                 @forelse ($notifications as $notification)
                     <tr class="hover:bg-blue-100 dark:hover:bg-gray-700
                         @if ($notification->unread())
@@ -28,15 +28,15 @@
                         @endif">
                         <td class="px-6 py-3 text-sm">
                             @if (is_int($notification->data['user_id'] ?? null))
-                                <a class="text-blue-500 hover:underline" href="{{ route('users.show', $notification->data['user_id']) }}">{{ $notification->data['body'] }}</a>
+                                <a class="hover:underline text-blue-500" href="{{ route('users.show', $notification->data['user_id']) }}">{{ $notification->data['body'] }}</a>
                             @elseif (is_int($notification->data['federation_id'] ?? null))
-                                <a class="text-blue-500 hover:underline" href="{{ route('federations.show', $notification->data['federation_id']) }}">{{ $notification->data['body'] }}</a>
+                                <a class="hover:underline text-blue-500" href="{{ route('federations.show', $notification->data['federation_id']) }}">{{ $notification->data['body'] }}</a>
                             @elseif (is_int($notification->data['entity_id'] ?? null))
-                                <a class="text-blue-500 hover:underline" href="{{ route('entities.show', $notification->data['entity_id']) }}">{{ $notification->data['body'] }}</a>
+                                <a class="hover:underline text-blue-500" href="{{ route('entities.show', $notification->data['entity_id']) }}">{{ $notification->data['body'] }}</a>
                             @elseif (is_int($notification->data['category_id'] ?? null))
-                                <a class="text-blue-500 hover:underline" href="{{ route('categories.show', $notification->data['category_id']) }}">{{ $notification->data['body'] }}</a>
+                                <a class="hover:underline text-blue-500" href="{{ route('categories.show', $notification->data['category_id']) }}">{{ $notification->data['body'] }}</a>
                             @elseif (is_int($notification->data['group_id'] ?? null))
-                                <a class="text-blue-500 hover:underline" href="{{ route('groups.show', $notification->data['group_id']) }}">{{ $notification->data['body'] }}</a>
+                                <a class="hover:underline text-blue-500" href="{{ route('groups.show', $notification->data['group_id']) }}">{{ $notification->data['body'] }}</a>
                             @else
                                 {{ $notification->data['body'] }}
                             @endif
@@ -70,7 +70,7 @@
                     </tr>
                 @empty
                     <tr class="hover:bg-blue-50 dark:hover-bg-gray-700">
-                        <td class="px-6 py-3 text-center font-bold" colspan="4">{{ __('notifications.empty') }}</td>
+                        <td class="px-6 py-3 font-bold text-center" colspan="4">{{ __('notifications.empty') }}</td>
                     </tr>
                 @endforelse
             </tbody>

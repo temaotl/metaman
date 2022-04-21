@@ -5,20 +5,20 @@
 
     <form action="{{ route('categories.import') }}" method="post">
         @csrf
-        <div class="bg-white dark:bg-transparent border rounded-lg overflow-x-auto">
+        <div class="dark:bg-transparent overflow-x-auto bg-white border rounded-lg">
             <table class="min-w-full border-b border-gray-300">
                 <thead>
                     <tr>
-                        <th class="px-6 py-3 border-b bg-gray-100 dark:bg-gray-700 text-left text-xs tracking-widest uppercase">
+                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             &nbsp;
                         </th>
-                        <th class="px-6 py-3 border-b bg-gray-100 dark:bg-gray-700 text-left text-xs tracking-widest uppercase">
+                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('common.file') }}
                         </th>
-                        <th class="px-6 py-3 border-b bg-gray-100 dark:bg-gray-700 text-left text-xs tracking-widest uppercase">
+                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('common.name') }}
                         </th>
-                        <th class="px-6 py-3 border-b bg-gray-100 dark:bg-gray-700 text-left text-xs tracking-widest uppercase">
+                        <th class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
                             {{ __('common.description') }}
                         </th>
                     </tr>
@@ -45,7 +45,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="px-4 py-4 bg-gray-100 dark:bg-transparent">
+        <div class="dark:bg-transparent px-4 py-4 bg-gray-100">
             <x-button>{{ __('categories.import') }}</x-button>
         </div>
     </form>

@@ -42,10 +42,10 @@ class EntityAddedToHfd extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_added_to_hfd_subject'))
-                    ->line(__('notifications.entity_added_to_hfd_body', [
-                        'name' => $this->entity->name_en,
-                    ]));
+            ->subject(__('notifications.entity_added_to_hfd_subject'))
+            ->line(__('notifications.entity_added_to_hfd_body', [
+                'name' => $this->entity->name_en,
+            ]));
     }
 
     /**

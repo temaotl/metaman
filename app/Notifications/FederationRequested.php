@@ -42,10 +42,10 @@ class FederationRequested extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.federation_requested_subject'))
-                    ->line(__('notifications.federation_requested_body', [
-                        'name' => $this->federation->name,
-                    ]));
+            ->subject(__('notifications.federation_requested_subject'))
+            ->line(__('notifications.federation_requested_body', [
+                'name' => $this->federation->name,
+            ]));
     }
 
     /**

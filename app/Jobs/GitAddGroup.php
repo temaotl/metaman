@@ -48,13 +48,12 @@ class GitAddGroup implements ShouldQueue
 
         Storage::put($this->group->tagfile, '');
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->add($this->group->tagfile);
 
             $git->commit(
                 $this->committer() . ": {$this->group->tagfile} (add)\n\n"
-                . "Added by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Added by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

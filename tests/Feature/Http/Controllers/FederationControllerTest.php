@@ -848,7 +848,6 @@ class FederationControllerTest extends TestCase
             ->assertSeeText('This action is unauthorized.');
 
         $this->assertEquals(route('federations.show', $federation), url()->current());
-
     }
 
     /** @test */

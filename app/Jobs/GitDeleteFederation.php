@@ -48,11 +48,10 @@ class GitDeleteFederation implements ShouldQueue
         $git->rm($this->federation->cfgfile);
         $git->rm($this->federation->tagfile);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->commit(
                 $this->committer() . ": {$this->federation->xml_id} (delete)\n\n"
-                . "Deleted by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Deleted by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

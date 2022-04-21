@@ -44,11 +44,11 @@ class IdpCategoryChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.idp_category_changed_subject'))
-                    ->line(__('notifications.idp_category_changed_body', [
-                        'name' => $this->entity->name_en,
-                        'category' => $this->category->name,
-                    ]));
+            ->subject(__('notifications.idp_category_changed_subject'))
+            ->line(__('notifications.idp_category_changed_body', [
+                'name' => $this->entity->name_en,
+                'category' => $this->category->name,
+            ]));
     }
 
     /**

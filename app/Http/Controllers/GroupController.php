@@ -131,8 +131,7 @@ class GroupController extends Controller
         $validated = $request->validated();
         $group->update($validated);
 
-        if(!$group->wasChanged())
-        {
+        if (!$group->wasChanged()) {
             return redirect()
                 ->route('groups.show', $group);
         }
@@ -154,8 +153,7 @@ class GroupController extends Controller
     {
         $this->authorize('do-everything');
 
-        if($group->entities->count() !== 0)
-        {
+        if ($group->entities->count() !== 0) {
             return redirect()
                 ->route('groups.show', $group)
                 ->with('status', __('groups.delete_empty'))
@@ -178,28 +176,26 @@ class GroupController extends Controller
         $this->initializeGit();
 
         $tagfiles = array();
-        foreach(Storage::files() as $file)
-        {
-            if(preg_match('/^' . config('git.edugain_tag') . '$/', $file)) continue;
-            if(preg_match('/^' . config('git.hfd') . '$/', $file)) continue;
-            if(preg_match('/^' . config('git.ec_rs') . '$/', $file)) continue;
+        foreach (Storage::files() as $file) {
+            if (preg_match('/^' . config('git.edugain_tag') . '$/', $file)) continue;
+            if (preg_match('/^' . config('git.hfd') . '$/', $file)) continue;
+            if (preg_match('/^' . config('git.ec_rs') . '$/', $file)) continue;
 
-            if(preg_match('/\.tag$/', $file)) $tagfiles[] = $file;
+            if (preg_match('/\.tag$/', $file)) $tagfiles[] = $file;
         }
 
         $groups = Group::select('tagfile')->get()->pluck('tagfile')->toArray();
         $categories = Category::select('tagfile')->get()->pluck('tagfile')->toArray();
 
         $unknown = array();
-        foreach($tagfiles as $tagfile)
-        {
-            if(in_array($tagfile, $groups) || in_array($tagfile, $categories)) continue;
+        foreach ($tagfiles as $tagfile) {
+            if (in_array($tagfile, $groups) || in_array($tagfile, $categories)) continue;
 
             $cfgfile = preg_replace('/\.tag$/', '.cfg', $tagfile);
-            if(!Storage::exists($cfgfile)) $unknown[] = $tagfile;
+            if (!Storage::exists($cfgfile)) $unknown[] = $tagfile;
         }
 
-        if(empty($unknown))
+        if (empty($unknown))
             return redirect()
                 ->route('groups.index')
                 ->with('status', __('groups.nothing_to_import'));
@@ -213,7 +209,7 @@ class GroupController extends Controller
     {
         $this->authorize('do-everything');
 
-        if(empty(request('groups')))
+        if (empty(request('groups')))
             return back()
                 ->with('status', __('groups.empty_import'))
                 ->with('color', 'red');
@@ -221,15 +217,14 @@ class GroupController extends Controller
         $imported = 0;
         $names = request('names');
         $descriptions = request('descriptions');
-        foreach(request('groups') as $group)
-        {
-            if(empty($names[$group]))
+        foreach (request('groups') as $group) {
+            if (empty($names[$group]))
                 $names[$group] = preg_replace('/\.tag$/', '', $group);
 
-            if(empty($descriptions[$group]))
+            if (empty($descriptions[$group]))
                 $descriptions[$group] = preg_replace('/\.tag$/', '', $group);
 
-            DB::transaction(function() use($group, $names, $descriptions) {
+            DB::transaction(function () use ($group, $names, $descriptions) {
                 Group::create([
                     'name' => $names[$group],
                     'description' => $descriptions[$group],
@@ -250,7 +245,7 @@ class GroupController extends Controller
 
         $this->initializeGit();
 
-        if(! Group::count())
+        if (!Group::count())
             return redirect()
                 ->route('groups.index')
                 ->with('status', __('groups.no_groups'))
@@ -258,13 +253,12 @@ class GroupController extends Controller
 
         DB::delete('DELETE FROM entity_group');
 
-        foreach(Group::select('id','tagfile')->get() as $group)
-        {
+        foreach (Group::select('id', 'tagfile')->get() as $group) {
             $members = explode("\n", trim(Storage::get($group->tagfile)));
 
-            if(! count($members)) continue;
+            if (!count($members)) continue;
 
-            foreach($members as $entityid)
+            foreach ($members as $entityid)
                 Entity::whereEntityid($entityid)->first()->groups()->syncWithoutDetaching($group);
         }
 

@@ -46,24 +46,21 @@ class GitDeleteEntity implements ShouldQueue
 
         $git->rm($this->entity->file);
 
-        foreach($this->entity->federations as $federation)
-        {
+        foreach ($this->entity->federations as $federation) {
             $tagfile = Storage::get($federation->tagfile);
             $tagfile = preg_replace('#' . $this->entity->entityid . '#', '', $tagfile);
             Storage::put($federation->tagfile, $tagfile);
             $this->trimWhiteSpaces($federation->tagfile);
 
-            if($git->hasChanges())
-            {
+            if ($git->hasChanges()) {
                 $git->add($federation->tagfile);
             }
         }
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->commit(
                 $this->committer() . ": {$this->fqdn($this->entity->entityid)} (delete)\n\n"
-                . "Deleted by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Deleted by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

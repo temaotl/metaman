@@ -33,7 +33,7 @@ class MembershipController extends Controller
     {
         $this->authorize('update', $membership);
 
-        DB::transaction(function() use($membership) {
+        DB::transaction(function () use ($membership) {
             $membership->entity->approved = true;
             $membership->entity->update();
 
@@ -46,7 +46,7 @@ class MembershipController extends Controller
             new GitAddEntity($membership->entity, Auth::user()),
             new GitAddToHfd($membership->entity, Auth::user()),
             new GitAddMembership($membership, Auth::user()),
-            function() use($membership) {
+            function () use ($membership) {
                 $admins = User::activeAdmins()->select('id', 'email')->get();
                 Notification::send($membership->entity->operators, new MembershipAccepted($membership));
                 Notification::send($admins, new MembershipAccepted($membership));
@@ -74,8 +74,7 @@ class MembershipController extends Controller
         $entity = $membership->entity->name_en ?? $membership->entity->entityid;
         $operators = $membership->entity->operators;
 
-        if(!$membership->entity->approved)
-        {
+        if (!$membership->entity->approved) {
             $membership->entity->forceDelete();
         }
 

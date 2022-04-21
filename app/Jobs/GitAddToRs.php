@@ -44,21 +44,19 @@ class GitAddToRs implements ShouldQueue
      */
     public function handle()
     {
-        if($this->entity->rs)
-        {
+        if ($this->entity->rs) {
             $git = $this->initializeGit();
 
             $tagfile = config('git.ec_rs');
             Storage::append($tagfile, $this->entity->entityid);
             $this->trimWhiteSpaces($tagfile);
 
-            if($git->hasChanges())
-            {
+            if ($git->hasChanges()) {
                 $git->add($tagfile);
 
                 $git->commit(
                     $this->committer() . ": $tagfile (update)\n\n"
-                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                        . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
                 );
 
                 $git->push();

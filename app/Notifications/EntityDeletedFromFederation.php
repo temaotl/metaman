@@ -44,11 +44,11 @@ class EntityDeletedFromFederation extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_deleted_from_federation_subject'))
-                    ->line(__('notifications.entity_deleted_from_federation_body', [
-                        'name' => $this->entity->name_en ?? $this->entity->entityid,
-                        'federation' => $this->federation->name,
-                    ]));
+            ->subject(__('notifications.entity_deleted_from_federation_subject'))
+            ->line(__('notifications.entity_deleted_from_federation_body', [
+                'name' => $this->entity->name_en ?? $this->entity->entityid,
+                'federation' => $this->federation->name,
+            ]));
     }
 
     /**

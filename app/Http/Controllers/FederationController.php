@@ -87,7 +87,7 @@ class FederationController extends Controller
 
         $validated = $request->validated();
         $id = generateFederationID($validated['name']);
-        $federation = DB::transaction(function() use($validated, $id) {
+        $federation = DB::transaction(function () use ($validated, $id) {
             $federation = Federation::create(array_merge($validated, [
                 'tagfile' => "$id.tag",
                 'cfgfile' => "$id.cfg",
@@ -197,8 +197,7 @@ class FederationController extends Controller
      */
     public function update(UpdateFederation $request, Federation $federation)
     {
-        switch(request('action'))
-        {
+        switch (request('action')) {
             case 'cancel':
                 $this->authorize('update', $federation);
 
@@ -246,8 +245,7 @@ class FederationController extends Controller
                 $validated = $request->validated();
                 $federation->update($validated);
 
-                if(!$federation->wasChanged())
-                {
+                if (!$federation->wasChanged()) {
                     return redirect()
                         ->route('federations.show', $federation);
                 }
@@ -288,12 +286,9 @@ class FederationController extends Controller
                 $state = $federation->trashed() ? 'deleted' : 'restored';
                 $color = $federation->trashed() ? 'red' : 'green';
 
-                if($federation->trashed())
-                {
+                if ($federation->trashed()) {
                     GitDeleteFederation::dispatch($federation, Auth::user());
-                }
-                else
-                {
+                } else {
                     GitAddFederation::dispatch($federation, 'state', Auth::user());
                 }
 
@@ -307,8 +302,7 @@ class FederationController extends Controller
             case 'add_operators':
                 $this->authorize('update', $federation);
 
-                if(!request('operators'))
-                {
+                if (!request('operators')) {
                     return redirect()
                         ->route('federations.show', $federation)
                         ->with('status', __('federations.add_empty_operators'))
@@ -333,8 +327,7 @@ class FederationController extends Controller
             case 'delete_operators':
                 $this->authorize('update', $federation);
 
-                if(!request('operators'))
-                {
+                if (!request('operators')) {
                     return redirect()
                         ->route('federations.show', $federation)
                         ->with('status', __('federations.delete_empty_operators'))
@@ -359,8 +352,7 @@ class FederationController extends Controller
             case 'add_entities':
                 $this->authorize('update', $federation);
 
-                if(!request('entities'))
-                {
+                if (!request('entities')) {
                     return redirect()
                         ->route('federations.show', $federation)
                         ->with('status', __('federations.add_empty_entities'))
@@ -387,8 +379,7 @@ class FederationController extends Controller
             case 'delete_entities':
                 $this->authorize('update', $federation);
 
-                if(!request('entities'))
-                {
+                if (!request('entities')) {
                     return redirect()
                         ->route('federations.show', $federation)
                         ->with('status', __('federations.delete_empty_entities'))
@@ -438,19 +429,17 @@ class FederationController extends Controller
         $this->initializeGit();
 
         $cfgfiles = array();
-        foreach(Storage::files() as $file)
-        {
-            if(preg_match('/^'.config('git.edugain_cfg').'$/', $file)) continue;
+        foreach (Storage::files() as $file) {
+            if (preg_match('/^' . config('git.edugain_cfg') . '$/', $file)) continue;
 
-            if(preg_match('/\.cfg$/', $file)) $cfgfiles[] = $file;
+            if (preg_match('/\.cfg$/', $file)) $cfgfiles[] = $file;
         }
 
         $federations = Federation::select('cfgfile')->get()->pluck('cfgfile')->toArray();
 
         $unknown = array();
-        foreach($cfgfiles as $cfgfile)
-        {
-            if(in_array($cfgfile, $federations)) continue;
+        foreach ($cfgfiles as $cfgfile) {
+            if (in_array($cfgfile, $federations)) continue;
 
             $content = Storage::get($cfgfile);
             preg_match('/\[(.*)\]/', $content, $xml_id);
@@ -463,7 +452,7 @@ class FederationController extends Controller
             $unknown[$cfgfile]['name'] = $name[1];
         }
 
-        if(empty($unknown))
+        if (empty($unknown))
             return redirect()
                 ->route('federations.index')
                 ->with('status', __('federations.nothing_to_import'));
@@ -477,7 +466,7 @@ class FederationController extends Controller
     {
         $this->authorize('do-everything');
 
-        if(empty(request('federations')))
+        if (empty(request('federations')))
             return back()
                 ->with('status', __('federations.empty_import'))
                 ->with('color', 'red');
@@ -485,20 +474,19 @@ class FederationController extends Controller
         $imported = 0;
         $names = request('names');
         $descriptions = request('descriptions');
-        foreach(request('federations') as $cfgfile)
-        {
+        foreach (request('federations') as $cfgfile) {
             $content = Storage::get($cfgfile);
             preg_match('/\[(.*)\]/', $content, $xml_id);
             preg_match('/filters\s*=\s*(.*)/', $content, $filters);
             preg_match('/name\s*=\s*(.*)/', $content, $xml_name);
 
-            if(empty($names[$cfgfile]))
+            if (empty($names[$cfgfile]))
                 $names[$cfgfile] = preg_replace('/\.cfg$/', '', $cfgfile);
 
-            if(empty($descriptions[$cfgfile]))
+            if (empty($descriptions[$cfgfile]))
                 $descriptions[$cfgfile] = preg_replace('/\.cfg$/', '', $cfgfile);
 
-            DB::transaction(function() use($cfgfile, $names, $descriptions, $xml_id, $xml_name, $filters) {
+            DB::transaction(function () use ($cfgfile, $names, $descriptions, $xml_id, $xml_name, $filters) {
                 $federation = Federation::create([
                     'name' => $names[$cfgfile],
                     'description' => $descriptions[$cfgfile],
@@ -531,18 +519,16 @@ class FederationController extends Controller
         $this->initializeGit();
 
         $cfgfiles = array();
-        foreach(Storage::files() as $file)
-        {
-            if(preg_match('/\.cfg/', $file))
+        foreach (Storage::files() as $file) {
+            if (preg_match('/\.cfg/', $file))
                 $cfgfiles[] = $file;
         }
 
         $federations = Federation::select('cfgfile')->get()->pluck('cfgfile')->toArray();
 
         $refreshed = 0;
-        foreach($cfgfiles as $cfgfile)
-        {
-            if(! in_array($cfgfile, $federations)) continue;
+        foreach ($cfgfiles as $cfgfile) {
+            if (!in_array($cfgfile, $federations)) continue;
 
             $content = Storage::get($cfgfile);
             preg_match('/\[(.*)\]/', $content, $xml_id);
@@ -556,7 +542,7 @@ class FederationController extends Controller
                 'filters' => $filters[1],
             ]);
 
-            if($federation->wasChanged()) $refreshed++;
+            if ($federation->wasChanged()) $refreshed++;
         }
 
         return redirect('federations')

@@ -42,10 +42,10 @@ class EntityDeletedFromHfd extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_deleted_from_hfd_subject'))
-                    ->line(__('notifications.entity_deleted_from_hfd_body', [
-                        'name' => $this->entity->name_en,
-                    ]));
+            ->subject(__('notifications.entity_deleted_from_hfd_subject'))
+            ->line(__('notifications.entity_deleted_from_hfd_body', [
+                'name' => $this->entity->name_en,
+            ]));
     }
 
     /**

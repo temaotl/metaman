@@ -21,7 +21,7 @@ class StatisticController extends Controller
             return Federation::count();
         });
 
-        $entity = Cache::remember('entity', $CACHE_TIME, function() {
+        $entity = Cache::remember('entity', $CACHE_TIME, function () {
             return Entity::select('type', 'edugain', 'hfd', 'rs', 'cocov1', 'sirtfi')->get();
         });
         $entities = $entity->count();

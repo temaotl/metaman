@@ -44,10 +44,10 @@ class YourFederationRightsChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__("notifications.your_federation_rights_{$this->action}_subject"))
-                    ->line(__("notifications.your_federation_rights_{$this->action}_body", [
-                        'name' => $this->federation->name,
-                    ]));
+            ->subject(__("notifications.your_federation_rights_{$this->action}_subject"))
+            ->line(__("notifications.your_federation_rights_{$this->action}_body", [
+                'name' => $this->federation->name,
+            ]));
     }
 
     /**

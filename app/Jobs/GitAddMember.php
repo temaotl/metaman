@@ -50,13 +50,12 @@ class GitAddMember implements ShouldQueue
         Storage::append($this->federation->tagfile, $this->entity->entityid);
         $this->trimWhiteSpaces($this->federation->tagfile);
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->add($this->federation->tagfile);
 
             $git->commit(
                 $this->committer() . ": {$this->federation->tagfile} (update)\n\n"
-                . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

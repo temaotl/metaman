@@ -47,16 +47,14 @@ class GitUpdateGroup implements ShouldQueue
     {
         $git = $this->initializeGit();
 
-        if($this->old_group !== $this->group->tagfile)
-        {
+        if ($this->old_group !== $this->group->tagfile) {
             $git->mv($this->old_group, $this->group->tagfile);
         }
 
-        if($git->hasChanges())
-        {
+        if ($git->hasChanges()) {
             $git->commit(
                 $this->committer() . ": {$this->group->tagfile} (update)\n\n"
-                . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

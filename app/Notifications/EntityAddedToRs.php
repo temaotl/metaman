@@ -42,10 +42,10 @@ class EntityAddedToRs extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_added_to_rs_subject'))
-                    ->line(__('notifications.entity_added_to_rs_body', [
-                        'name' => $this->entity->name_en,
-                    ]));
+            ->subject(__('notifications.entity_added_to_rs_subject'))
+            ->line(__('notifications.entity_added_to_rs_body', [
+                'name' => $this->entity->name_en,
+            ]));
     }
 
     /**

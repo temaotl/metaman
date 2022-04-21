@@ -16,7 +16,7 @@ class ABlockedUserLoginTest extends DuskTestCase
     {
         User::factory()->create(['active' => false]);
 
-        $this->browse(function(Browser $browser) {
+        $this->browse(function (Browser $browser) {
             $browser->visit('/')
                 ->press('Fake Login')
                 ->assertSee(__('welcome.blocked_account'))

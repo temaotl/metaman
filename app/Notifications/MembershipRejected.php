@@ -42,11 +42,11 @@ class MembershipRejected extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.membership_rejected_subject'))
-                    ->line(__('notifications.membership_rejected_body', [
-                        'entity' => $this->entity,
-                        'federation' => $this->federation,
-                    ]));
+            ->subject(__('notifications.membership_rejected_subject'))
+            ->line(__('notifications.membership_rejected_body', [
+                'entity' => $this->entity,
+                'federation' => $this->federation,
+            ]));
     }
 
     /**

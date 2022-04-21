@@ -12,15 +12,13 @@ class FakeController extends Controller
 {
     public function login(int $id = null)
     {
-        if(!App::environment(['local', 'testing']))
-        {
+        if (!App::environment(['local', 'testing'])) {
             dd('Only for `local` and `testing` environments!');
         }
 
         $user = User::findOrFail($id ?? request('id'));
 
-        if(!$user->active)
-        {
+        if (!$user->active) {
             return redirect('/blocked');
         }
 
@@ -32,8 +30,7 @@ class FakeController extends Controller
 
     public function logout()
     {
-        if(!App::environment(['local', 'testing']))
-        {
+        if (!App::environment(['local', 'testing'])) {
             dd('Only for `local` and `testing` environments!');
         }
 

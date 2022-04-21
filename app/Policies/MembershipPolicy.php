@@ -20,13 +20,11 @@ class MembershipPolicy
      */
     public function update(User $user, Membership $membership)
     {
-        if($user->admin)
-        {
+        if ($user->admin) {
             return true;
         }
 
-        if(in_array(Auth::id(), $membership->federation->load('operators')->operators->pluck('id')->toArray()))
-        {
+        if (in_array(Auth::id(), $membership->federation->load('operators')->operators->pluck('id')->toArray())) {
             return true;
         }
     }
@@ -40,13 +38,11 @@ class MembershipPolicy
      */
     public function delete(User $user, Membership $membership)
     {
-        if($user->admin)
-        {
+        if ($user->admin) {
             return true;
         }
 
-        if(in_array(Auth::id(), $membership->federation->load('operators')->operators->pluck('id')->toArray()))
-        {
+        if (in_array(Auth::id(), $membership->federation->load('operators')->operators->pluck('id')->toArray())) {
             return true;
         }
     }

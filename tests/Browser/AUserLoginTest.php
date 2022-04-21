@@ -16,7 +16,7 @@ class AUserLoginTest extends DuskTestCase
     {
         User::factory()->create(['active' => true]);
 
-        $this->browse(function(Browser $browser) {
+        $this->browse(function (Browser $browser) {
             $browser->visit('/')
                 ->press('Fake Login')
                 ->assertSee(config('app.name'))

@@ -95,14 +95,12 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        switch(request('action'))
-        {
+        switch (request('action')) {
             case 'status':
 
                 $this->authorize('do-everything');
 
-                if($request->user()->id === $user->id)
-                {
+                if ($request->user()->id === $user->id) {
                     return redirect()
                         ->back()
                         ->with('status', __('users.cannot_toggle_your_status'))
@@ -130,8 +128,7 @@ class UserController extends Controller
 
                 $this->authorize('do-everything');
 
-                if($request->user()->id === $user->id)
-                {
+                if ($request->user()->id === $user->id) {
                     return redirect()
                         ->back()
                         ->with('status', __('users.cannot_toggle_your_role'))
@@ -160,15 +157,13 @@ class UserController extends Controller
                 $this->authorize('update', $user);
 
                 $emails = explode(';', $user->emails);
-                if(in_array(request('email'), $emails))
-                {
+                if (in_array(request('email'), $emails)) {
                     $user->update([
                         'email' => request('email'),
                     ]);
                 }
 
-                if(!$user->wasChanged())
-                {
+                if (!$user->wasChanged()) {
                     return back();
                 }
 

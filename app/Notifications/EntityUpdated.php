@@ -42,10 +42,10 @@ class EntityUpdated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.entity_updated_subject'))
-                    ->line(__('notifications.entity_updated_body', [
-                        'name' => $this->entity->name_en,
-                    ]));
+            ->subject(__('notifications.entity_updated_subject'))
+            ->line(__('notifications.entity_updated_body', [
+                'name' => $this->entity->name_en,
+            ]));
     }
 
     /**

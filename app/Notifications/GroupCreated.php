@@ -42,10 +42,10 @@ class GroupCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(__('notifications.group_created_subject'))
-                    ->line(__('notifications.group_created_body', [
-                        'name' => $this->group->name,
-                    ]));
+            ->subject(__('notifications.group_created_subject'))
+            ->line(__('notifications.group_created_body', [
+                'name' => $this->group->name,
+            ]));
     }
 
     /**
