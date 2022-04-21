@@ -1,0 +1,11 @@
+{
+    "bladeFormatter.format.enabled": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "files.associations": {
+        "*.blade.php": "blade"
+    },
+    "git.enableCommitSigning": true,
+    "headwind.prependCustomClasses": true
+}

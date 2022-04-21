@@ -1,0 +1,16 @@
+{
+    "recommendations": [
+        "esbenp.prettier-vscode",
+        "ryannaddy.laravel-artisan",
+        "onecentlin.laravel-blade",
+        "codingyu.laravel-goto-view",
+        "fetzi.php-file-types",
+        "bmewburn.vscode-intelephense-client",
+        "mehedidracula.php-namespace-resolver",
+        "bradlc.vscode-tailwindcss",
+        "austenc.tailwind-docs",
+        "mikestead.dotenv",
+        "calebporzio.better-phpunit",
+        "davidanson.vscode-markdownlint"
+    ]
+}
