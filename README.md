@@ -15,7 +15,7 @@ Authentication is expected to be managed by locally running Shibboleth Service P
 - Apache 2.4
 - Supervisor 4.1
 
-The above mentioned requirements can be easily achieved by using Ubuntu 20.04 LTS and using [Ondřej Surý's PPA repository](https://launchpad.net/~ondrej/+archive/ubuntu/php/).
+The above mentioned requirements can be easily achieved by using Ubuntu 22.04 LTS (Jammy Jellyfish). For those running older Ubuntu or Debian, [Ondřej Surý's PPA repository](https://launchpad.net/~ondrej/+archive/ubuntu/php/) might be very appreciated.
 
 ## Installation
 
