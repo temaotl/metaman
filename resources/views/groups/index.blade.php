@@ -54,7 +54,7 @@
                                 {{ $group->description }}
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                {{ $group->entities->count() }}
+                                {{ $group->entities_count }}
                             </td>
                             <td class="px-6 py-3 text-sm">
                                 <a class="hover:underline link text-blue-500"

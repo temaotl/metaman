@@ -43,6 +43,7 @@ class CategoryController extends Controller
         $categories = Category::query()
             ->search(request('search'))
             ->orderBy('name')
+            ->withCount('entities')
             ->paginate();
 
         return view('categories.index', [

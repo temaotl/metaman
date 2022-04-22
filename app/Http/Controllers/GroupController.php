@@ -43,6 +43,7 @@ class GroupController extends Controller
         $groups = Group::query()
             ->search(request('search'))
             ->orderBy('name')
+            ->withCount('entities')
             ->paginate();
 
         return view('groups.index', [
