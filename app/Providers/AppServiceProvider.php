@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,8 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (! app()->environment('production')) {
+        if (!app()->environment('production')) {
             Mail::alwaysTo('foo@example.org');
+            Model::preventLazyLoading();
         }
     }
 }
