@@ -284,6 +284,8 @@ class EntityController extends Controller
                             'name_cs' => $updated_entity['name_cs'],
                             'description_en' => $updated_entity['description_en'],
                             'description_cs' => $updated_entity['description_cs'],
+                            'cocov1' => $updated_entity['cocov1'],
+                            'sirtfi' => $updated_entity['sirtfi'],
                             'metadata' => $updated_entity['metadata'],
                         ]);
 
