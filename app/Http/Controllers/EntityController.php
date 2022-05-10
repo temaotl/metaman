@@ -355,9 +355,22 @@ class EntityController extends Controller
                 if ($entity->trashed()) {
                     $entity->restore();
 
+                    $user = Auth::user();
+                    $category = $entity->category;
+
                     Bus::chain([
                         new GitAddEntity($entity, Auth::user()),
                         new GitAddToHfd($entity, Auth::user()),
+                        function () use ($entity, $user) {
+                            if ($entity->edugain) {
+                                GitAddToEdugain::dispatch($entity, $user);
+                            }
+                        },
+                        function () use ($category, $entity, $user) {
+                            if ($entity->category) {
+                                GitAddToCategory::dispatch($category, $entity, $user);
+                            }
+                        },
                         function () use ($entity) {
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityStateChanged($entity));
@@ -381,6 +394,8 @@ class EntityController extends Controller
                     Bus::chain([
                         new GitDeleteEntity($entity, Auth::user()),
                         new GitDeleteFromHfd($entity, Auth::user()),
+                        new GitDeleteFromEdugain($entity, Auth::user()),
+                        new GitDeleteFromCategory($entity->category ?? null, $entity, Auth::user()),
                         function () use ($entity) {
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityStateChanged($entity));
