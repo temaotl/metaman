@@ -22,20 +22,16 @@ class GitUpdateGroup implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, GitTrait;
 
-    public $old_group;
-    public $group;
-    public $user;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(string $old_group, Group $group, User $user)
-    {
-        $this->old_group = $old_group;
-        $this->group = $group;
-        $this->user = $user;
+    public function __construct(
+        public string $old_group,
+        public Group $group,
+        public User $user
+    ) {
     }
 
     /**

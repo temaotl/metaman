@@ -21,18 +21,15 @@ class GitAddMembership implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, GitTrait;
 
-    public $membership;
-    public $user;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Membership $membership, User $user)
-    {
-        $this->membership = $membership;
-        $this->user = $user;
+    public function __construct(
+        public Membership $membership,
+        public User $user
+    ) {
     }
 
     /**

@@ -22,20 +22,16 @@ class GitUpdateCategory implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, GitTrait;
 
-    public $old_category;
-    public $category;
-    public $user;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(string $old_category, Category $category, User $user)
-    {
-        $this->old_category = $old_category;
-        $this->category = $category;
-        $this->user = $user;
+    public function __construct(
+        public string $old_category,
+        public Category $category,
+        public User $user
+    ) {
     }
 
     /**

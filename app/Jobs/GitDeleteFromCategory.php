@@ -22,20 +22,16 @@ class GitDeleteFromCategory implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, GitTrait;
 
-    public $category;
-    public $entity;
-    public $user;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(?Category $category, Entity $entity, User $user)
-    {
-        $this->category = $category;
-        $this->entity = $entity;
-        $this->user = $user;
+    public function __construct(
+        public ?Category $category,
+        public Entity $entity,
+        public User $user
+    ) {
     }
 
     /**

@@ -23,18 +23,15 @@ class GitAddGroup implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, GitTrait;
 
-    public $group;
-    public $user;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Group $group, User $user)
-    {
-        $this->group = $group;
-        $this->user = $user;
+    public function __construct(
+        public Group $group,
+        public User $user
+    ) {
     }
 
     /**

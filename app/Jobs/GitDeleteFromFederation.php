@@ -24,20 +24,16 @@ class GitDeleteFromFederation implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, GitTrait;
 
-    public $entity;
-    public $federation;
-    public $user;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Entity $entity, Federation $federation, User $user)
-    {
-        $this->entity = $entity;
-        $this->federation = $federation;
-        $this->user = $user;
+    public function __construct(
+        public Entity $entity,
+        public Federation $federation,
+        public User $user
+    ) {
     }
 
     /**

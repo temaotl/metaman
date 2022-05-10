@@ -21,18 +21,15 @@ class GitUpdateEntity implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, GitTrait;
 
-    public $entity;
-    public $user;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Entity $entity, User $user)
-    {
-        $this->entity = $entity;
-        $this->user = $user;
+    public function __construct(
+        public Entity $entity,
+        public User $user
+    ) {
     }
 
     /**

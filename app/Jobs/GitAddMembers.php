@@ -24,20 +24,16 @@ class GitAddMembers implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, GitTrait;
 
-    public $federation;
-    public $entities;
-    public $user;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Federation $federation, Collection $entities, User $user)
-    {
-        $this->federation = $federation;
-        $this->entities = $entities;
-        $this->user = $user;
+    public function __construct(
+        public Federation $federation,
+        public Collection $entities,
+        public User $user
+    ) {
     }
 
     /**
