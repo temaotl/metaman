@@ -12,16 +12,14 @@ class AskRs extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $entity;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Entity $entity)
-    {
-        $this->entity = $entity;
+    public function __construct(
+        public Entity $entity
+    ) {
     }
 
     /**
