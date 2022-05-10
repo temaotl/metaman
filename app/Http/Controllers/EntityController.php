@@ -16,6 +16,8 @@ use App\Jobs\GitDeleteFromEdugain;
 use App\Jobs\GitDeleteFromFederation;
 use App\Jobs\GitDeleteFromHfd;
 use App\Jobs\GitDeleteFromRs;
+use App\Jobs\GitRestoreToCategory;
+use App\Jobs\GitRestoreToEdugain;
 use App\Jobs\GitUpdateEntity;
 use App\Mail\AskRs;
 use App\Models\Category;
@@ -355,22 +357,11 @@ class EntityController extends Controller
                 if ($entity->trashed()) {
                     $entity->restore();
 
-                    $user = Auth::user();
-                    $category = $entity->category;
-
                     Bus::chain([
                         new GitAddEntity($entity, Auth::user()),
                         new GitAddToHfd($entity, Auth::user()),
-                        function () use ($entity, $user) {
-                            if ($entity->edugain) {
-                                GitAddToEdugain::dispatch($entity, $user);
-                            }
-                        },
-                        function () use ($category, $entity, $user) {
-                            if ($entity->category) {
-                                GitAddToCategory::dispatch($category, $entity, $user);
-                            }
-                        },
+                        new GitRestoreToEdugain($entity, Auth::user()),
+                        new GitRestoreToCategory($entity, Auth::user()),
                         function () use ($entity) {
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityStateChanged($entity));
