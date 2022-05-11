@@ -18,11 +18,11 @@ class FederationMembersChanged extends Notification
      *
      * @return void
      */
-    public function __construct(Federation $federation, Collection $entities, string $action)
-    {
-        $this->federation = $federation;
-        $this->entities = $entities;
-        $this->action = $action;
+    public function __construct(
+        public Federation $federation,
+        public Collection $entities,
+        public string $action
+    ) {
     }
 
     /**

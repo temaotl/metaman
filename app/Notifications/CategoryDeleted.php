@@ -16,9 +16,9 @@ class CategoryDeleted extends Notification
      *
      * @return void
      */
-    public function __construct(string $category)
-    {
-        $this->category = $category;
+    public function __construct(
+        public string $category
+    ) {
     }
 
     /**

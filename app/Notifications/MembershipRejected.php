@@ -16,10 +16,10 @@ class MembershipRejected extends Notification
      *
      * @return void
      */
-    public function __construct(string $entity, string $federation)
-    {
-        $this->entity = $entity;
-        $this->federation = $federation;
+    public function __construct(
+        public string $entity,
+        public string $federation
+    ) {
     }
 
     /**

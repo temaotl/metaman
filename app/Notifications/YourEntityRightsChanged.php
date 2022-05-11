@@ -17,10 +17,10 @@ class YourEntityRightsChanged extends Notification
      *
      * @return void
      */
-    public function __construct(Entity $entity, string $action)
-    {
-        $this->entity = $entity;
-        $this->action = $action;
+    public function __construct(
+        public Entity $entity,
+        public string $action
+    ) {
     }
 
     /**

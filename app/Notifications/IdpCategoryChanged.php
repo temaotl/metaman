@@ -18,10 +18,10 @@ class IdpCategoryChanged extends Notification
      *
      * @return void
      */
-    public function __construct(Entity $entity, Category $category)
-    {
-        $this->entity = $entity;
-        $this->category = $category;
+    public function __construct(
+        public Entity $entity,
+        public Category $category
+    ) {
     }
 
     /**

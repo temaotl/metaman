@@ -18,10 +18,10 @@ class YourFederationRightsChanged extends Notification
      *
      * @return void
      */
-    public function __construct(Federation $federation, string $action)
-    {
-        $this->federation = $federation;
-        $this->action = $action;
+    public function __construct(
+        public Federation $federation,
+        public string $action
+    ) {
     }
 
     /**

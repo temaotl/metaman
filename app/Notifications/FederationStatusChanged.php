@@ -17,9 +17,9 @@ class FederationStatusChanged extends Notification
      *
      * @return void
      */
-    public function __construct(Federation $federation)
-    {
-        $this->federation = $federation;
+    public function __construct(
+        public Federation $federation
+    ) {
     }
 
     /**

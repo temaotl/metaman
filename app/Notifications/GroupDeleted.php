@@ -16,9 +16,9 @@ class GroupDeleted extends Notification
      *
      * @return void
      */
-    public function __construct(string $group)
-    {
-        $this->group = $group;
+    public function __construct(
+        public string $group
+    ) {
     }
 
     /**

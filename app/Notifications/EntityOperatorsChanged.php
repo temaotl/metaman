@@ -18,11 +18,11 @@ class EntityOperatorsChanged extends Notification
      *
      * @return void
      */
-    public function __construct(Entity $entity, Collection $operators, string $action)
-    {
-        $this->entity = $entity;
-        $this->operators = $operators;
-        $this->action = $action;
+    public function __construct(
+        public Entity $entity,
+        public Collection $operators,
+        public string $action
+    ) {
     }
 
     /**

@@ -17,9 +17,9 @@ class GroupCreated extends Notification
      *
      * @return void
      */
-    public function __construct(Group $group)
-    {
-        $this->group = $group;
+    public function __construct(
+        public Group $group
+    ) {
     }
 
     /**

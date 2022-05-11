@@ -17,9 +17,9 @@ class EntityUpdated extends Notification
      *
      * @return void
      */
-    public function __construct(Entity $entity)
-    {
-        $this->entity = $entity;
+    public function __construct(
+        public Entity $entity
+    ) {
     }
 
     /**

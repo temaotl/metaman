@@ -17,9 +17,9 @@ class CategoryCreated extends Notification
      *
      * @return void
      */
-    public function __construct(Category $category)
-    {
-        $this->category = $category;
+    public function __construct(
+        public Category $category
+    ) {
     }
 
     /**

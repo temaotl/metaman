@@ -16,9 +16,9 @@ class FederationDestroyed extends Notification
      *
      * @return void
      */
-    public function __construct(string $name)
-    {
-        $this->name = $name;
+    public function __construct(
+        public string $name
+    ) {
     }
 
     /**

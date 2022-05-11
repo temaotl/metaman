@@ -18,10 +18,10 @@ class EntityDeletedFromFederation extends Notification
      *
      * @return void
      */
-    public function __construct(Entity $entity, Federation $federation)
-    {
-        $this->entity = $entity;
-        $this->federation = $federation;
+    public function __construct(
+        public Entity $entity,
+        public Federation $federation
+    ) {
     }
 
     /**

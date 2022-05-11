@@ -17,9 +17,9 @@ class MembershipAccepted extends Notification
      *
      * @return void
      */
-    public function __construct(Membership $membership)
-    {
-        $this->membership = $membership;
+    public function __construct(
+        public Membership $membership
+    ) {
     }
 
     /**
