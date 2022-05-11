@@ -1,3 +1,7 @@
+@php
+$locale = app()->getLocale();
+@endphp
+
 @extends('layout')
 @section('title', __('entities.import'))
 
@@ -35,7 +39,7 @@
                                     value="{{ $entity['file'] }}">
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                {{ $entity['name_en'] }}
+                                {{ $entity["name_$locale"] }}
                             </td>
                             <td class="px-6 py-3 text-sm">
                                 {{ $entity['entityid'] }}

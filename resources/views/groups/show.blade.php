@@ -1,3 +1,7 @@
+@php
+$locale = app()->getLocale();
+@endphp
+
 @extends('layout')
 @section('title', __('groups.show', ['name' => $group->name]))
 
@@ -44,7 +48,7 @@
                             @forelse ($group->entities as $entity)
                                 <li>
                                     <a class="hover:underline text-blue-500"
-                                        href="{{ route('entities.show', $entity) }}">{{ $entity->name_en ?: $entity->entityid }}</a>
+                                        href="{{ route('entities.show', $entity) }}">{{ $entity->{"name_$locale"} ?: $entity->entityid }}</a>
                                 </li>
                             @empty
                                 {{ __('groups.no_entities') }}

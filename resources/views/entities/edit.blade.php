@@ -1,5 +1,9 @@
+@php
+$locale = app()->getLocale();
+@endphp
+
 @extends('layout')
-@section('title', __('entities.edit', ['name' => $entity->name_en]))
+@section('title', __('entities.edit', ['name' => $entity->{"name_$locale"}]))
 
 @section('content')
 

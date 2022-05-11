@@ -1,3 +1,7 @@
+@php
+$locale = app()->getLocale();
+@endphp
+
 @extends('layout')
 @section('title', __('common.entities'))
 
@@ -52,13 +56,13 @@
                     @forelse ($entities as $entity)
                         <tr class="hover:bg-blue-50 dark:hover-bg-gray-700" role="button">
                             <td class="whitespace-nowrap px-6 py-3 text-sm">
-                                {{ $entity->name_en }}
+                                {{ $entity->{"name_$locale"} }}
                                 <div class="text-gray-500">
                                     {{ $entity->entityid }}
                                 </div>
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                {{ $entity->description_en ?: __('entities.no_description') }}
+                                {{ $entity->{"description_$locale"} ?: __('entities.no_description') }}
                             </td>
                             <td class="px-6 py-3 text-sm">
                                 <x-pils.approved :model="$entity" />

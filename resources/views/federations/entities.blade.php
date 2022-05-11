@@ -1,3 +1,7 @@
+@php
+$locale = app()->getLocale();
+@endphp
+
 @extends('layout')
 @section('title', __('federations.show', ['name' => $federation->name]))
 
@@ -30,20 +34,20 @@
                             </tr>
                         </thead>
                         <tbody class="checkable divide-y divide-gray-200">
-                            @forelse ($members->sortBy('name_en') as $entity)
+                            @forelse ($members as $entity)
                                 <tr class="hover:bg-blue-50" role="button">
                                     <td class="px-6 py-3 text-sm">
                                         <input class="rounded" type="checkbox" name="entities[]"
                                             value="{{ $entity->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
-                                        {{ $entity->name_en }}
+                                        {{ $entity->{"name_$locale"} }}
                                         <div class="text-gray-500">
                                             {{ $entity->entityid }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-3 text-sm">
-                                        {{ $entity->description_en ?: __('entities.no_description') }}
+                                        {{ $entity->{"description_$locale"} ?: __('entities.no_description') }}
                                     </td>
                                     <td class="px-6 py-3 text-sm">
                                         <x-pils.approved :model="$entity" />
@@ -109,13 +113,13 @@
                                             value="{{ $entity->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
-                                        {{ $entity->name_en }}
+                                        {{ $entity->{"name_$locale"} }}
                                         <div class="text-gray-500">
                                             {{ $entity->entityid }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-3 text-sm">
-                                        {{ $entity->description_en ?: __('entities.no_description') }}
+                                        {{ $entity->{"description_$locale"} ?: __('entities.no_description') }}
                                     </td>
                                     <td class="px-6 py-3 text-sm">
                                         <x-pils.approved :model="$entity" />
@@ -160,10 +164,10 @@
                     @forelse ($members as $entity)
                         <tr class="hover:bg-blue-50 bg-white">
                             <td class="px-6 py-3 text-sm">
-                                {{ $entity->name_en }}
+                                {{ $entity->{"name_$locale"} }}
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                {{ $entity->description_en }}
+                                {{ $entity->{"description_$locale"} }}
                             </td>
                             <td class="px-6 py-3 text-sm">
                                 <x-pils.approved :model="$entity" />

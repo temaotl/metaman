@@ -6,7 +6,7 @@
 ]) }}
 
 @foreach ($entities as $entity)
-- {{ $entity->name_en }}
+- {{ $entity->name_en ?? $entity->entityid }}
 @endforeach
 
 Regards,

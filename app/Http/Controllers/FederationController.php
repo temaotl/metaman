@@ -145,9 +145,11 @@ class FederationController extends Controller
     {
         $this->authorize('view', $federation);
 
-        $members = $federation->entities()->paginate(10, ['*'], 'membersPage');
+        $locale = app()->getLocale();
+
+        $members = $federation->entities()->orderBy("name_$locale")->paginate(10, ['*'], 'membersPage');
         $ids = $federation->entities->pluck('id');
-        $entities = Entity::orderBy('name_en')
+        $entities = Entity::orderBy("name_$locale")
             ->whereNotIn('id', $ids)
             ->search(request('search'))
             ->paginate(10, ['*'], 'usersPage');
@@ -163,7 +165,8 @@ class FederationController extends Controller
     {
         $this->authorize('update', $federation);
 
-        $joins = Membership::where('federation_id', $federation->id)
+        $joins = Membership::with('entity:id,entityid,name_en,name_cs', 'requester:id,name')
+            ->where('federation_id', $federation->id)
             ->whereApproved(false)
             ->get();
 

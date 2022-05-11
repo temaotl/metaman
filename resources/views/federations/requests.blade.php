@@ -1,3 +1,7 @@
+@php
+$locale = app()->getLocale();
+@endphp
+
 @extends('layout')
 @section('title', __('common.requests'))
 
@@ -12,7 +16,8 @@
                     <div class="bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                         <dt class="text-sm text-gray-500">{{ __('common.entity') }}</dt>
                         <dd><a class="hover:underline text-blue-500"
-                                href="{{ route('entities.show', $join->entity) }}">{{ $join->entity->name_en }}</a></dd>
+                                href="{{ route('entities.show', $join->entity) }}">{{ $join->entity->{"name_$locale"} ?? $join->entity->entityid }}</a>
+                        </dd>
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
                         <dt class="text-sm text-gray-500">{{ __('common.requester') }}</dt>

@@ -1,5 +1,9 @@
+@php
+$locale = app()->getLocale();
+@endphp
+
 @extends('layout')
-@section('title', __('entities.show', ['name' => $entity->name_en]))
+@section('title', __('entities.show', ['name' => $entity->{"name_$locale"}]))
 
 @section('content')
 
@@ -12,7 +16,7 @@
                 <div class="bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                     <dt class="text-sm text-gray-500">{{ __('common.name') }}</dt>
                     <dd class="sm:col-span-2">
-                        <span class="pr-4">{{ $entity->name_en ?? __('entities.no_name') }}</span>
+                        <span class="pr-4">{{ $entity->{"name_$locale"} ?? __('entities.no_name') }}</span>
                         <x-pils.approved :model="$entity" />
                         <x-pils.status :model="$entity" />
                         <x-pils.state :model="$entity" />
@@ -20,7 +24,7 @@
                 </div>
                 <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
                     <dt class="text-sm text-gray-500">{{ __('common.description') }}</dt>
-                    <dd class="sm:col-span-2">{{ $entity->description_en ?? __('entities.no_description') }}</dd>
+                    <dd class="sm:col-span-2">{{ $entity->{"description_$locale"} ?? __('entities.no_description') }}</dd>
                 </div>
                 <div class="bg-gray-50 dark:bg-gray-900 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5">
                     <dt class="text-sm text-gray-500">{{ __('common.entityid') }}</dt>

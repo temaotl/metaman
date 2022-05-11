@@ -70,8 +70,10 @@ class MembershipController extends Controller
 
         $entity = $membership->entity->entityid;
 
+        $locale = app()->getLocale();
+
         $federation = $membership->federation->name;
-        $entity = $membership->entity->name_en ?? $membership->entity->entityid;
+        $entity = $membership->entity->{"name_$locale"} ?? $membership->entity->entityid;
         $operators = $membership->entity->operators;
 
         if (!$membership->entity->approved) {

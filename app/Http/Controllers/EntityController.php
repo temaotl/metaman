@@ -62,12 +62,14 @@ class EntityController extends Controller
     {
         $this->authorize('viewAny', Entity::class);
 
+        $locale = app()->getLocale();
+
         $entities = Entity::query()
             ->visibleTo(Auth::user())
             ->search(request('search'))
             ->orderByDesc('active')
             ->orderByDesc('approved')
-            ->orderBy('name_en')
+            ->orderBy("name_$locale")
             ->paginate();
 
         return view('entities.index', [
@@ -344,9 +346,11 @@ class EntityController extends Controller
                 Notification::send($entity->operators, new EntityStatusChanged($entity));
                 Notification::send($admins, new EntityStatusChanged($entity));
 
+                $locale = app()->getLocale();
+
                 return redirect()
                     ->route('entities.show', $entity)
-                    ->with('status', __("entities.$status", ['name' => $entity->name_en ?? $entity->entityid]))
+                    ->with('status', __("entities.$status", ['name' => $entity->{"name_$locale"} ?? $entity->entityid]))
                     ->with('color', $color);
 
                 break;
@@ -398,9 +402,11 @@ class EntityController extends Controller
                 $state = $entity->trashed() ? 'deleted' : 'restored';
                 $color = $entity->trashed() ? 'red' : 'green';
 
+                $locale = app()->getLocale();
+
                 return redirect()
                     ->route('entities.show', $entity)
-                    ->with('status', __("entities.$state", ['name' => $entity->name_en ?? $entity->entityid]))
+                    ->with('status', __("entities.$state", ['name' => $entity->{"name_$locale"} ?? $entity->entityid]))
                     ->with('color', $color);
 
                 break;
@@ -645,7 +651,9 @@ class EntityController extends Controller
     {
         $this->authorize('forceDelete', $entity);
 
-        $name = $entity->name_en ?? $entity->entityid;
+        $locale = app()->getLocale();
+
+        $name = $entity->{"name_$locale"} ?? $entity->entityid;
         $entity->forceDelete();
 
         $admins = User::activeAdmins()->select('id', 'email')->get();
