@@ -315,7 +315,9 @@ class GroupControllerTest extends TestCase
         $this->assertEquals($groupDescription, $group->description);
         $this->assertEquals($groupTagfile, $group->tagfile);
 
-        Bus::assertDispatched(GitAddGroup::class);
+        Bus::assertDispatched(GitAddGroup::class, function ($job) use ($group) {
+            return $job->group->is($group);
+        });
     }
 
     /** @test */
@@ -368,7 +370,9 @@ class GroupControllerTest extends TestCase
         $this->assertEquals($groupDescription, $group->description);
         $this->assertEquals($groupTagfile, $group->tagfile);
 
-        Bus::assertDispatched(GitUpdateGroup::class);
+        Bus::assertDispatched(GitUpdateGroup::class, function ($job) use ($group) {
+            return $job->group->is($group);
+        });
     }
 
     /** @test */
@@ -390,7 +394,9 @@ class GroupControllerTest extends TestCase
 
         $this->assertEquals(0, Group::count());
 
-        Bus::assertDispatched(GitDeleteGroup::class);
+        Bus::assertDispatched(GitDeleteGroup::class, function ($job) use ($group) {
+            return $job->group === $group->tagfile;
+        });
     }
 
     /** @test */

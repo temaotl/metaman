@@ -418,7 +418,9 @@ class FederationControllerTest extends TestCase
         $federation->refresh();
         $this->assertEquals($federationName, $federation->name);
 
-        Bus::assertDispatched(GitUpdateFederation::class);
+        Bus::assertDispatched(GitUpdateFederation::class, function ($job) use ($federation) {
+            return $job->federation->is($federation);
+        });
     }
 
     /** @test */
@@ -480,7 +482,9 @@ class FederationControllerTest extends TestCase
         $this->assertTrue($federation->trashed());
         $this->assertEquals(route('federations.show', $federation), url()->current());
 
-        Bus::assertDispatched(GitDeleteFederation::class);
+        Bus::assertDispatched(GitDeleteFederation::class, function ($job) use ($federation) {
+            return $job->federation->is($federation);
+        });
 
         $this
             ->followingRedirects()
@@ -494,7 +498,9 @@ class FederationControllerTest extends TestCase
         $this->assertFalse($federation->trashed());
         $this->assertEquals(route('federations.show', $federation), url()->current());
 
-        Bus::assertDispatched(GitAddFederation::class);
+        Bus::assertDispatched(GitAddFederation::class, function ($job) use ($federation) {
+            return $job->federation->is($federation);
+        });
     }
 
     /** @test */
@@ -568,7 +574,10 @@ class FederationControllerTest extends TestCase
         $this->assertEquals(2, $federation->entities()->count());
         $this->assertEquals(route('federations.entities', $federation), url()->current());
 
-        Bus::assertDispatched(GitAddMembers::class);
+        Bus::assertDispatched(GitAddMembers::class, function ($job) use ($federation, $new_entity) {
+            return $job->federation->is($federation) &&
+                $job->entities->contains($new_entity);
+        });
 
         $this
             ->followingRedirects()
@@ -583,7 +592,10 @@ class FederationControllerTest extends TestCase
         $this->assertEquals(1, $federation->entities()->count());
         $this->assertEquals(route('federations.entities', $federation), url()->current());
 
-        Bus::assertDispatched(GitDeleteMembers::class);
+        Bus::assertDispatched(GitDeleteMembers::class, function ($job) use ($federation, $new_entity) {
+            return $job->federation->is($federation) &&
+                $job->entities->contains($new_entity);
+        });
     }
 
     /** @test */
@@ -1069,7 +1081,9 @@ class FederationControllerTest extends TestCase
         $this->assertTrue($federation->trashed());
         $this->assertEquals(route('federations.show', $federation), url()->current());
 
-        Bus::assertDispatched(GitDeleteFederation::class);
+        Bus::assertDispatched(GitDeleteFederation::class, function ($job) use ($federation) {
+            return $job->federation->is($federation);
+        });
 
         $this
             ->followingRedirects()
@@ -1083,7 +1097,9 @@ class FederationControllerTest extends TestCase
         $this->assertFalse($federation->trashed());
         $this->assertEquals(route('federations.show', $federation), url()->current());
 
-        Bus::assertDispatched(GitAddFederation::class);
+        Bus::assertDispatched(GitAddFederation::class, function ($job) use ($federation) {
+            return $job->federation->is($federation);
+        });
     }
 
     /** @test */
@@ -1192,7 +1208,10 @@ class FederationControllerTest extends TestCase
         $this->assertEquals(2, $federation->entities()->count());
         $this->assertEquals(route('federations.entities', $federation), url()->current());
 
-        Bus::assertDispatched(GitAddMembers::class);
+        Bus::assertDispatched(GitAddMembers::class, function ($job) use ($federation, $new_entity) {
+            return $job->federation->is($federation) &&
+                $job->entities->contains($new_entity);
+        });
 
         $this
             ->followingRedirects()
@@ -1218,7 +1237,10 @@ class FederationControllerTest extends TestCase
         $this->assertEquals(1, $federation->entities()->count());
         $this->assertEquals(route('federations.entities', $federation), url()->current());
 
-        Bus::assertDispatched(GitDeleteMembers::class);
+        Bus::assertDispatched(GitDeleteMembers::class, function ($job) use ($federation, $new_entity) {
+            return $job->federation->is($federation) &&
+                $job->entities->contains($new_entity);
+        });
     }
 
     /** @test */
@@ -1343,7 +1365,9 @@ class FederationControllerTest extends TestCase
 
         $this->assertEquals(route('federations.show', $federation), url()->current());
 
-        Bus::assertDispatched(GitAddFederation::class);
+        Bus::assertDispatched(GitAddFederation::class, function ($job) use ($federation) {
+            return $job->federation->is($federation);
+        });
     }
 
     /** @test */

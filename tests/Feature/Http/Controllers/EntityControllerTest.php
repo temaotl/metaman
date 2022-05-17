@@ -642,7 +642,9 @@ class EntityControllerTest extends TestCase
 
     $this->assertEquals(route('entities.show', $entity), url()->current());
 
-    Bus::assertDispatched(GitUpdateEntity::class);
+    Bus::assertDispatched(GitUpdateEntity::class, function ($job) use ($entity) {
+      return $job->entity->is($entity);
+    });
   }
 
   /** @test */
@@ -693,7 +695,9 @@ class EntityControllerTest extends TestCase
       ->patch(route('entities.update', $entity), ['action' => 'state'])
       ->assertSeeText(__('entities.deleted', ['name' => $entity->name_en]));
 
-    Bus::assertDispatched(GitDeleteEntity::class);
+    Bus::assertDispatched(GitDeleteEntity::class, function ($job) use ($entity) {
+      return $job->entity->is($entity);
+    });
 
     $entity->refresh();
     $this->assertTrue($entity->trashed());
@@ -709,7 +713,9 @@ class EntityControllerTest extends TestCase
     $this->assertFalse($entity->trashed());
     $this->assertEquals(route('entities.show', $entity), url()->current());
 
-    Bus::assertDispatched(GitAddEntity::class);
+    Bus::assertDispatched(GitAddEntity::class, function ($job) use ($entity) {
+      return $job->entity->is($entity);
+    });
   }
 
   /** @test */
@@ -1279,7 +1285,9 @@ class EntityControllerTest extends TestCase
       ->assertSeeText(__('entities.entity_updated'));
 
     $this->assertEquals(route('entities.show', $entity), url()->current());
-    Bus::assertDispatched(GitUpdateEntity::class);
+    Bus::assertDispatched(GitUpdateEntity::class, function ($job) use ($entity) {
+      return $job->entity->is($entity);
+    });
   }
 
   /** @test */
@@ -1329,7 +1337,9 @@ class EntityControllerTest extends TestCase
       ->patch(route('entities.update', $entity), ['action' => 'state'])
       ->assertSeeText(__('entities.deleted', ['name' => $entity->name_en]));
 
-    Bus::assertDispatched(GitDeleteEntity::class);
+    Bus::assertDispatched(GitDeleteEntity::class, function ($job) use ($entity) {
+      return $job->entity->is($entity);
+    });
 
     $entity->refresh();
     $this->assertTrue($entity->trashed());
@@ -1345,7 +1355,9 @@ class EntityControllerTest extends TestCase
     $this->assertFalse($entity->trashed());
     $this->assertEquals(route('entities.show', $entity), url()->current());
 
-    Bus::assertDispatched(GitAddEntity::class);
+    Bus::assertDispatched(GitAddEntity::class, function ($job) use ($entity) {
+      return $job->entity->is($entity);
+    });
   }
 
   /** @test */

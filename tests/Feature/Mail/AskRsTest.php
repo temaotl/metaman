@@ -39,7 +39,7 @@ class AskRsTest extends TestCase
 
         Mail::assertQueued(AskRs::class, function ($email) use ($entity) {
             return $email->hasTo(config('mail.admin.address')) &&
-                $email->entity->entityid === $entity->entityid;
+                $email->entity->is($entity);
         });
     }
 

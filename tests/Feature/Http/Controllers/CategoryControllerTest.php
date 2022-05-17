@@ -343,7 +343,9 @@ class CategoryControllerTest extends TestCase
         $this->assertEquals($categoryDescription, $category->description);
         $this->assertEquals($categoryTagfile, $category->tagfile);
 
-        Bus::assertDispatched(GitAddCategory::class);
+        Bus::assertDispatched(GitAddCategory::class, function ($job) use ($category) {
+            return $job->category->is($category);
+        });
     }
 
     /** @test */
@@ -396,7 +398,9 @@ class CategoryControllerTest extends TestCase
         $this->assertEquals($categoryDescription, $category->description);
         $this->assertEquals($categoryTagfile, $category->tagfile);
 
-        Bus::assertDispatched(GitUpdateCategory::class);
+        Bus::assertDispatched(GitUpdateCategory::class, function ($job) use ($category) {
+            return $job->category->is($category);
+        });
     }
 
     /** @test */
@@ -418,7 +422,9 @@ class CategoryControllerTest extends TestCase
 
         $this->assertEquals(0, Category::count());
 
-        Bus::assertDispatched(GitDeleteCategory::class);
+        Bus::assertDispatched(GitDeleteCategory::class, function ($job) use ($category) {
+            return $job->category === $category->tagfile;
+        });
     }
 
     /** @test */
