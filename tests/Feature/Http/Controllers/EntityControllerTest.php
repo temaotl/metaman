@@ -756,6 +756,31 @@ class EntityControllerTest extends TestCase
   }
 
   /** @test */
+  public function a_user_with_operator_permission_can_change_an_existing_entities_federation_membership()
+  {
+    $user = User::factory()->create();
+    $entity = Entity::factory()->create();
+    $user->entities()->attach($entity);
+    $federation = Federation::factory()->create();
+
+    $this->assertTrue($entity->active);
+    $this->assertTrue($federation->active);
+    $this->assertEquals(1, $user->entities()->count());
+    $this->assertEquals(0, Membership::whereApproved(false)->count());
+
+    $this
+      ->followingRedirects()
+      ->actingAs($user)
+      ->post(route('entities.join', $entity), [
+        'federation' => $federation->id,
+        'explanation' => $this->faker->sentence(),
+      ])
+      ->assertSeeText(__('entities.join_requested', ['name' => $federation->name]));
+
+    $this->assertEquals(1, Membership::whereApproved(false)->count());
+  }
+
+  /** @test */
   public function a_user_without_operator_permission_cannot_see_entities_edit_page()
   {
     $user = User::factory()->create();
@@ -834,6 +859,30 @@ class EntityControllerTest extends TestCase
         'operators' => [$new_operator->id],
       ])
       ->assertForbidden();
+  }
+
+  /** @test */
+  public function a_user_without_operator_permission_cannot_change_an_existing_entities_federation_membership()
+  {
+    $user = User::factory()->create();
+    $entity = Entity::factory()->create();
+    $federation = Federation::factory()->create();
+
+    $this->assertTrue($entity->active);
+    $this->assertTrue($federation->active);
+    $this->assertEquals(0, $user->entities()->count());
+    $this->assertEquals(0, Membership::whereApproved(false)->count());
+
+    $this
+      ->followingRedirects()
+      ->actingAs($user)
+      ->post(route('entities.join', $entity), [
+        'federation' => $federation->id,
+        'explanation' => $this->faker->sentence(),
+      ])
+      ->assertForbidden();
+
+    $this->assertEquals(0, Membership::whereApproved(false)->count());
   }
 
   /** @test */
@@ -1416,6 +1465,31 @@ class EntityControllerTest extends TestCase
     $entity->refresh();
     $this->assertEquals(0, $entity->operators()->count());
     $this->assertEquals(route('entities.show', $entity), url()->current());
+  }
+
+  /** @test */
+  public function an_admin_can_change_an_existing_entities_federation_membership()
+  {
+    $this->withoutExceptionHandling();
+
+    $admin = User::factory()->create(['admin' => true]);
+    $entity = Entity::factory()->create();
+    $federation = Federation::factory()->create();
+
+    $this->assertTrue($entity->active);
+    $this->assertTrue($federation->active);
+    $this->assertEquals(0, Membership::whereApproved(false)->count());
+
+    $this
+      ->followingRedirects()
+      ->actingAs($admin)
+      ->post(route('entities.join', $entity), [
+        'federation' => $federation->id,
+        'explanation' => $this->faker->sentence(),
+      ])
+      ->assertSeeText(__('entities.join_requested', ['name' => $federation->name]));
+
+    $this->assertEquals(1, Membership::whereApproved(false)->count());
   }
 
   /** @test */
