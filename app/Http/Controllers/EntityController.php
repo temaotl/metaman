@@ -62,19 +62,7 @@ class EntityController extends Controller
     {
         $this->authorize('viewAny', Entity::class);
 
-        $locale = app()->getLocale();
-
-        $entities = Entity::query()
-            ->visibleTo(Auth::user())
-            ->search(request('search'))
-            ->orderByDesc('active')
-            ->orderByDesc('approved')
-            ->orderBy("name_$locale")
-            ->paginate();
-
-        return view('entities.index', [
-            'entities' => $entities,
-        ]);
+        return view('entities.index');
     }
 
     /**
