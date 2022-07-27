@@ -27,14 +27,7 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = User::query()
-            ->search(request('search'))
-            ->orderBy('name')
-            ->paginate();
-
-        return view('users.index', [
-            'users' => $users,
-        ]);
+        return view('users.index');
     }
 
     /**
