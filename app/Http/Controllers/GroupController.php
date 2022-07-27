@@ -40,15 +40,7 @@ class GroupController extends Controller
     {
         $this->authorize('do-everything');
 
-        $groups = Group::query()
-            ->search(request('search'))
-            ->orderBy('name')
-            ->withCount('entities')
-            ->paginate();
-
-        return view('groups.index', [
-            'groups' => $groups,
-        ]);
+        return view('groups.index');
     }
 
     /**
