@@ -40,15 +40,7 @@ class CategoryController extends Controller
     {
         $this->authorize('do-everything');
 
-        $categories = Category::query()
-            ->search(request('search'))
-            ->orderBy('name')
-            ->withCount('entities')
-            ->paginate();
-
-        return view('categories.index', [
-            'categories' => $categories,
-        ]);
+        return view('categories.index');
     }
 
     /**
