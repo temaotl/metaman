@@ -50,17 +50,7 @@ class FederationController extends Controller
     {
         $this->authorize('viewAny', Federation::class);
 
-        $federations = Federation::query()
-            ->visibleTo(Auth::user())
-            ->search(request('search'))
-            ->orderByDesc('active')
-            ->orderByDesc('approved')
-            ->orderBy('name')
-            ->paginate();
-
-        return view('federations.index', [
-            'federations' => $federations,
-        ]);
+        return view('federations.index');
     }
 
     /**
