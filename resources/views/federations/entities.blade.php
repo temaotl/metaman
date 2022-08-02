@@ -37,8 +37,7 @@ $locale = app()->getLocale();
                             @forelse ($members as $entity)
                                 <tr class="hover:bg-blue-50" role="button">
                                     <td class="px-6 py-3 text-sm">
-                                        <input class="rounded" type="checkbox" name="entities[]"
-                                            value="{{ $entity->id }}">
+                                        <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $entity->{"name_$locale"} }}
@@ -83,8 +82,8 @@ $locale = app()->getLocale();
             <div class="mb-4">
                 <form>
                     <label class="sr-only" for="search">{{ __('common.search') }}</label>
-                    <input class="dark:bg-transparent w-full px-4 py-2 border rounded-lg" type="text" name="search" id="search"
-                        value="{{ request('search') }}" placeholder="{{ __('entities.searchbox') }}">
+                    <input class="dark:bg-transparent w-full px-4 py-2 border rounded-lg" type="text" name="search"
+                        id="search" value="{{ request('search') }}" placeholder="{{ __('entities.searchbox') }}">
                 </form>
             </div>
             <form id="add_members" action="{{ route('federations.update', $federation) }}" method="post">
@@ -109,8 +108,7 @@ $locale = app()->getLocale();
                             @forelse ($entities as $entity)
                                 <tr class="hover:bg-blue-50" role="button">
                                     <td class="px-6 py-3 text-sm">
-                                        <input class="rounded" type="checkbox" name="entities[]"
-                                            value="{{ $entity->id }}">
+                                        <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $entity->{"name_$locale"} }}
@@ -165,9 +163,12 @@ $locale = app()->getLocale();
                         <tr class="hover:bg-blue-50 bg-white">
                             <td class="px-6 py-3 text-sm">
                                 {{ $entity->{"name_$locale"} }}
+                                <div class="text-gray-500">
+                                    {{ $entity->entityid }}
+                                </div>
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                {{ $entity->{"description_$locale"} }}
+                                {{ $entity->{"description_$locale"} ?: __('entities.no_description') }}
                             </td>
                             <td class="px-6 py-3 text-sm">
                                 <x-pils.approved :model="$entity" />
