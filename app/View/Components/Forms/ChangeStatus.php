@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class ChangeStatus extends Component
 {
     public $route;
+
     public $model;
 
     /**

@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 trait ValidatorTrait
 {
     public string $code = '';
+
     public string $message = '';
+
     public string $error = '';
 
     // //////////////////////////////////////////////////
@@ -33,8 +35,9 @@ trait ValidatorTrait
         $errors = libxml_get_errors();
         $result = null;
         foreach ($errors as $error) {
-            $result .= trim($error->message) . ' ';
+            $result .= trim($error->message).' ';
         }
+
         return $result;
         libxml_clear_errors();
     }
@@ -48,17 +51,17 @@ trait ValidatorTrait
 
         $result = null;
         foreach (libxml_get_errors() as $error) {
-            $result .= "Error on line {$error->line}: " . trim($error->message) . ". ";
+            $result .= "Error on line {$error->line}: ".trim($error->message).'. ';
         }
-        if (!is_null($result)) {
+        if (! is_null($result)) {
             $this->error = $result;
         }
 
         if (
-            !$dom->schemaValidate(dirname(__DIR__) . '/../xsd/saml-schema-metadata-2.0.xsd') or
-            !$dom->schemaValidate(dirname(__DIR__) . '/../xsd/sstc-saml-metadata-ui-v1.0.xsd')
+            ! $dom->schemaValidate(dirname(__DIR__).'/../xsd/saml-schema-metadata-2.0.xsd') or
+            ! $dom->schemaValidate(dirname(__DIR__).'/../xsd/sstc-saml-metadata-ui-v1.0.xsd')
         ) {
-            $this->error = 'This metadata is not valid against XML schema. ' . $this->libxml_display_errors();
+            $this->error = 'This metadata is not valid against XML schema. '.$this->libxml_display_errors();
         }
 
         return $dom;
@@ -68,16 +71,16 @@ trait ValidatorTrait
     {
         $xpath = new \DOMXPath($dom);
 
-        $xpath->registerNameSpace("md", "urn:oasis:names:tc:SAML:2.0:metadata");
-        $xpath->registerNameSpace("ds", "http://www.w3.org/2000/09/xmldsig#");
-        $xpath->registerNameSpace("shibmd", "urn:mace:shibboleth:metadata:1.0");
-        $xpath->registerNameSpace("mdui", "urn:oasis:names:tc:SAML:metadata:ui");
-        $xpath->registerNameSpace("eduidmd", "http://eduid.cz/schema/metadata/1.0");
-        $xpath->registerNameSpace("init", "urn:oasis:names:tc:SAML:profiles:SSO:request-init");
-        $xpath->registerNameSpace("idpdisc", "urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol");
-        $xpath->registerNameSpace("mdattr", "urn:oasis:names:tc:SAML:metadata:attribute");
-        $xpath->registerNameSpace("saml", "urn:oasis:names:tc:SAML:2.0:assertion");
-        $xpath->registerNameSpace("remd", "http://refeds.org/metadata");
+        $xpath->registerNameSpace('md', 'urn:oasis:names:tc:SAML:2.0:metadata');
+        $xpath->registerNameSpace('ds', 'http://www.w3.org/2000/09/xmldsig#');
+        $xpath->registerNameSpace('shibmd', 'urn:mace:shibboleth:metadata:1.0');
+        $xpath->registerNameSpace('mdui', 'urn:oasis:names:tc:SAML:metadata:ui');
+        $xpath->registerNameSpace('eduidmd', 'http://eduid.cz/schema/metadata/1.0');
+        $xpath->registerNameSpace('init', 'urn:oasis:names:tc:SAML:profiles:SSO:request-init');
+        $xpath->registerNameSpace('idpdisc', 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol');
+        $xpath->registerNameSpace('mdattr', 'urn:oasis:names:tc:SAML:metadata:attribute');
+        $xpath->registerNameSpace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
+        $xpath->registerNameSpace('remd', 'http://refeds.org/metadata');
 
         return $xpath;
     }
@@ -112,7 +115,7 @@ trait ValidatorTrait
 
     public function getEntityFile(object $xpath): string
     {
-        return urlencode(preg_replace('#^https://#', '', $this->getEntityId($xpath))) . '.xml';
+        return urlencode(preg_replace('#^https://#', '', $this->getEntityId($xpath))).'.xml';
     }
 
     public function getEntityNameEn(object $xpath): ?string
@@ -205,7 +208,7 @@ trait ValidatorTrait
 
         return json_encode([
             'result' => 'Error',
-            'error' => 'This is no metadata.'
+            'error' => 'This is no metadata.',
         ], JSON_FORCE_OBJECT);
     }
 
@@ -214,11 +217,11 @@ trait ValidatorTrait
     // //////////////////////////////////////////////////
     public function checkDependencies(): void
     {
-        if (!extension_loaded('exif')) {
+        if (! extension_loaded('exif')) {
             throw new \Exception('Exif support not available.');
         }
 
-        if (!extension_loaded('gd')) {
+        if (! extension_loaded('gd')) {
             throw new \Exception('GD support not available.');
         }
     }
@@ -234,7 +237,7 @@ trait ValidatorTrait
 
     public function checkHTTPS(object $xpath): void
     {
-        $URL = array();
+        $URL = [];
 
         if ($this->isIDP($xpath)) {
             $SSODescriptor = 'md:IDPSSODescriptor';
@@ -242,59 +245,59 @@ trait ValidatorTrait
             $SSODescriptor = 'md:IDPSSODescriptor';
         }
 
-        # /md:EntityDescriptor[@entityID]
+        // /md:EntityDescriptor[@entityID]
         $URL['entityID'] = $xpath->query('/md:EntityDescriptor')->item(0)->getAttribute('entityID');
 
-        # /md:EntityDescriptor/$SSODescriptor/md:Extensions/mdui:UIInfo/mdui:Logo
-        $Logo = $xpath->query('/md:EntityDescriptor/' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:Logo');
+        // /md:EntityDescriptor/$SSODescriptor/md:Extensions/mdui:UIInfo/mdui:Logo
+        $Logo = $xpath->query('/md:EntityDescriptor/'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:Logo');
         for ($i = 0; $i < $Logo->length; $i++) {
-            $URL['Logo' . ($i + 1)] = $Logo->item($i)->nodeValue;
+            $URL['Logo'.($i + 1)] = $Logo->item($i)->nodeValue;
         }
 
-        # /md:EntityDescriptor/$SSODescriptor/md:ArtifactResolutionService
-        $ArtifactResolutionService = $xpath->query('/md:EntityDescriptor/' . $SSODescriptor . '/md:ArtifactResolutionService');
+        // /md:EntityDescriptor/$SSODescriptor/md:ArtifactResolutionService
+        $ArtifactResolutionService = $xpath->query('/md:EntityDescriptor/'.$SSODescriptor.'/md:ArtifactResolutionService');
         for ($i = 0; $i < $ArtifactResolutionService->length; $i++) {
-            $URL['ArtifactResolutionService' . ($i + 1)] = $ArtifactResolutionService->item($i)->getAttribute('Location');
+            $URL['ArtifactResolutionService'.($i + 1)] = $ArtifactResolutionService->item($i)->getAttribute('Location');
         }
 
-        # /md:EntityDescriptor/$SSODescriptor/md:SingleLogoutService
-        $SingleLogoutService = $xpath->query('/md:EntityDescriptor/' . $SSODescriptor . '/md:SingleLogoutService');
+        // /md:EntityDescriptor/$SSODescriptor/md:SingleLogoutService
+        $SingleLogoutService = $xpath->query('/md:EntityDescriptor/'.$SSODescriptor.'/md:SingleLogoutService');
         for ($i = 0; $i < $SingleLogoutService->length; $i++) {
-            $URL['SingleLogoutService' . ($i + 1)] = $SingleLogoutService->item($i)->getAttribute('Location');
+            $URL['SingleLogoutService'.($i + 1)] = $SingleLogoutService->item($i)->getAttribute('Location');
         }
 
-        # /md:EntityDescriptor/$SSODescriptor/md:SingleSignOnService
-        $SingleSignOnService = $xpath->query('/md:EntityDescriptor/' . $SSODescriptor . '/md:SingleSignOnService');
+        // /md:EntityDescriptor/$SSODescriptor/md:SingleSignOnService
+        $SingleSignOnService = $xpath->query('/md:EntityDescriptor/'.$SSODescriptor.'/md:SingleSignOnService');
         for ($i = 0; $i < $SingleSignOnService->length; $i++) {
-            $URL['SingleSignOnService' . ($i + 1)] = $SingleSignOnService->item($i)->getAttribute('Location');
+            $URL['SingleSignOnService'.($i + 1)] = $SingleSignOnService->item($i)->getAttribute('Location');
         }
 
-        # /md:EntityDescriptor/md:AttributeAuthorityDescriptor/md:AttributeService
+        // /md:EntityDescriptor/md:AttributeAuthorityDescriptor/md:AttributeService
         $AttributeService = $xpath->query('/md:EntityDescriptor/md:AttributeAuthorityDescriptor/md:AttributeService');
         for ($i = 0; $i < $AttributeService->length; $i++) {
-            $URL['AttributeService' . ($i + 1)] = $AttributeService->item($i)->getAttribute('Location');
+            $URL['AttributeService'.($i + 1)] = $AttributeService->item($i)->getAttribute('Location');
         }
 
-        # /md:EntityDescriptor/$SSODescriptor/md:Extensions/init:RequestInitiator
-        $RequestInitiator = $xpath->query('/md:EntityDescriptor/' . $SSODescriptor . '/md:Extensions/init:RequestInitiator');
+        // /md:EntityDescriptor/$SSODescriptor/md:Extensions/init:RequestInitiator
+        $RequestInitiator = $xpath->query('/md:EntityDescriptor/'.$SSODescriptor.'/md:Extensions/init:RequestInitiator');
         for ($i = 0; $i < $RequestInitiator->length; $i++) {
-            $URL['RequestInitiator' . ($i + 1)] = $RequestInitiator->item($i)->getAttribute('Location');
+            $URL['RequestInitiator'.($i + 1)] = $RequestInitiator->item($i)->getAttribute('Location');
         }
 
-        # /md:EntityDescriptor/$SSODescriptor/md:Extensions/idpdisc:DiscoveryResponse
-        $DiscoveryResponse = $xpath->query('/md:EntityDescriptor/' . $SSODescriptor . '/md:Extensions/idpdisc:DiscoveryResponse');
+        // /md:EntityDescriptor/$SSODescriptor/md:Extensions/idpdisc:DiscoveryResponse
+        $DiscoveryResponse = $xpath->query('/md:EntityDescriptor/'.$SSODescriptor.'/md:Extensions/idpdisc:DiscoveryResponse');
         for ($i = 0; $i < $DiscoveryResponse->length; $i++) {
-            $URL['DiscoveryResponse' . ($i + 1)] = $DiscoveryResponse->item($i)->getAttribute('Location');
+            $URL['DiscoveryResponse'.($i + 1)] = $DiscoveryResponse->item($i)->getAttribute('Location');
         }
 
-        # /md:EntityDescriptor/$SSODescriptor/md:AssertionConsumerService
-        $AssertionConsumerService = $xpath->query('/md:EntityDescriptor/' . $SSODescriptor . '/md:AssertionConsumerService');
+        // /md:EntityDescriptor/$SSODescriptor/md:AssertionConsumerService
+        $AssertionConsumerService = $xpath->query('/md:EntityDescriptor/'.$SSODescriptor.'/md:AssertionConsumerService');
         for ($i = 0; $i < $AssertionConsumerService->length; $i++) {
-            $URL['AssertionConsumerService' . ($i + 1)] = $AssertionConsumerService->item($i)->getAttribute('Location');
+            $URL['AssertionConsumerService'.($i + 1)] = $AssertionConsumerService->item($i)->getAttribute('Location');
         }
 
         foreach ($URL as $key => $value) {
-            if (!preg_match('/^https\:\/\//', $value)) {
+            if (! preg_match('/^https\:\/\//', $value)) {
                 $this->error .= "HTTPS missing in $key. ";
             }
         }
@@ -309,12 +312,12 @@ trait ValidatorTrait
         }
 
         $RepublishRequestIDP = $xpath->query('/md:EntityDescriptor/md:IDPSSODescriptor/md:Extensions/eduidmd:RepublishRequest');
-        $RepublishRequestSP  = $xpath->query('/md:EntityDescriptor/md:SPSSODescriptor/md:Extensions/eduidmd:RepublishRequest');
-        $RepublishRequest    = $xpath->query('/md:EntityDescriptor/md:Extensions/eduidmd:RepublishRequest');
-        $RepublishTarget     = $xpath->query('/md:EntityDescriptor/md:Extensions/eduidmd:RepublishRequest/eduidmd:RepublishTarget');
+        $RepublishRequestSP = $xpath->query('/md:EntityDescriptor/md:SPSSODescriptor/md:Extensions/eduidmd:RepublishRequest');
+        $RepublishRequest = $xpath->query('/md:EntityDescriptor/md:Extensions/eduidmd:RepublishRequest');
+        $RepublishTarget = $xpath->query('/md:EntityDescriptor/md:Extensions/eduidmd:RepublishRequest/eduidmd:RepublishTarget');
 
         if (($RepublishRequestIDP->length > 0) or ($RepublishRequestSP->length > 0)) {
-            $this->error .= 'RepublishRequest element placed incorrectly in /EntityDescriptor/' . $SSODescriptor . '/Extensions, but it has to be in /EntityDescriptor/Extensions. ';
+            $this->error .= 'RepublishRequest element placed incorrectly in /EntityDescriptor/'.$SSODescriptor.'/Extensions, but it has to be in /EntityDescriptor/Extensions. ';
         }
 
         if ($RepublishRequest->length > 0) {
@@ -333,12 +336,12 @@ trait ValidatorTrait
         foreach ($element as $e) {
             @$file = file_get_contents($e->nodeValue);
 
-            if (@$http_response_header === NULL) {
-                return $e->nodeValue . ' from ' . $e->parentNode->nodeName . '/' . $e->nodeName . '[@xml:lang="' . $e->getAttribute('xml:lang') . '"] could not be read, check www.ssllabs.com for possible SSL errors. ';
-            } elseif (preg_match("/403|404|500/", $http_response_header[0])) {
-                return $e->nodeValue . ' from ' . $e->parentNode->nodeName . '/' . $e->nodeName . '[@xml:lang="' . $e->getAttribute('xml:lang') . '"] could not be read due to ' . $http_response_header[0] . ' return code. ';
-            } elseif (!$file) {
-                return $e->nodeValue . ' from ' . $e->parentNode->nodeName . '/' . $e->nodeName . '[@xml:lang="' . $e->getAttribute('xml:lang') . '"] failed to load. ';
+            if (@$http_response_header === null) {
+                return $e->nodeValue.' from '.$e->parentNode->nodeName.'/'.$e->nodeName.'[@xml:lang="'.$e->getAttribute('xml:lang').'"] could not be read, check www.ssllabs.com for possible SSL errors. ';
+            } elseif (preg_match('/403|404|500/', $http_response_header[0])) {
+                return $e->nodeValue.' from '.$e->parentNode->nodeName.'/'.$e->nodeName.'[@xml:lang="'.$e->getAttribute('xml:lang').'"] could not be read due to '.$http_response_header[0].' return code. ';
+            } elseif (! $file) {
+                return $e->nodeValue.' from '.$e->parentNode->nodeName.'/'.$e->nodeName.'[@xml:lang="'.$e->getAttribute('xml:lang').'"] failed to load. ';
             } else {
                 return '';
             }
@@ -353,34 +356,34 @@ trait ValidatorTrait
             $SSODescriptor = 'SPSSODescriptor';
         }
 
-        $DisplayName_CS         = $xpath->query('/md:EntityDescriptor/md:' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:DisplayName[@xml:lang="cs"]');
-        $DisplayName_EN         = $xpath->query('/md:EntityDescriptor/md:' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:DisplayName[@xml:lang="en"]');
-        $Description_CS         = $xpath->query('/md:EntityDescriptor/md:' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:Description[@xml:lang="cs"]');
-        $Description_EN         = $xpath->query('/md:EntityDescriptor/md:' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:Description[@xml:lang="en"]');
-        $InformationURL_CS      = $xpath->query('/md:EntityDescriptor/md:' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:InformationURL[@xml:lang="cs"]');
-        $InformationURL_EN      = $xpath->query('/md:EntityDescriptor/md:' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:InformationURL[@xml:lang="en"]');
-        $Logo                   = $xpath->query('/md:EntityDescriptor/md:' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:Logo');
-        $PrivacyStatementURL_CS = $xpath->query('/md:EntityDescriptor/md:' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:PrivacyStatementURL[@xml:lang="cs"]');
-        $PrivacyStatementURL_EN = $xpath->query('/md:EntityDescriptor/md:' . $SSODescriptor . '/md:Extensions/mdui:UIInfo/mdui:PrivacyStatementURL[@xml:lang="en"]');
+        $DisplayName_CS = $xpath->query('/md:EntityDescriptor/md:'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:DisplayName[@xml:lang="cs"]');
+        $DisplayName_EN = $xpath->query('/md:EntityDescriptor/md:'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:DisplayName[@xml:lang="en"]');
+        $Description_CS = $xpath->query('/md:EntityDescriptor/md:'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:Description[@xml:lang="cs"]');
+        $Description_EN = $xpath->query('/md:EntityDescriptor/md:'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:Description[@xml:lang="en"]');
+        $InformationURL_CS = $xpath->query('/md:EntityDescriptor/md:'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:InformationURL[@xml:lang="cs"]');
+        $InformationURL_EN = $xpath->query('/md:EntityDescriptor/md:'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:InformationURL[@xml:lang="en"]');
+        $Logo = $xpath->query('/md:EntityDescriptor/md:'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:Logo');
+        $PrivacyStatementURL_CS = $xpath->query('/md:EntityDescriptor/md:'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:PrivacyStatementURL[@xml:lang="cs"]');
+        $PrivacyStatementURL_EN = $xpath->query('/md:EntityDescriptor/md:'.$SSODescriptor.'/md:Extensions/mdui:UIInfo/mdui:PrivacyStatementURL[@xml:lang="en"]');
 
         if ($DisplayName_CS->length !== 1) {
-            $this->error .= $SSODescriptor . '/UIInfo/DisplayName[@xml:lang="cs"] missing. ';
+            $this->error .= $SSODescriptor.'/UIInfo/DisplayName[@xml:lang="cs"] missing. ';
         }
 
         if ($DisplayName_EN->length !== 1) {
-            $this->error .= $SSODescriptor . '/UIInfo/DisplayName[@xml:lang="en"] missing. ';
+            $this->error .= $SSODescriptor.'/UIInfo/DisplayName[@xml:lang="en"] missing. ';
         }
 
         if ($Description_CS->length !== 1) {
-            $this->error .= $SSODescriptor . '/UIInfo/Description[@xml:lang="cs"] missing. ';
+            $this->error .= $SSODescriptor.'/UIInfo/Description[@xml:lang="cs"] missing. ';
         }
 
         if ($Description_EN->length !== 1) {
-            $this->error .= $SSODescriptor . '/UIInfo/Description[@xml:lang="en"] missing. ';
+            $this->error .= $SSODescriptor.'/UIInfo/Description[@xml:lang="en"] missing. ';
         }
 
         if ($InformationURL_CS->length !== 1) {
-            $this->error .= $SSODescriptor . '/UIInfo/InformationURL[@xml:lang="cs"] missing. ';
+            $this->error .= $SSODescriptor.'/UIInfo/InformationURL[@xml:lang="cs"] missing. ';
         } else {
             $r = $this->checkURLaddress($InformationURL_CS);
             if ($r) {
@@ -389,7 +392,7 @@ trait ValidatorTrait
         }
 
         if ($InformationURL_EN->length !== 1) {
-            $this->error .= $SSODescriptor . '/UIInfo/InformationURL[@xml:lang="en"] missing. ';
+            $this->error .= $SSODescriptor.'/UIInfo/InformationURL[@xml:lang="en"] missing. ';
         } else {
             $r = $this->checkURLaddress($InformationURL_EN);
             if ($r) {
@@ -399,34 +402,34 @@ trait ValidatorTrait
 
         if ($this->isIDP($xpath)) {
             if ($Logo->length < 1) {
-                $this->error .= $SSODescriptor . '/UIInfo/Logo missing. ';
+                $this->error .= $SSODescriptor.'/UIInfo/Logo missing. ';
             } else {
                 foreach ($Logo as $logo) {
                     @$file = file_get_contents($logo->nodeValue);
-                    if (!$file) {
-                        $this->error .= $SSODescriptor . '/UIInfo/Logo ' . $logo->nodeValue . ' could not be read. ';
+                    if (! $file) {
+                        $this->error .= $SSODescriptor.'/UIInfo/Logo '.$logo->nodeValue.' could not be read. ';
                     } else {
                         if (exif_imagetype($logo->nodeValue)) {
-                            $imagesize  = getimagesize($logo->nodeValue);
-                            $img_width  = $imagesize[0];
+                            $imagesize = getimagesize($logo->nodeValue);
+                            $img_width = $imagesize[0];
                             $img_height = $imagesize[1];
-                            $md_width   = $logo->getAttribute("width");
-                            $md_height  = $logo->getAttribute("height");
+                            $md_width = $logo->getAttribute('width');
+                            $md_height = $logo->getAttribute('height');
 
                             if ($img_width != $md_width) {
-                                $this->error .= $SSODescriptor . '/UIInfo/Logo[@width="' . $md_width . '"] does not match the width (' . $img_width . 'px) of the image ' . $logo->nodeValue . '. ';
+                                $this->error .= $SSODescriptor.'/UIInfo/Logo[@width="'.$md_width.'"] does not match the width ('.$img_width.'px) of the image '.$logo->nodeValue.'. ';
                             }
 
                             if ($img_height != $md_height) {
-                                $this->error .= $SSODescriptor . '/UIInfo/Logo[@height="' . $md_height . '"] does not match the height (' . $img_height . 'px) of the image ' . $logo->nodeValue . '. ';
+                                $this->error .= $SSODescriptor.'/UIInfo/Logo[@height="'.$md_height.'"] does not match the height ('.$img_height.'px) of the image '.$logo->nodeValue.'. ';
                             }
                         }
 
-                        if (!exif_imagetype($logo->nodeValue)) {
+                        if (! exif_imagetype($logo->nodeValue)) {
                             $doc = new \DOMDocument();
                             $doc->load($logo->nodeValue);
                             if (strcmp($doc->documentElement->nodeName, 'svg') !== 0) {
-                                $this->error .= $SSODescriptor . '/UIInfo/Logo ' . $logo->nodeValue . ' is not an image. ';
+                                $this->error .= $SSODescriptor.'/UIInfo/Logo '.$logo->nodeValue.' is not an image. ';
                             }
                         }
                     }
@@ -455,12 +458,13 @@ trait ValidatorTrait
 
         if ($certificates->length === 0) {
             $this->error .= 'No certificate found. ';
+
             return;
         }
 
         $i = 0;
         foreach ($certificates as $cert) {
-            $X509Certificate = "-----BEGIN CERTIFICATE-----\n" . trim($cert->nodeValue) . "\n-----END CERTIFICATE-----";
+            $X509Certificate = "-----BEGIN CERTIFICATE-----\n".trim($cert->nodeValue)."\n-----END CERTIFICATE-----";
             $cert_info = openssl_x509_parse($X509Certificate, true);
 
             if (is_array($cert_info)) {
@@ -468,7 +472,7 @@ trait ValidatorTrait
                 $cert_validFor = floor((strtotime($cert_validTo) - time()) / (60 * 60 * 24));
                 $pub_key = openssl_pkey_get_details(openssl_pkey_get_public($X509Certificate));
             } else {
-                $this->error .= 'The certificate #' . ($i + 1) . ' is invalid. ';
+                $this->error .= 'The certificate #'.($i + 1).' is invalid. ';
             }
 
             // This is here to skip every other certificate in order to
@@ -476,17 +480,18 @@ trait ValidatorTrait
             // expired/old certificate.
             if ($i % 2 === 0) {
                 $i++;
+
                 continue;
             }
 
             $CRT_VALIDITY = 30;
             if ($cert_validFor < $CRT_VALIDITY) {
-                $this->error .= 'The certificate(s) must be valid at least for ' . $CRT_VALIDITY . ' days, yours certificate #' . ($i + 1) . ' is valid for ' . $cert_validFor . ' days. ';
+                $this->error .= 'The certificate(s) must be valid at least for '.$CRT_VALIDITY.' days, yours certificate #'.($i + 1).' is valid for '.$cert_validFor.' days. ';
             }
 
             $CRT_KEY_SIZE = 2048;
             if ($pub_key['bits'] < $CRT_KEY_SIZE) {
-                $this->error .= 'The public key(s) must be at least ' . $CRT_KEY_SIZE . ' bits, yours public key for certificate #' . ($i + 1) . ' is ' . $pub_key['bits'] . ' bits. ';
+                $this->error .= 'The public key(s) must be at least '.$CRT_KEY_SIZE.' bits, yours public key for certificate #'.($i + 1).' is '.$pub_key['bits'].' bits. ';
             }
 
             $i++;
@@ -495,12 +500,12 @@ trait ValidatorTrait
 
     public function checkScope(object $xpath): void
     {
-        if (!$this->isIDP($xpath)) {
+        if (! $this->isIDP($xpath)) {
             return;
         }
 
         $IDPSSOScope = $xpath->query('/md:EntityDescriptor/md:IDPSSODescriptor/md:Extensions/shibmd:Scope');
-        $AAScope     = $xpath->query('/md:EntityDescriptor/md:AttributeAuthorityDescriptor/md:Extensions/shibmd:Scope');
+        $AAScope = $xpath->query('/md:EntityDescriptor/md:AttributeAuthorityDescriptor/md:Extensions/shibmd:Scope');
 
         if ($IDPSSOScope->length !== 1) {
             $this->error .= 'Precisely 1 EntityDescriptor/IDPSSODescriptor/Extensions/Scope required. ';
@@ -540,7 +545,7 @@ trait ValidatorTrait
 
     public function checkAttributeAuthorityDescriptor(object $xpath): void
     {
-        $SAML2binding  = 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP';
+        $SAML2binding = 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP';
         $SAML2protocol = 'urn:oasis:names:tc:SAML:2.0:protocol';
 
         $AttributeAuthorityDescriptor = $xpath->query('/md:EntityDescriptor/md:AttributeAuthorityDescriptor');
@@ -551,7 +556,7 @@ trait ValidatorTrait
 
             foreach ($AttributeService as $as) {
                 if (strcmp($as->getAttribute('Binding'), $SAML2binding) === 0) {
-                    if (!preg_match("/$SAML2protocol/", $protocols)) {
+                    if (! preg_match("/$SAML2protocol/", $protocols)) {
                         $this->error .= 'SAML 2.0 binding requires SAML 2.0 token in EntityDescriptor/AttributeAuthorityDescriptor[@protocolSupportEnumeration]. ';
                     }
                 }
@@ -566,7 +571,7 @@ trait ValidatorTrait
                     }
                 }
 
-                if (!$SAML2binding_found) {
+                if (! $SAML2binding_found) {
                     $this->error .= 'SAML 2.0 token in EntityDescriptor/AttributeAuthorityDescriptor[@protocolSupportEnumeration] requires SAML 2.0 binding. ';
                 }
             }
@@ -580,12 +585,12 @@ trait ValidatorTrait
         if ($Organization->length === 0) {
             $this->error .= 'Organization element missing. ';
         } else {
-            $OrganizationName_CS         = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationName[@xml:lang="cs"]');
-            $OrganizationName_EN         = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationName[@xml:lang="en"]');
-            $OrganizationDisplayName_CS  = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationDisplayName[@xml:lang="cs"]');
-            $OrganizationDisplayName_EN  = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationDisplayName[@xml:lang="en"]');
-            $OrganizationURL_CS          = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationURL[@xml:lang="cs"]');
-            $OrganizationURL_EN          = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationURL[@xml:lang="en"]');
+            $OrganizationName_CS = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationName[@xml:lang="cs"]');
+            $OrganizationName_EN = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationName[@xml:lang="en"]');
+            $OrganizationDisplayName_CS = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationDisplayName[@xml:lang="cs"]');
+            $OrganizationDisplayName_EN = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationDisplayName[@xml:lang="en"]');
+            $OrganizationURL_CS = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationURL[@xml:lang="cs"]');
+            $OrganizationURL_EN = $xpath->query('/md:EntityDescriptor/md:Organization/md:OrganizationURL[@xml:lang="en"]');
 
             if ($OrganizationName_CS->length === 0) {
                 $this->error .= 'Organization/OrganizationName[@xml:lang="cs"] missing. ';
@@ -625,13 +630,13 @@ trait ValidatorTrait
 
     public function checkContactPerson(object $xpath): void
     {
-        $ContactPerson          = $xpath->query('/md:EntityDescriptor/md:ContactPerson');
+        $ContactPerson = $xpath->query('/md:EntityDescriptor/md:ContactPerson');
         $ContactPersonTechnical = $xpath->query('/md:EntityDescriptor/md:ContactPerson[@contactType="technical"]');
 
         foreach ($ContactPerson as $c) {
             @$email = $c->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:metadata', 'EmailAddress')->item(0)->nodeValue;
 
-            if (!preg_match('/^mailto\:/', $email)) {
+            if (! preg_match('/^mailto\:/', $email)) {
                 $this->error .= 'ContactPerson/EmailAddress does not contain "mailto:" scheme. ';
             }
         }
@@ -641,8 +646,8 @@ trait ValidatorTrait
         } else {
             foreach ($ContactPersonTechnical as $c) {
                 @$givenName = $c->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:metadata', 'GivenName')->item(0)->nodeValue;
-                @$sn        = $c->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:metadata', 'SurName')->item(0)->nodeValue;
-                @$email     = $c->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:metadata', 'EmailAddress')->item(0)->nodeValue;
+                @$sn = $c->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:metadata', 'SurName')->item(0)->nodeValue;
+                @$email = $c->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:metadata', 'EmailAddress')->item(0)->nodeValue;
 
                 if (empty($givenName)) {
                     $this->error .= 'ContactPerson[@contactType="technical"]/GivenName missing. ';
@@ -716,7 +721,7 @@ trait ValidatorTrait
                 if ($sirtfi_contact->length === 0) {
                     $this->error .= 'Sirtfi category claimed, but Sirtfi contact not defined. ';
                 } elseif ($sirtfi_contact->length === 1) {
-                    @$name  = $sirtfi_contact->item(0)->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:metadata', 'GivenName')->item(0)->nodeValue;
+                    @$name = $sirtfi_contact->item(0)->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:metadata', 'GivenName')->item(0)->nodeValue;
                     @$email = $sirtfi_contact->item(0)->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:metadata', 'EmailAddress')->item(0)->nodeValue;
 
                     if (empty($name)) {
@@ -727,8 +732,8 @@ trait ValidatorTrait
                         $this->error .= 'Sirtfi contact is missing EmailAddress element. ';
                     }
 
-                    if (!empty($name) && !empty($email)) {
-                        $this->message .= 'Sirtfi application (' . preg_replace('/mailto:/', '', $email) . '). ';
+                    if (! empty($name) && ! empty($email)) {
+                        $this->message .= 'Sirtfi application ('.preg_replace('/mailto:/', '', $email).'). ';
                     }
                 } else {
                     $this->error .= 'Multiple Sirtfi contact definition is prohibited. ';

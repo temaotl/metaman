@@ -2,20 +2,19 @@
 
 namespace App\Jobs;
 
-use Throwable;
-use App\Models\User;
+use App\Mail\ExceptionOccured;
 use App\Models\Entity;
+use App\Models\User;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
-use App\Mail\ExceptionOccured;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class GitRestoreToCategory implements ShouldQueue
 {
@@ -39,7 +38,9 @@ class GitRestoreToCategory implements ShouldQueue
      */
     public function handle()
     {
-        if (!$this->entity->category) return;
+        if (! $this->entity->category) {
+            return;
+        }
 
         $git = $this->initializeGit();
 
@@ -50,8 +51,8 @@ class GitRestoreToCategory implements ShouldQueue
             $git->add($this->entity->category->tagfile);
 
             $git->commit(
-                $this->committer() . ": {$this->entity->category->tagfile} (update)\n\n"
-                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                $this->committer().": {$this->entity->category->tagfile} (update)\n\n"
+                    ."Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

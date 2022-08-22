@@ -7,7 +7,6 @@ use App\Models\Entity;
 use App\Models\User;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -43,7 +42,7 @@ class GitDeleteFromEdugain implements ShouldQueue
 
         $tagfile = config('git.edugain_tag');
         $content = Storage::get($tagfile);
-        $content = preg_replace('#' . $this->entity->entityid . '#', '', $content);
+        $content = preg_replace('#'.$this->entity->entityid.'#', '', $content);
         Storage::put($tagfile, $content);
         $this->trimWhiteSpaces($tagfile);
 
@@ -51,8 +50,8 @@ class GitDeleteFromEdugain implements ShouldQueue
             $git->add($tagfile);
 
             $git->commit(
-                $this->committer() . ": $tagfile (update)\n\n"
-                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                $this->committer().": $tagfile (update)\n\n"
+                    ."Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

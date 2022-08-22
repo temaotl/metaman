@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Confirm extends Component
 {
     public $model;
+
     public $form;
 
     /**

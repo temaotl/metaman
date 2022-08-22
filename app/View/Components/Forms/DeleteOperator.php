@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class DeleteOperator extends Component
 {
     public $route;
+
     public $model;
+
     public $user;
 
     /**

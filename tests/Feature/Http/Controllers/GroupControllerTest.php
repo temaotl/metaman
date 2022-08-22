@@ -60,7 +60,7 @@ class GroupControllerTest extends TestCase
             ->post(route('groups.store'), [
                 'name' => $name = substr($this->faker->company(), 0, 32),
                 'description' => $this->faker->catchPhrase(),
-                'tagfile' => generateFederationID($name) . '.tag',
+                'tagfile' => generateFederationID($name).'.tag',
             ])
             ->assertSeeText('login');
 
@@ -168,7 +168,7 @@ class GroupControllerTest extends TestCase
             ->post(route('groups.store'), [
                 'name' => $name = substr($this->faker->company(), 0, 32),
                 'description' => $this->faker->catchPhrase(),
-                'tagfile' => generateFederationID($name) . '.tag',
+                'tagfile' => generateFederationID($name).'.tag',
             ])
             ->assertStatus(403);
 
@@ -181,7 +181,7 @@ class GroupControllerTest extends TestCase
         $user = User::factory()->create();
         $groupName = substr($this->faker->company(), 0, 32);
         $groupDescription = $this->faker->catchPhrase();
-        $groupTagfile = generateFederationID($groupName) . '.tag';
+        $groupTagfile = generateFederationID($groupName).'.tag';
         $group = Group::factory()->create([
             'name' => $groupName,
             'description' => $groupDescription,
@@ -199,7 +199,7 @@ class GroupControllerTest extends TestCase
             ->patch(route('groups.update', $group), [
                 'name' => $name = substr($this->faker->company(), 0, 32),
                 'description' => $this->faker->catchPhrase(),
-                'tagfile' => generateFederationID($name) . '.tag',
+                'tagfile' => generateFederationID($name).'.tag',
             ])
             ->assertStatus(403);
 
@@ -306,7 +306,7 @@ class GroupControllerTest extends TestCase
             ->post(route('groups.store'), [
                 'name' => $groupName = substr($this->faker->company(), 0, 32),
                 'description' => $groupDescription = $this->faker->catchPhrase(),
-                'tagfile' => $groupTagfile = generateFederationID($groupName) . '.tag',
+                'tagfile' => $groupTagfile = generateFederationID($groupName).'.tag',
             ])
             ->assertSeeText(__('groups.added', ['name' => $groupName]));
 
@@ -328,7 +328,7 @@ class GroupControllerTest extends TestCase
         $admin = User::factory()->create(['admin' => true]);
         $groupName = substr($this->faker->company(), 0, 32);
         $groupDescription = $this->faker->catchPhrase();
-        $groupTagfile = generateFederationID($groupName) . '.tag';
+        $groupTagfile = generateFederationID($groupName).'.tag';
         $oldGroupName = $groupTagfile;
         $group = Group::factory()->create([
             'name' => $groupName,
@@ -360,7 +360,7 @@ class GroupControllerTest extends TestCase
             ->patch(route('groups.update', $group), [
                 'name' => $groupName = substr($this->faker->company(), 0, 32),
                 'description' => $groupDescription = $this->faker->catchPhrase(),
-                'tagfile' => $groupTagfile = generateFederationID($groupName) . '.tag',
+                'tagfile' => $groupTagfile = generateFederationID($groupName).'.tag',
             ])
             ->assertSeeText(__('groups.updated', ['name' => $oldGroupName]));
 

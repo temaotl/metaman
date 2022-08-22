@@ -17,8 +17,8 @@ class ShibbolethController extends Controller
         return redirect(
             request()
                 ->server('Shib-Handler')
-                . '/Login?target='
-                . action('\\' . __CLASS__ . '@store')
+                .'/Login?target='
+                .action('\\'.__CLASS__.'@store')
         );
     }
 
@@ -29,16 +29,18 @@ class ShibbolethController extends Controller
         $user = User::updateOrCreate(
             ['uniqueid' => request()->server('uniqueId')],
             [
-                'name'       => request()->server('cn'),
-                'email'      => $mail[0],
-                'emails'     => count($mail) > 1 ? request()->server('mail') : null,
+                'name' => request()->server('cn'),
+                'email' => $mail[0],
+                'emails' => count($mail) > 1 ? request()->server('mail') : null,
                 'last_login' => now(),
             ]
         );
 
         $user->refresh();
 
-        if (!$user->active) return redirect('blocked');
+        if (! $user->active) {
+            return redirect('blocked');
+        }
 
         Auth::login($user);
         Session::regenerate();

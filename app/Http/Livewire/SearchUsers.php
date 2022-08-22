@@ -11,6 +11,7 @@ class SearchUsers extends Component
     use WithPagination;
 
     public $search = '';
+
     protected $queryString = ['search' => ['except' => '']];
 
     public function updatingSearch()

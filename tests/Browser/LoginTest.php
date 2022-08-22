@@ -16,7 +16,7 @@ class LoginTest extends DuskTestCase
     {
         $user = User::factory()->create(['active' => false]);
 
-        $this->browse(function (Browser $browser) use ($user) {
+        $this->browse(function (Browser $browser) {
             $browser->visit('/')
                 ->press('Fake Login')
                 ->assertSee(__('welcome.blocked_account'))
@@ -29,7 +29,7 @@ class LoginTest extends DuskTestCase
     {
         $user = User::factory()->create(['active' => true]);
 
-        $this->browse(function (Browser $browser) use ($user) {
+        $this->browse(function (Browser $browser) {
             $browser->visit('/')
                 ->press('Fake Login')
                 ->assertSee(__('common.dashboard'))

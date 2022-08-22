@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Notifications\FederationMembersChanged;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -55,8 +54,8 @@ class GitAddMembers implements ShouldQueue
             $git->add($this->federation->tagfile);
 
             $git->commit(
-                $this->committer() . ": {$this->federation->tagfile} (update)\n\n"
-                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                $this->committer().": {$this->federation->tagfile} (update)\n\n"
+                    ."Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

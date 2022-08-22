@@ -8,6 +8,7 @@ use Livewire\Component;
 class SearchGroups extends Component
 {
     public $search = '';
+
     protected $queryString = ['search' => ['except' => '']];
 
     public function render()

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Entity;
 use App\Models\Category;
+use App\Models\Entity;
 use App\Models\Federation;
 use Illuminate\Support\Facades\Cache;
 
@@ -42,7 +42,9 @@ class StatisticController extends Controller
         $categories = Cache::remember('categories', $CACHE_TIME, function () {
             return Category::select('name')->withCount('entities as count')->get();
         });
-        foreach ($categories as $c) $idp_category[$c->name] = $c->count;
+        foreach ($categories as $c) {
+            $idp_category[$c->name] = $c->count;
+        }
 
         $sp = $entity->filter(fn ($e) => $e['type'] == 'sp');
         $sps = $sp->count();
@@ -52,9 +54,9 @@ class StatisticController extends Controller
         $sps_sirtfi = $sp->filter(fn ($e) => $e['sirtfi'] == 1)->count();
 
         return response()->json([
-            'next_refresh_at' => $CACHE_TIME . ' (Europe/Prague)',
+            'next_refresh_at' => $CACHE_TIME.' (Europe/Prague)',
             'federations' => [
-                'all' => $federations
+                'all' => $federations,
             ],
             'entities' => [
                 'all' => $entities,
@@ -70,16 +72,16 @@ class StatisticController extends Controller
                     'edugain' => $idps_edugain,
                     'rs' => $idps_rs,
                     'cocov1' => $idps_cocov1,
-                    'sirtfi' => $idps_sirtfi
+                    'sirtfi' => $idps_sirtfi,
                 ],
                 'sp' => [
                     'all' => $sps,
                     'edugain' => $sps_edugain,
                     'rs' => $sps_rs,
                     'cocov1' => $sps_cocov1,
-                    'sirtfi' => $sps_sirtfi
-                ]
-            ]
+                    'sirtfi' => $sps_sirtfi,
+                ],
+            ],
         ]);
     }
 }

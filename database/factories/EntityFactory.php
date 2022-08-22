@@ -26,7 +26,7 @@ class EntityFactory extends Factory
         return [
             'type' => random_int(0, 1) ? 'idp' : 'sp',
             'entityid' => $entityid,
-            'file' => urlencode(preg_replace('#https://#', '', $entityid)) . '.xml',
+            'file' => urlencode(preg_replace('#https://#', '', $entityid)).'.xml',
             'name_en' => $this->faker->catchPhrase(),
             'name_cs' => $this->faker->catchPhrase(),
             'description_en' => $this->faker->text(255),

@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Notifications\EntityDeletedFromHfd;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -45,7 +44,7 @@ class GitDeleteFromHfd implements ShouldQueue
 
         $tagfile = config('git.hfd');
         $content = Storage::get($tagfile);
-        $content = preg_replace('#' . $this->entity->entityid . '#', '', $content);
+        $content = preg_replace('#'.$this->entity->entityid.'#', '', $content);
         Storage::put($tagfile, $content);
         $this->trimWhiteSpaces($tagfile);
 
@@ -53,8 +52,8 @@ class GitDeleteFromHfd implements ShouldQueue
             $git->add($tagfile);
 
             $git->commit(
-                $this->committer() . ": $tagfile (update)\n\n"
-                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                $this->committer().": $tagfile (update)\n\n"
+                    ."Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

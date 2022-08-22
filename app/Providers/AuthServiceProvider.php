@@ -25,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('do-everything', function($user) {
+        Gate::define('do-everything', function ($user) {
             return $user->admin;
         });
     }

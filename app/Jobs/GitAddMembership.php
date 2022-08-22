@@ -7,7 +7,6 @@ use App\Models\Membership;
 use App\Models\User;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -48,10 +47,10 @@ class GitAddMembership implements ShouldQueue
             $git->add($this->membership->federation->tagfile);
 
             $git->commit(
-                $this->committer() . ": {$this->membership->federation->tagfile} (update)\n\n"
-                    . "Requested by: {$this->membership->requester->name} ({$this->membership->requester->uniqueid})\n"
-                    . wordwrap("Explanation: {$this->membership->explanation}", 72) . "\n\n"
-                    . "Approved by: {$this->user->name} ({$this->user->uniqueid})\n"
+                $this->committer().": {$this->membership->federation->tagfile} (update)\n\n"
+                    ."Requested by: {$this->membership->requester->name} ({$this->membership->requester->uniqueid})\n"
+                    .wordwrap("Explanation: {$this->membership->explanation}", 72)."\n\n"
+                    ."Approved by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

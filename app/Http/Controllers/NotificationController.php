@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
@@ -46,14 +45,16 @@ class NotificationController extends Controller
             $notification->markAsUnread();
         }
 
-        return redirect('notifications?page=' . request('page'));
+        return redirect('notifications?page='.request('page'));
     }
 
     public function destroy($id)
     {
         $notification = Auth::user()->notifications()->findOrFail($id);
-        if ($notification) $notification->delete();
+        if ($notification) {
+            $notification->delete();
+        }
 
-        return redirect('notifications?page=' . request('page'));
+        return redirect('notifications?page='.request('page'));
     }
 }

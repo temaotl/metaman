@@ -156,7 +156,7 @@ class UserController extends Controller
                     ]);
                 }
 
-                if (!$user->wasChanged()) {
+                if (! $user->wasChanged()) {
                     return back();
                 }
 

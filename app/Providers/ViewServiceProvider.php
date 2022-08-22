@@ -25,9 +25,9 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('partials.header', function($view) {
-            $notifications = Auth::user()->unreadNotifications()->count();
-            $view->with('notifications', $notifications);
-        });
+        // View::composer('partials.header', function ($view) {
+        //     $notifications = Auth::user()->unreadNotifications()->count();
+        //     $view->with('notifications', $notifications);
+        // });
     }
 }

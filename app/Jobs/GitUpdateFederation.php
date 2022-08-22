@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Notifications\FederationUpdated;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -41,7 +40,7 @@ class GitUpdateFederation implements ShouldQueue
      */
     public function handle()
     {
-        $content  = "[{$this->federation->xml_id}]\n";
+        $content = "[{$this->federation->xml_id}]\n";
         $content .= "filters = {$this->federation->filters}\n";
         $content .= "name = {$this->federation->xml_name}";
 
@@ -53,8 +52,8 @@ class GitUpdateFederation implements ShouldQueue
             $git->add($this->federation->cfgfile);
 
             $git->commit(
-                $this->committer() . ": {$this->federation->cfgfile} (update)\n\n"
-                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
+                $this->committer().": {$this->federation->cfgfile} (update)\n\n"
+                    ."Updated by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

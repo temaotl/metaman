@@ -9,7 +9,6 @@ use App\Models\Membership;
 use App\Models\User;
 use App\Notifications\MembershipAccepted;
 use App\Notifications\MembershipRejected;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
@@ -76,7 +75,7 @@ class MembershipController extends Controller
         $entity = $membership->entity->{"name_$locale"} ?? $membership->entity->entityid;
         $operators = $membership->entity->operators;
 
-        if (!$membership->entity->approved) {
+        if (! $membership->entity->approved) {
             $membership->entity->forceDelete();
         }
 

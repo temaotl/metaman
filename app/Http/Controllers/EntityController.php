@@ -92,7 +92,7 @@ class EntityController extends Controller
         $validated = $request->validated();
 
         $metadata = $this->getMetadata($request);
-        if (!$metadata) {
+        if (! $metadata) {
             return redirect()
                 ->route('entities.create')
                 ->with('status', __('entities.metadata_couldnt_be_read'))
@@ -102,10 +102,10 @@ class EntityController extends Controller
         $result = json_decode($this->validateMetadata($metadata), true);
         $new_entity = json_decode($this->parseMetadata($metadata), true);
 
-        if (array_key_exists('result', $new_entity) && !is_null($new_entity['result'])) {
+        if (array_key_exists('result', $new_entity) && ! is_null($new_entity['result'])) {
             return redirect()
                 ->back()
-                ->with('status', __('entities.no_metadata') . ' ' . $result['error'])
+                ->with('status', __('entities.no_metadata').' '.$result['error'])
                 ->with('color', 'red');
         }
 
@@ -120,7 +120,7 @@ class EntityController extends Controller
         switch ($result['code']) {
             case '0':
                 $federation = Federation::findOrFail($validated['federation']);
-                $entity = DB::transaction(function () use ($new_entity, $federation, $request) {
+                $entity = DB::transaction(function () use ($new_entity, $federation) {
                     if ($new_entity['type'] === 'idp') {
                         $new_entity = array_merge($new_entity, ['hfd' => true]);
                     }
@@ -130,6 +130,7 @@ class EntityController extends Controller
                         'explanation' => request('explanation'),
                         'requested_by' => Auth::id(),
                     ]);
+
                     return $entity;
                 });
 
@@ -138,7 +139,7 @@ class EntityController extends Controller
                 Notification::send($admins, new EntityRequested($entity, $federation));
 
                 return redirect('entities')
-                    ->with('status', __('entities.entity_requested', ['name' => $entity->entityid]) . ' ' . $result['message']);
+                    ->with('status', __('entities.entity_requested', ['name' => $entity->entityid]).' '.$result['message']);
 
                 break;
 
@@ -244,7 +245,7 @@ class EntityController extends Controller
                 ]);
 
                 $metadata = $this->getMetadata($request);
-                if (!$metadata) {
+                if (! $metadata) {
                     return redirect()
                         ->back()
                         ->with('status', __('entities.metadata_couldnt_be_read'))
@@ -254,7 +255,7 @@ class EntityController extends Controller
                 $result = json_decode($this->validateMetadata($metadata), true);
                 $updated_entity = json_decode($this->parseMetadata($metadata), true);
 
-                if (array_key_exists('result', $updated_entity) && !is_null($updated_entity['result'])) {
+                if (array_key_exists('result', $updated_entity) && ! is_null($updated_entity['result'])) {
                     return redirect()
                         ->back()
                         ->with('status', __('entities.no_metadata'))
@@ -281,7 +282,7 @@ class EntityController extends Controller
                             'metadata' => $updated_entity['metadata'],
                         ]);
 
-                        if (!$entity->wasChanged()) {
+                        if (! $entity->wasChanged()) {
                             return redirect()
                                 ->back()
                                 ->with('status', __('entities.not_changed'));
@@ -402,7 +403,7 @@ class EntityController extends Controller
             case 'add_operators':
                 $this->authorize('update', $entity);
 
-                if (!request('operators')) {
+                if (! request('operators')) {
                     return redirect()
                         ->route('entities.show', $entity)
                         ->with('status', __('entities.add_empty_operators'))
@@ -427,7 +428,7 @@ class EntityController extends Controller
             case 'delete_operators':
                 $this->authorize('update', $entity);
 
-                if (!request('operators')) {
+                if (! request('operators')) {
                     return redirect()
                         ->back()
                         ->with('status', __('entities.delete_empty_operators'))
@@ -537,7 +538,7 @@ class EntityController extends Controller
                     },
                 ])->dispatch();
 
-                if (!$entity->wasChanged()) {
+                if (! $entity->wasChanged()) {
                     return redirect()
                         ->back();
                 }
@@ -657,23 +658,27 @@ class EntityController extends Controller
 
         $this->initializeGit();
 
-        $xmlfiles = array();
-        $tagfiles = array();
+        $xmlfiles = [];
+        $tagfiles = [];
         foreach (Storage::files() as $file) {
-            if (preg_match('/\.xml$/', $file))
+            if (preg_match('/\.xml$/', $file)) {
                 $xmlfiles[] = $file;
+            }
 
             if (preg_match('/\.tag$/', $file)) {
-                if (preg_match('/^' . config('git.edugain_tag') . '$/', $file)) continue;
+                if (preg_match('/^'.config('git.edugain_tag').'$/', $file)) {
+                    continue;
+                }
 
                 $federation = Federation::whereTagfile($file)->first();
-                if ($federation === null && Storage::exists(preg_replace('/\.tag/', '.cfg', $file)))
+                if ($federation === null && Storage::exists(preg_replace('/\.tag/', '.cfg', $file))) {
                     return redirect()
                         ->route('entities.index')
                         ->with('status', __('entities.missing_federations'))
                         ->with('color', 'red');
-                else
+                } else {
                     $tagfiles[] = $file;
+                }
             }
         }
 
@@ -681,9 +686,11 @@ class EntityController extends Controller
 
         $entities = Entity::select('file')->get()->pluck('file')->toArray();
 
-        $unknown = array();
+        $unknown = [];
         foreach ($xmlfiles as $xmlfile) {
-            if (in_array($xmlfile, $entities)) continue;
+            if (in_array($xmlfile, $entities)) {
+                continue;
+            }
 
             $metadata = Storage::get($xmlfile);
             $metadata = $this->parseMetadata($metadata);
@@ -705,6 +712,7 @@ class EntityController extends Controller
                 if (preg_match_all($pattern, $content)) {
                     if (strcmp($tagfile, config('git.edugain_tag')) === 0) {
                         $unknown[$xmlfile]['federations'][] = 'eduGAIN';
+
                         continue;
                     }
 
@@ -714,10 +722,11 @@ class EntityController extends Controller
             }
         }
 
-        if (empty($unknown))
+        if (empty($unknown)) {
             return redirect()
                 ->route('entities.index')
                 ->with('status', __('entities.nothing_to_import'));
+        }
 
         return view('entities.import', [
             'entities' => $unknown,
@@ -728,10 +737,11 @@ class EntityController extends Controller
     {
         $this->authorize('do-everything');
 
-        if (empty(request('entities')))
+        if (empty(request('entities'))) {
             return back()
                 ->with('status', __('entities.empty_import'))
                 ->with('color', 'red');
+        }
 
         // ADD SELECTED ENTITIES FROM XML FILES TO DATABASE
         $imported = 0;
@@ -759,7 +769,9 @@ class EntityController extends Controller
                 $pattern = preg_quote($entity->entityid, '/');
                 $pattern = "/^$pattern\$/m";
 
-                if (!preg_match_all($pattern, $members)) continue;
+                if (! preg_match_all($pattern, $members)) {
+                    continue;
+                }
 
                 $entity->federations()->attach($federation, [
                     'requested_by' => Auth::id(),
@@ -798,17 +810,20 @@ class EntityController extends Controller
 
         $this->initializeGit();
 
-        $xmlfiles = array();
+        $xmlfiles = [];
         foreach (Storage::files() as $file) {
-            if (preg_match('/\.xml/', $file))
+            if (preg_match('/\.xml/', $file)) {
                 $xmlfiles[] = $file;
+            }
         }
 
         $entities = Entity::select('file')->get()->pluck('file')->toArray();
 
         $refreshed = 0;
         foreach ($xmlfiles as $xmlfile) {
-            if (!in_array($xmlfile, $entities)) continue;
+            if (! in_array($xmlfile, $entities)) {
+                continue;
+            }
 
             $metadata = Storage::get($xmlfile);
             $refreshed_entity = json_decode($this->parseMetadata($metadata), true);
@@ -821,20 +836,22 @@ class EntityController extends Controller
             $pattern = preg_quote($refreshed_entity['entityid'], '/');
             $pattern = "/^$pattern\$/m";
 
-            if (preg_match_all($pattern, $edugain))
+            if (preg_match_all($pattern, $edugain)) {
                 $entity->update(['edugain' => true]);
-            else
+            } else {
                 $entity->update(['edugain' => false]);
+            }
 
             if ($entity->type->value === 'idp') {
                 $hfd = Storage::get(config('git.hfd'));
                 $pattern = preg_quote($refreshed_entity['entityid'], '/');
                 $pattern = "/^$pattern\$/m";
 
-                if (preg_match_all($pattern, $hfd))
+                if (preg_match_all($pattern, $hfd)) {
                     $entity->update(['hfd' => true]);
-                else
+                } else {
                     $entity->update(['hfd' => false]);
+                }
             }
 
             if ($entity->type->value === 'sp') {
@@ -842,14 +859,16 @@ class EntityController extends Controller
                 $pattern = preg_quote($refreshed_entity['entityid'], '/');
                 $pattern = "/^$pattern\$/m";
 
-                if (preg_match_all($pattern, $rs))
+                if (preg_match_all($pattern, $rs)) {
                     $entity->update(['rs' => true]);
-                else
+                } else {
                     $entity->update(['rs' => false]);
+                }
             }
 
-            if ($entity->wasChanged())
+            if ($entity->wasChanged()) {
                 $refreshed++;
+            }
         }
 
         return redirect('entities')
@@ -873,12 +892,14 @@ class EntityController extends Controller
     public function metadata(Entity $entity)
     {
         $this->authorize('view', $entity);
+
         return Storage::download($entity->file);
     }
 
     public function showmetadata(Entity $entity)
     {
         $this->authorize('view', $entity);
+
         return response()->file(Storage::path($entity->file));
     }
 }

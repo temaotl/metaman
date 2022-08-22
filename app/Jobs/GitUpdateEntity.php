@@ -7,7 +7,6 @@ use App\Models\Entity;
 use App\Models\User;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -47,8 +46,8 @@ class GitUpdateEntity implements ShouldQueue
             $git->add($this->entity->file);
 
             $git->commit(
-                $this->committer() . ": {$this->fqdn($this->entity->entityid)} (update)\n\n"
-                    . "Updated by: {$this->user->name} ({$this->user->uniqueid})"
+                $this->committer().": {$this->fqdn($this->entity->entityid)} (update)\n\n"
+                    ."Updated by: {$this->user->name} ({$this->user->uniqueid})"
             );
 
             $git->push();

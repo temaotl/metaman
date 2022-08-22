@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Cancel extends Component
 {
     public $route;
+
     public $model;
 
     /**

@@ -2,12 +2,12 @@
 
 namespace App\View\Components\Buttons;
 
-use App\Models\User;
 use Illuminate\View\Component;
 
 class Admin extends Component
 {
     public $user;
+
     public $target;
 
     /**

@@ -9,7 +9,6 @@ use App\Notifications\FederationApproved;
 use App\Notifications\FederationStateChanged;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -43,24 +42,24 @@ class GitAddFederation implements ShouldQueue
      */
     public function handle()
     {
-        $content  = "[{$this->federation->xml_id}]\n";
+        $content = "[{$this->federation->xml_id}]\n";
         $content .= "filters = {$this->federation->filters}\n";
         $content .= "name = {$this->federation->xml_name}";
 
         $git = $this->initializeGit();
 
         Storage::put($this->federation->cfgfile, $content);
-        Storage::put($this->federation->tagfile, "");
+        Storage::put($this->federation->tagfile, '');
 
         if ($git->hasChanges()) {
             $git->add($this->federation->cfgfile);
             $git->add($this->federation->tagfile);
 
             $git->commit(
-                $this->committer() . ": {$this->federation->xml_id} (add)\n\n"
-                    . "Requested by: {$this->federation->operators[0]->name} ({$this->federation->operators[0]->uniqueid})\n"
-                    . wordwrap("Explanation: {$this->federation->explanation}", 72) . "\n\n"
-                    . "Approved by: {$this->user->name} ({$this->user->uniqueid})\n"
+                $this->committer().": {$this->federation->xml_id} (add)\n\n"
+                    ."Requested by: {$this->federation->operators[0]->name} ({$this->federation->operators[0]->uniqueid})\n"
+                    .wordwrap("Explanation: {$this->federation->explanation}", 72)."\n\n"
+                    ."Approved by: {$this->user->name} ({$this->user->uniqueid})\n"
             );
 
             $git->push();

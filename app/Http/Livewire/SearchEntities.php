@@ -3,8 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\Entity;
-use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class SearchEntities extends Component
@@ -12,6 +12,7 @@ class SearchEntities extends Component
     use WithPagination;
 
     public $search = '';
+
     protected $queryString = ['search' => ['except' => '']];
 
     public $locale;

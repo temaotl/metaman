@@ -29,7 +29,7 @@ class AskRs extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->subject(config('app.name') . ': R&S application')
+        return $this->subject(config('app.name').': R&S application')
             ->text('emails.ask_rs');
     }
 }

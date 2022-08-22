@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Notifications\EntityDeletedFromRs;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -41,12 +40,12 @@ class GitDeleteFromRs implements ShouldQueue
      */
     public function handle()
     {
-        if (!$this->entity->rs) {
+        if (! $this->entity->rs) {
             $git = $this->initializeGit();
 
             $tagfile = config('git.ec_rs');
             $content = Storage::get($tagfile);
-            $content = preg_replace('#' . $this->entity->entityid . '#', '', $content);
+            $content = preg_replace('#'.$this->entity->entityid.'#', '', $content);
             Storage::put($tagfile, $content);
             $this->trimWhiteSpaces($tagfile);
 
@@ -54,8 +53,8 @@ class GitDeleteFromRs implements ShouldQueue
                 $git->add($tagfile);
 
                 $git->commit(
-                    $this->committer() . ": $tagfile (update)\n\n"
-                        . "Updated by {$this->user->name} ({$this->user->uniqueid})\n"
+                    $this->committer().": $tagfile (update)\n\n"
+                        ."Updated by {$this->user->name} ({$this->user->uniqueid})\n"
                 );
 
                 $git->push();

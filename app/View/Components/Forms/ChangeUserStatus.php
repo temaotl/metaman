@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 class ChangeUserStatus extends Component
 {
     public $route;
+
     public $user;
 
     /**

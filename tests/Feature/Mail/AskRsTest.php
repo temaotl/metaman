@@ -7,7 +7,6 @@ use App\Models\Entity;
 use App\Models\Federation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
@@ -28,7 +27,7 @@ class AskRsTest extends TestCase
             'requested_by' => $user->id,
             'approved_by' => $user->id,
             'approved' => true,
-            'explanation' => 'Test'
+            'explanation' => 'Test',
         ]);
 
         $this

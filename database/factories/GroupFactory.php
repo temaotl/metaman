@@ -26,7 +26,7 @@ class GroupFactory extends Factory
         return [
             'name' => $name,
             'description' => $this->faker->catchPhrase(),
-            'tagfile' => generateFederationID($name) . '.tag',
+            'tagfile' => generateFederationID($name).'.tag',
         ];
     }
 }

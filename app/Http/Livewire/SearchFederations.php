@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
 use App\Models\Federation;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class SearchFederations extends Component
 {
     public $search = '';
+
     public $queryString = ['search' => ['except' => '']];
 
     public function render()

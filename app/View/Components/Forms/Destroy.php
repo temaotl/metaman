@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Destroy extends Component
 {
     public $route;
+
     public $model;
 
     /**

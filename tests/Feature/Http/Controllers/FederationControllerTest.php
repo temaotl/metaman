@@ -10,11 +10,9 @@ use App\Jobs\GitUpdateFederation;
 use App\Models\Entity;
 use App\Models\Federation;
 use App\Models\User;
-use App\Notifications\FederationApproved;
 use App\Notifications\FederationCancelled;
 use App\Notifications\FederationDestroyed;
 use App\Notifications\FederationRejected;
-use App\Notifications\FederationRequested;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Bus;
@@ -68,10 +66,10 @@ class FederationControllerTest extends TestCase
             ->post(route('federations.store'), [
                 'name' => $name = substr($this->faker->company(), 0, 32),
                 'description' => $this->faker->catchPhrase(),
-                'tagfile' => generateFederationID($name) . '.tag',
-                'cfgfile' => generateFederationID($name) . '.cfg',
+                'tagfile' => generateFederationID($name).'.tag',
+                'cfgfile' => generateFederationID($name).'.cfg',
                 'xml_id' => generateFederationID($name),
-                'xml_name' => 'urn:mace:cesnet.cz:' . generateFederationID($name),
+                'xml_name' => 'urn:mace:cesnet.cz:'.generateFederationID($name),
                 'filters' => generateFederationID($name),
             ])
             ->assertSeeText('login');
@@ -104,7 +102,7 @@ class FederationControllerTest extends TestCase
                 'name' => $name = substr($this->faker->unique()->company(), 0, 32),
                 'description' => $this->faker->catchPhrase(),
                 'xml_id' => generateFederationID($name),
-                'xml_name' => 'urn:mace:cesnet.cz:' . generateFederationID($name),
+                'xml_name' => 'urn:mace:cesnet.cz:'.generateFederationID($name),
                 'filters' => generateFederationID($name),
             ])
             ->assertSeeText('login');
@@ -350,10 +348,10 @@ class FederationControllerTest extends TestCase
             ->post(route('federations.store'), [
                 'name' => $federationName = substr($this->faker->company(), 0, 32),
                 'description' => $federationDescription = $this->faker->catchPhrase(),
-                'tagfile' => $federationTagfile = generateFederationID($federationName) . '.tag',
-                'cfgfile' => $federationCfgfile = generateFederationID($federationName) . '.cfg',
+                'tagfile' => $federationTagfile = generateFederationID($federationName).'.tag',
+                'cfgfile' => $federationCfgfile = generateFederationID($federationName).'.cfg',
                 'xml_id' => $federationXmlid = generateFederationID($federationName),
-                'xml_name' => $federationXmlname = 'urn:mace:cesnet.cz:' . generateFederationID($federationName),
+                'xml_name' => $federationXmlname = 'urn:mace:cesnet.cz:'.generateFederationID($federationName),
                 'filters' => $federationFilters = generateFederationID($federationName),
                 'explanation' => $federationExplanation = $this->faker->sentence(),
             ])
@@ -925,10 +923,10 @@ class FederationControllerTest extends TestCase
             ->post(route('federations.store'), [
                 'name' => $federationName = substr($this->faker->company(), 0, 32),
                 'description' => $federationDescription = $this->faker->catchPhrase(),
-                'tagfile' => $federationTagfile = generateFederationID($federationName) . '.tag',
-                'cfgfile' => $federationCfgfile = generateFederationID($federationName) . '.cfg',
+                'tagfile' => $federationTagfile = generateFederationID($federationName).'.tag',
+                'cfgfile' => $federationCfgfile = generateFederationID($federationName).'.cfg',
                 'xml_id' => $federationXmlid = generateFederationID($federationName),
-                'xml_name' => $federationXmlname = 'urn:mace:cesnet.cz:' . generateFederationID($federationName),
+                'xml_name' => $federationXmlname = 'urn:mace:cesnet.cz:'.generateFederationID($federationName),
                 'filters' => $federationFilters = generateFederationID($federationName),
                 'explanation' => $federationExplanation = $this->faker->sentence(),
             ])
@@ -999,7 +997,7 @@ class FederationControllerTest extends TestCase
         $federationName = substr($this->faker->unique()->company(), 0, 32);
         $federationDescription = $this->faker->catchPhrase();
         $federationXmlId = generateFederationID($federationName);
-        $federationXmlName = "urn:mace:cesnet.cz:" . generateFederationID($federationName);
+        $federationXmlName = 'urn:mace:cesnet.cz:'.generateFederationID($federationName);
         $federationFilters = $this->faker->unique()->text(32);
 
         $this

@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
 use App\Models\Category;
+use Livewire\Component;
 
 class SearchCategories extends Component
 {
     public $search = '';
+
     protected $queryString = ['search' => ['except' => '']];
 
     public function render()
@@ -17,7 +18,6 @@ class SearchCategories extends Component
             ->orderBy('name')
             ->withCount('entities')
             ->paginate();
-
 
         return view('livewire.search-categories', [
             'categories' => $categories,
