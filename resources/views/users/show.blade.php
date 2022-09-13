@@ -94,7 +94,7 @@ $locale = app()->getLocale();
                     <dd class="sm:col-span-2">
                         @if (count($user->entities))
                             <ul class="list-decimal list-inside">
-                                @foreach ($user->entities as $entity)
+                                @foreach ($user->entities->sortBy("name_{$locale}") as $entity)
                                     <li>
                                         <a class="hover:underline text-blue-500"
                                             href="{{ route('entities.show', $entity) }}">{{ $entity->{"name_$locale"} ?: $entity->entityid }}</a>
