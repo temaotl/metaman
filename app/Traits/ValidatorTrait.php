@@ -384,20 +384,10 @@ trait ValidatorTrait
 
         if ($InformationURL_CS->length !== 1) {
             $this->error .= $SSODescriptor.'/UIInfo/InformationURL[@xml:lang="cs"] missing. ';
-        } else {
-            $r = $this->checkURLaddress($InformationURL_CS);
-            if ($r) {
-                $this->error .= $r;
-            }
         }
 
         if ($InformationURL_EN->length !== 1) {
             $this->error .= $SSODescriptor.'/UIInfo/InformationURL[@xml:lang="en"] missing. ';
-        } else {
-            $r = $this->checkURLaddress($InformationURL_EN);
-            if ($r) {
-                $this->error .= $r;
-            }
         }
 
         if ($this->isIDP($xpath)) {
