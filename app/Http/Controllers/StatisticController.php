@@ -25,19 +25,19 @@ class StatisticController extends Controller
             return Entity::select('type', 'edugain', 'hfd', 'rs', 'cocov1', 'sirtfi')->get();
         });
         $entities = $entity->count();
-        $edugain = $entity->filter(fn ($e) => $e['edugain'] == 1)->count();
-        $hfd = $entity->filter(fn ($e) => $e['hfd'] == 1)->count();
-        $rs = $entity->filter(fn ($e) => $e['rs'] == 1)->count();
-        $cocov1 = $entity->filter(fn ($e) => $e['cocov1'] == 1)->count();
-        $sirtfi = $entity->filter(fn ($e) => $e['sirtfi'] == 1)->count();
+        $edugain = $entity->filter(fn ($e) => $e->edugain)->count();
+        $hfd = $entity->filter(fn ($e) => $e->hfd)->count();
+        $rs = $entity->filter(fn ($e) => $e->rs)->count();
+        $cocov1 = $entity->filter(fn ($e) => $e->cocov1)->count();
+        $sirtfi = $entity->filter(fn ($e) => $e->sirtfi)->count();
 
-        $idp = $entity->filter(fn ($e) => $e['type'] == 'idp');
+        $idp = $entity->filter(fn ($e) => $e->type->value == 'idp');
         $idps = $idp->count();
-        $idps_hfd = $idp->filter(fn ($e) => $e['hfd'] == 1)->count();
-        $idps_edugain = $idp->filter(fn ($e) => $e['edugain'] == 1)->count();
-        $idps_rs = $idp->filter(fn ($e) => $e['rs'] == 1)->count();
-        $idps_cocov1 = $idp->filter(fn ($e) => $e['cocov1'] == 1)->count();
-        $idps_sirtfi = $idp->filter(fn ($e) => $e['sirtfi'] == 1)->count();
+        $idps_hfd = $idp->filter(fn ($e) => $e->hfd)->count();
+        $idps_edugain = $idp->filter(fn ($e) => $e->edugain)->count();
+        $idps_rs = $idp->filter(fn ($e) => $e->rs)->count();
+        $idps_cocov1 = $idp->filter(fn ($e) => $e->cocov1)->count();
+        $idps_sirtfi = $idp->filter(fn ($e) => $e->sirtfi)->count();
 
         $categories = Cache::remember('categories', $CACHE_TIME, function () {
             return Category::select('name')->withCount('entities as count')->get();
@@ -46,12 +46,12 @@ class StatisticController extends Controller
             $idp_category[$c->name] = $c->count;
         }
 
-        $sp = $entity->filter(fn ($e) => $e['type'] == 'sp');
+        $sp = $entity->filter(fn ($e) => $e->type->value == 'sp');
         $sps = $sp->count();
-        $sps_edugain = $sp->filter(fn ($e) => $e['edugain'] == 1)->count();
-        $sps_rs = $sp->filter(fn ($e) => $e['rs'] == 1)->count();
-        $sps_cocov1 = $sp->filter(fn ($e) => $e['cocov1'] == 1)->count();
-        $sps_sirtfi = $sp->filter(fn ($e) => $e['sirtfi'] == 1)->count();
+        $sps_edugain = $sp->filter(fn ($e) => $e->edugain)->count();
+        $sps_rs = $sp->filter(fn ($e) => $e->rs)->count();
+        $sps_cocov1 = $sp->filter(fn ($e) => $e->cocov1)->count();
+        $sps_sirtfi = $sp->filter(fn ($e) => $e->sirtfi)->count();
 
         return response()->json([
             'next_refresh_at' => $CACHE_TIME.' (Europe/Prague)',
