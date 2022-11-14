@@ -732,6 +732,13 @@ trait ValidatorTrait
         }
     }
 
+    public function checkOneEntityAttributesElementPerExtensions(object $xpath): void
+    {
+        if (($count = $xpath->query('/md:EntityDescriptor/md:Extensions/mdattr:EntityAttributes')->length) > 1) {
+            $this->error .= "Multiple (in your case: {$count}) EntityAttributes elements in EntityDescriptor/Extensions forbidden. ";
+        }
+    }
+
     public function generateResult(): void
     {
         if (empty($this->error)) {
@@ -760,6 +767,7 @@ trait ValidatorTrait
             $this->checkOrganization($xpath);
             $this->checkContactPerson($xpath);
             $this->checkEC($xpath);
+            $this->checkOneEntityAttributesElementPerExtensions($xpath);
 
             $this->generateResult();
         }
