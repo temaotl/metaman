@@ -1,7 +1,3 @@
-@php
-$locale = app()->getLocale();
-@endphp
-
 @extends('layout')
 @section('title', __('entities.edit', ['name' => $entity->{"name_$locale"}]))
 
@@ -40,9 +36,9 @@ $locale = app()->getLocale();
                         </dt>
                         <dd class="sm:col-span-2">
                             {!! $errors->first('metadata', '<div class="float-right text-sm font-semibold text-red-600">:message</div>') !!}
-                            <textarea class="text-sm @error('metadata') border-red-500 border @else @if (old('metadata') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 rounded-md"
-                                name="metadata" id="metadata" rows="10"
-                                placeholder="{{ __('entities.metadata_placeholder') }}">{{ old('metadata') }}</textarea>
+                            <textarea
+                                class="text-sm @error('metadata') border-red-500 border @else @if (old('metadata') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 rounded-md"
+                                name="metadata" id="metadata" rows="10" placeholder="{{ __('entities.metadata_placeholder') }}">{{ old('metadata') }}</textarea>
                         </dd>
                     </div>
                 </dl>

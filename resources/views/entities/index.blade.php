@@ -1,7 +1,3 @@
-@php
-$locale = app()->getLocale();
-@endphp
-
 @extends('layout')
 @section('title', __('common.entities'))
 

@@ -29,5 +29,8 @@ class ViewServiceProvider extends ServiceProvider
         //     $notifications = Auth::user()->unreadNotifications()->count();
         //     $view->with('notifications', $notifications);
         // });
+        View::composer('*', function ($view) {
+            $view->with('locale', app()->getLocale());
+        });
     }
 }

@@ -1,7 +1,3 @@
-@php
-$locale = app()->getLocale();
-@endphp
-
 @extends('layout')
 @section('title', __('entities.show', ['name' => $entity->{"name_$locale"}]))
 
@@ -39,8 +35,7 @@ $locale = app()->getLocale();
                             @forelse ($operators->sortBy('name') as $operator)
                                 <tr class="bg-white" role="button">
                                     <td class="px-6 py-3 text-sm">
-                                        <input class="rounded" type="checkbox" name="operators[]"
-                                            value="{{ $operator->id }}">
+                                        <input class="rounded" type="checkbox" name="operators[]" value="{{ $operator->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $operator->name }}
@@ -75,8 +70,8 @@ $locale = app()->getLocale();
             <div class="mb-4">
                 <form class="">
                     <label class="sr-only" for="search">{{ __('common.search') }}</label>
-                    <input class="dark:bg-transparent w-full px-4 py-2 border rounded-lg" type="text" name="search" id="search"
-                        value="{{ request('search') }}" placeholder="{{ __('users.searchbox') }}">
+                    <input class="dark:bg-transparent w-full px-4 py-2 border rounded-lg" type="text" name="search"
+                        id="search" value="{{ request('search') }}" placeholder="{{ __('users.searchbox') }}">
                 </form>
             </div>
             <form id="add_operators" action="{{ route('entities.update', $entity) }}" method="post">
@@ -105,8 +100,7 @@ $locale = app()->getLocale();
                             @forelse ($users as $user)
                                 <tr class="bg-white" role="button">
                                     <td class="px-6 py-3 text-sm">
-                                        <input class="rounded" type="checkbox" name="operators[]"
-                                            value="{{ $user->id }}">
+                                        <input class="rounded" type="checkbox" name="operators[]" value="{{ $user->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $user->name }}

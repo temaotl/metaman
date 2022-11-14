@@ -1,7 +1,3 @@
-@php
-$locale = app()->getLocale();
-@endphp
-
 @extends('layout')
 @section('title', __('entities.show', ['name' => $entity->{"name_$locale"}]))
 
@@ -95,10 +91,10 @@ $locale = app()->getLocale();
                                 </dt>
                                 <dd class="sm:col-span-2">
                                     {!! $errors->first('explanation', '<div class="float-right text-sm font-semibold text-red-600">:message</div>') !!}
-                                    <textarea class="text-sm @error('explanation') border-red-500 border @else @if (old('explanation') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 dark:border-gray-700 rounded-md"
+                                    <textarea
+                                        class="text-sm @error('explanation') border-red-500 border @else @if (old('explanation') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 dark:border-gray-700 rounded-md"
                                         name="explanation" id="explanation" rows="3" maxlength="255"
-                                        placeholder="{{ __('entities.join_explanation_placeholder') }}"
-                                        required>{{ old('explanation') }}</textarea>
+                                        placeholder="{{ __('entities.join_explanation_placeholder') }}" required>{{ old('explanation') }}</textarea>
                                 </dd>
                             </div>
                         </dl>
