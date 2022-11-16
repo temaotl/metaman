@@ -10,7 +10,7 @@
     "require": {
         "php": "^8.1.0",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^9.2",
+        "laravel/framework": "^9.19",
         "laravel/tinker": "^2.7",
         "larswiegers/laravel-translations-checker": "^0.2.0",
         "livewire/livewire": "^2.10",
