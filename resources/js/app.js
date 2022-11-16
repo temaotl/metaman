@@ -1,4 +1,4 @@
-require("./bootstrap");
+import "./bootstrap";
 
 $(document).on("click", "#menu", function () {
     $("#navigation").toggleClass("hidden");
