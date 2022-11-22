@@ -9,7 +9,8 @@
 
         <div class="mb-4">
             <h3 class="text-lg font-semibold">{{ __('common.present_operators') }}</h3>
-            <form id="delete_operators" action="{{ route('federations.update', $federation) }}" method="post">
+            <form x-data="{ open: false }" id="delete_operators" action="{{ route('federations.update', $federation) }}"
+                method="post">
                 @csrf
                 @method('patch')
                 <input type="hidden" name="action" value="delete_operators">
@@ -31,12 +32,12 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="checkable divide-y divide-gray-200">
+                        <tbody class="divide-y divide-gray-200">
                             @forelse ($operators as $operator)
-                                <tr class="bg-white" role="button">
+                                <tr x-data class="bg-white" role="button"
+                                    @click="checkbox = $el.querySelector('input[type=checkbox]'); checkbox.checked = !checkbox.checked">
                                     <td class="px-6 py-3 text-sm">
-                                        <input class="rounded" type="checkbox" name="operators[]"
-                                            value="{{ $operator->id }}">
+                                        <input class="rounded" type="checkbox" name="operators[]" value="{{ $operator->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $operator->name }}
@@ -57,9 +58,13 @@
                     {{ $operators->links() }}
                     @if (count($operators))
                         <div class="px-4 py-3 bg-gray-100">
-                            <x-button color="red" target="true" data-target="delete_operators">
-                                {{ __('common.delete_operators') }}</x-button>
-                            <x-modals.confirm :model="$federation" form="delete_operators" />
+                            <x-button color="red" @click.prevent="open = !open">{{ __('common.delete_operators') }}
+                            </x-button>
+
+                            <x-modal>
+                                <x-slot:title>{{ __('common.confirm_delete_operators') }}</x-slot:title>
+                                {{ __('common.confirm_delete_operators_body') }}
+                            </x-modal>
                         </div>
                     @endif
                 </div>
@@ -71,11 +76,12 @@
             <div class="mb-4">
                 <form class="">
                     <label class="sr-only" for="search">{{ __('common.search') }}</label>
-                    <input class="dark:bg-transparent w-full px-4 py-2 border rounded-lg" type="text" name="search" id="search"
-                        value="{{ request('search') }}" placeholder="{{ __('users.searchbox') }}">
+                    <input class="dark:bg-transparent w-full px-4 py-2 border rounded-lg" type="text" name="search"
+                        id="search" value="{{ request('search') }}" placeholder="{{ __('users.searchbox') }}">
                 </form>
             </div>
-            <form id="add_operators" action="{{ route('federations.update', $federation) }}" method="post">
+            <form x-data="{ open: false }" id="add_operators" action="{{ route('federations.update', $federation) }}"
+                method="post">
                 @csrf
                 @method('patch')
                 <input type="hidden" name="action" value="add_operators">
@@ -97,12 +103,12 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="checkable divide-y divide-gray-200">
+                        <tbody class="divide-y divide-gray-200">
                             @forelse ($users as $user)
-                                <tr class="bg-white" role="button">
+                                <tr x-data class="bg-white" role="button"
+                                    @click="checkbox = $el.querySelector('input[type=checkbox]'); checkbox.checked = !checkbox.checked">
                                     <td class="px-6 py-3 text-sm">
-                                        <input class="rounded" type="checkbox" name="operators[]"
-                                            value="{{ $user->id }}">
+                                        <input class="rounded" type="checkbox" name="operators[]" value="{{ $user->id }}">
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-3 text-sm">
                                         {{ $user->name }}
@@ -123,8 +129,12 @@
                     {{ $users->links() }}
                     @if (count($users))
                         <div class="px-4 py-3 bg-gray-100">
-                            <x-button target="true" data-target="add_operators">{{ __('common.add_operators') }}</x-button>
-                            <x-modals.confirm :model="$federation" form="add_operators" />
+                            <x-button @click.prevent="open = !open">{{ __('common.add_operators') }}</x-button>
+
+                            <x-modal>
+                                <x-slot:title>{{ __('common.confirm_add_operators') }}</x-slot:title>
+                                {{ __('common.confirm_add_operators_body') }}
+                            </x-modal>
                         </div>
                     @endif
                 </div>

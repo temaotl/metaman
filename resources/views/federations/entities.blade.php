@@ -11,7 +11,8 @@
             <h3 class="text-lg font-semibold">
                 {{ __('common.delete_members') }}
             </h3>
-            <form id="delete_members" action="{{ route('federations.update', $federation) }}" method="post">
+            <form x-data="{ open: false }" id="delete_members" action="{{ route('federations.update', $federation) }}"
+                method="post">
                 @csrf
                 @method('patch')
                 <input type="hidden" name="action" value="delete_entities">
@@ -29,9 +30,10 @@
                                     {{ __('common.status') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="checkable divide-y divide-gray-200">
+                        <tbody class="divide-y divide-gray-200">
                             @forelse ($members as $entity)
-                                <tr class="hover:bg-blue-50" role="button">
+                                <tr x-data class="hover:bg-blue-50" role="button"
+                                    @click="checkbox = $el.querySelector('input[type=checkbox]'); checkbox.checked = !checkbox.checked">
                                     <td class="px-6 py-3 text-sm">
                                         <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity->id }}">
                                     </td>
@@ -62,9 +64,12 @@
                     {{ $members->links() }}
                     @if (count($members))
                         <div class="px-4 py-2 bg-gray-100">
-                            <x-button color="red" target="true" data-target="delete_members">
-                                {{ __('common.delete_members') }}</x-button>
-                            <x-modals.confirm :model="$federation" form="delete_members" />
+                            <x-button color="red" @click.prevent="open = !open">{{ __('common.delete_members') }}</x-button>
+
+                            <x-modal>
+                                <x-slot:title>{{ __('common.confirm_delete_members') }}</x-slot:title>
+                                {{ __('common.confirm_delete_members_body') }}
+                            </x-modal>
                         </div>
                     @endif
                 </div>
@@ -82,7 +87,8 @@
                         id="search" value="{{ request('search') }}" placeholder="{{ __('entities.searchbox') }}">
                 </form>
             </div>
-            <form id="add_members" action="{{ route('federations.update', $federation) }}" method="post">
+            <form x-data="{ open: false }" id="add_members" action="{{ route('federations.update', $federation) }}"
+                method="post">
                 @csrf
                 @method('patch')
                 <input type="hidden" name="action" value="add_entities">
@@ -100,9 +106,10 @@
                                     {{ __('common.status') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="checkable divide-y divide-gray-200">
+                        <tbody class="divide-y divide-gray-200">
                             @forelse ($entities as $entity)
-                                <tr class="hover:bg-blue-50" role="button">
+                                <tr x-data class="hover:bg-blue-50" role="button"
+                                    @click="checkbox = $el.querySelector('input[type=checkbox]'); checkbox.checked = !checkbox.checked">
                                     <td class="px-6 py-3 text-sm">
                                         <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity->id }}">
                                     </td>
@@ -133,8 +140,12 @@
                     {{ $entities->links() }}
                     @if (count($entities))
                         <div class="px-4 py-2 bg-gray-100">
-                            <x-button target="true" data-target="add_members">{{ __('common.add_members') }}</x-button>
-                            <x-modals.confirm :model="$federation" form="add_members" />
+                            <x-button @click.prevent="open = !open">{{ __('common.add_members') }}</x-button>
+
+                            <x-modal>
+                                <x-slot:title>{{ __('common.confirm_add_members') }}</x-slot:title>
+                                {{ __('common.confirm_add_members_body') }}
+                            </x-modal>
                         </div>
                     @endif
                 </div>

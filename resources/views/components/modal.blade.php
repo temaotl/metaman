@@ -1,4 +1,6 @@
-<div id="{{ $form }}-modal" class="modal-overlay fixed inset-0 z-10 hidden overflow-y-auto">
+@props(['action' => __('common.confirm')])
+
+<div x-cloak x-show="open" class="fixed inset-0 z-10 overflow-y-auto">
     <div class="overlay sm:block sm:p-0 flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -24,19 +26,19 @@
                         </h3>
                         <div class="mt-2">
                             <p class="text-sm text-gray-500">
-                                {{ $text }}
+                                {{ $slot }}
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse px-4 py-3">
-                <button type="submit" form="{{ $form }}"
+                <button type="submit"
                     class="hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm">
                     {{ $action }}
                 </button>
-                <button type="button"
-                    class="close-modal hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm">
+                <button @click="open = false" type="button"
+                    class="hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm">
                     {{ __('common.cancel') }}
                 </button>
             </div>
