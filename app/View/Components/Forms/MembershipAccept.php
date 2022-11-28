@@ -7,16 +7,13 @@ use Illuminate\View\Component;
 
 class MembershipAccept extends Component
 {
-    public $membership;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(Membership $membership)
+    public function __construct(public Membership $membership)
     {
-        $this->membership = $membership;
     }
 
     /**

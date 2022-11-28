@@ -111,24 +111,6 @@ class FederationControllerTest extends TestCase
     }
 
     /** @test */
-    public function an_anonymouse_user_cannot_change_an_existing_federations_status()
-    {
-        $federation = Federation::factory()->create();
-
-        $this->assertTrue($federation->active);
-
-        $this
-            ->followingRedirects()
-            ->patch(route('federations.update', $federation), [
-                'action' => 'status',
-            ])
-            ->assertSeeText('login');
-
-        $this->assertTrue($federation->active);
-        $this->assertEquals(route('login'), url()->current());
-    }
-
-    /** @test */
     public function an_anonymouse_user_cannot_change_an_existing_federations_state()
     {
         $federation = Federation::factory()->create();
@@ -316,8 +298,7 @@ class FederationControllerTest extends TestCase
             ->assertSeeText($federation->name)
             ->assertSeeText($federation->description)
             ->assertSeeText($federation->xml_id)
-            ->assertSeeText($federation->xml_name)
-            ->assertSeeText(__('common.active'));
+            ->assertSeeText($federation->xml_name);
 
         $this->assertEquals(1, Federation::count());
         $this->assertEquals(route('federations.show', $federation), url()->current());
@@ -419,41 +400,6 @@ class FederationControllerTest extends TestCase
         Bus::assertDispatched(GitUpdateFederation::class, function ($job) use ($federation) {
             return $job->federation->is($federation);
         });
-    }
-
-    /** @test */
-    public function a_user_with_operator_permission_can_change_an_existing_federations_status()
-    {
-        $federation = Federation::factory()->create();
-        $federation->operators()->attach(User::factory()->create());
-
-        $this->assertTrue($federation->active);
-
-        $user = User::first();
-
-        $this
-            ->followingRedirects()
-            ->actingAs($user)
-            ->patch(route('federations.update', $federation), [
-                'action' => 'status',
-            ])
-            ->assertSeeText(__('federations.inactive', ['name' => $federation->name]));
-
-        $federation->refresh();
-        $this->assertFalse($federation->active);
-        $this->assertEquals(route('federations.show', $federation), url()->current());
-
-        $this
-            ->followingRedirects()
-            ->actingAs($user)
-            ->patch(route('federations.update', $federation), [
-                'action' => 'status',
-            ])
-            ->assertSeeText(__('federations.active', ['name' => $federation->name]));
-
-        $federation->refresh();
-        $this->assertTrue($federation->active);
-        $this->assertEquals(route('federations.show', $federation), url()->current());
     }
 
     /** @test */
@@ -666,23 +612,6 @@ class FederationControllerTest extends TestCase
     }
 
     /** @test */
-    public function a_user_without_operator_permission_cannot_change_an_existing_federations_status()
-    {
-        $user = User::factory()->create();
-        $federation = Federation::factory()->create();
-
-        $this
-            ->actingAs($user)
-            ->patch(route('federations.update', $federation), [
-                'action' => 'status',
-            ])
-            ->assertStatus(403)
-            ->assertSeeText('This action is unauthorized.');
-
-        $this->assertEquals(route('federations.show', $federation), url()->current());
-    }
-
-    /** @test */
     public function a_user_without_operator_permission_cannot_change_an_existing_federations_state()
     {
         $user = User::factory()->create();
@@ -892,8 +821,7 @@ class FederationControllerTest extends TestCase
             ->assertSeeText($federation->xml_name)
             ->assertSeeText($federation->tagfile)
             ->assertSeeText($federation->cfgfile)
-            ->assertSeeText($federation->filters)
-            ->assertSeeText(__('common.active'));
+            ->assertSeeText($federation->filters);
 
         $this->assertEquals(1, Federation::count());
         $this->assertEquals(route('federations.show', $federation), url()->current());
@@ -1019,40 +947,6 @@ class FederationControllerTest extends TestCase
         $this->assertEquals($federationXmlName, $federation->xml_name);
         $this->assertEquals($federationFilters, $federation->filters);
         $this->assertEquals(1, Federation::count());
-        $this->assertEquals(route('federations.show', $federation), url()->current());
-    }
-
-    /** @test */
-    public function an_admin_can_change_an_existing_federations_status()
-    {
-        $admin = User::factory()->create(['admin' => true]);
-        $federation = Federation::factory()->create();
-
-        $this->assertEquals(1, Federation::count());
-        $this->assertTrue($federation->active);
-
-        $this
-            ->followingRedirects()
-            ->actingAs($admin)
-            ->patch(route('federations.update', $federation), [
-                'action' => 'status',
-            ])
-            ->assertSeeText(__('federations.inactive', ['name' => $federation->name]));
-
-        $federation->refresh();
-        $this->assertFalse($federation->active);
-        $this->assertEquals(route('federations.show', $federation), url()->current());
-
-        $this
-            ->followingRedirects()
-            ->actingAs($admin)
-            ->patch(route('federations.update', $federation), [
-                'action' => 'status',
-            ])
-            ->assertSeeText(__('federations.active', ['name' => $federation->name]));
-
-        $federation->refresh();
-        $this->assertTrue($federation->active);
         $this->assertEquals(route('federations.show', $federation), url()->current());
     }
 

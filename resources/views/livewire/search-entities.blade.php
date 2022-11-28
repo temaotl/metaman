@@ -54,9 +54,7 @@
                                 {{ $entity->{"description_$locale"} ?: __('entities.no_description') }}
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                <x-pils.approved :model="$entity" />
-                                <x-pils.status :model="$entity" />
-                                <x-pils.state :model="$entity" />
+                                <x-status :model="$entity" />
                             </td>
                             <td class="px-6 py-3 text-sm text-right">
                                 <a class="hover:underline text-blue-500"

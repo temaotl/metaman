@@ -4,13 +4,11 @@
 
     <input type="hidden" name="action" value="role">
 
-    <x-button @click.prevent="open = !open">
-        @if ($user->admin)
-            {{ __('common.deadmin') }}
-        @else
-            {{ __('common.make_admin') }}
-        @endif
-    </x-button>
+    @if ($user->admin)
+        <x-button @click.prevent="open = !open" color="blue">{{ __('common.deadmin') }}</x-button>
+    @else
+        <x-button @click.prevent="open = !open" color="red">{{ __('common.make_admin') }}</x-button>
+    @endif
 
     <x-modal>
         <x-slot:title>

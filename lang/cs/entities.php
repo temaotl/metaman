@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'active' => 'Entita :name byla úspěšně aktivována.',
     'add_empty_operators' => 'Nezvolili jste žádné uživatele, kteří by se měli stát správci.',
     'add_hfd' => 'Přidat HfD',
     'add' => 'Přidat entitu',
@@ -33,8 +32,7 @@ return [
     'get_metadata' => 'Stáhnout metadata',
     'hfd' => 'Entita má nyní nastaveno Hide from Discovery.',
     'import' => 'Import entit',
-    'imported' => '{0} Žádná entita nebyla importována.|{1} Jedna entita byla importována a potřebuje být aktivována.|[2,4] :count entity byly importovány a potřebují být aktivovány.|[5,*] :count entit bylo importováno a potřebuje být aktivováno.',
-    'inactive' => 'Entita :name byla úspěšně deaktivována.',
+    'imported' => '{0} Žádná entita nebyla importována.|{1} Jedna entita byla importována.|[2,4] :count entity byly importovány.|[5,*] :count entit bylo importováno.',
     'join_empty_federations' => 'Nezvolili jste žádnou federaci k připojení.',
     'join_explanation_placeholder' => 'Zdůvodněte žádost o členství',
     'join_federation' => 'Připojit k federaci',

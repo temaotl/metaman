@@ -29,7 +29,7 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        return $user->admin || $user->id === $model->id;
+        return $user->admin || $user->is($model);
     }
 
     /**
@@ -52,6 +52,6 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        return $user->admin || $user->id === $model->id;
+        return $user->admin || $user->is($model);
     }
 }

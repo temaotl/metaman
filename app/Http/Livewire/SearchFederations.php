@@ -17,7 +17,6 @@ class SearchFederations extends Component
         $federations = Federation::query()
             ->visibleTo(Auth::user())
             ->search($this->search)
-            ->orderByDesc('active')
             ->orderByDesc('approved')
             ->orderBy('name')
             ->paginate();

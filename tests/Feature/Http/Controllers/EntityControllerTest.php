@@ -100,22 +100,6 @@ class EntityControllerTest extends TestCase
     }
 
     /** @test */
-    public function an_anonymouse_user_cannot_change_an_existing_entities_status()
-    {
-        $entity = Entity::factory()->create();
-
-        $this->assertTrue($entity->active);
-
-        $this
-          ->followingRedirects()
-          ->patch(route('entities.update', $entity), ['action' => 'status'])
-          ->assertSeeText('login');
-
-        $this->assertTrue($entity->active);
-        $this->assertEquals(route('login'), url()->current());
-    }
-
-    /** @test */
     public function an_anonymouse_user_cannot_change_an_existing_entities_state()
     {
         $entity = Entity::factory()->create();
@@ -183,7 +167,6 @@ class EntityControllerTest extends TestCase
     public function an_anonymouse_user_cannot_purge_an_existing_entity()
     {
         $entity = Entity::factory()->create([
-            'active' => false,
             'deleted_at' => now(),
         ]);
 
@@ -647,36 +630,6 @@ class EntityControllerTest extends TestCase
     }
 
     /** @test */
-    public function a_user_with_operator_permission_can_change_an_existing_entities_status()
-    {
-        $user = User::factory()->create();
-        $entity = Entity::factory()->create();
-        $user->entities()->attach($entity);
-
-        $this->assertTrue($entity->active);
-
-        $this
-          ->followingRedirects()
-          ->actingAs($user)
-          ->patch(route('entities.update', $entity), ['action' => 'status'])
-          ->assertSeeText(__('entities.inactive', ['name' => $entity->name_en]));
-
-        $entity->refresh();
-        $this->assertFalse($entity->active);
-        $this->assertEquals(route('entities.show', $entity), url()->current());
-
-        $this
-          ->followingRedirects()
-          ->actingAs($user)
-          ->patch(route('entities.update', $entity), ['action' => 'status'])
-          ->assertSeeText(__('entities.active', ['name' => $entity->name_en]));
-
-        $entity->refresh();
-        $this->assertTrue($entity->active);
-        $this->assertEquals(route('entities.show', $entity), url()->current());
-    }
-
-    /** @test */
     public function a_user_with_operator_permission_can_change_an_existing_entities_state()
     {
         Bus::fake();
@@ -762,8 +715,6 @@ class EntityControllerTest extends TestCase
         $user->entities()->attach($entity);
         $federation = Federation::factory()->create();
 
-        $this->assertTrue($entity->active);
-        $this->assertTrue($federation->active);
         $this->assertEquals(1, $user->entities()->count());
         $this->assertEquals(0, Membership::whereApproved(false)->count());
 
@@ -803,20 +754,6 @@ class EntityControllerTest extends TestCase
               'url' => 'https://whoami.cesnet.cz/idp/shibboleth',
           ])
           ->assertSeeText('login');
-    }
-
-    /** @test */
-    public function a_user_without_operator_permission_cannot_change_an_existing_entities_status()
-    {
-        $user = User::factory()->create();
-        $entity = Entity::factory()->create();
-
-        $this->assertEquals(1, Entity::count());
-
-        $this
-          ->actingAs($user)
-          ->patch(route('entities.update', $entity), ['action' => 'status'])
-          ->assertForbidden();
     }
 
     /** @test */
@@ -867,8 +804,6 @@ class EntityControllerTest extends TestCase
         $entity = Entity::factory()->create();
         $federation = Federation::factory()->create();
 
-        $this->assertTrue($entity->active);
-        $this->assertTrue($federation->active);
         $this->assertEquals(0, $user->entities()->count());
         $this->assertEquals(0, Membership::whereApproved(false)->count());
 
@@ -889,7 +824,6 @@ class EntityControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $entity = Entity::factory()->create([
-            'active' => false,
             'deleted_at' => now(),
         ]);
 
@@ -1339,36 +1273,6 @@ class EntityControllerTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_change_an_existing_entities_status()
-    {
-        $admin = User::factory()->create(['admin' => true]);
-        $entity = Entity::factory()->create();
-
-        $this->assertEquals(1, Entity::count());
-        $this->assertTrue($entity->active);
-
-        $this
-          ->followingRedirects()
-          ->actingAs($admin)
-          ->patch(route('entities.update', $entity), ['action' => 'status'])
-          ->assertSeeText(__('entities.inactive', ['name' => $entity->name_en]));
-
-        $entity->refresh();
-        $this->assertFalse($entity->active);
-        $this->assertEquals(route('entities.show', $entity), url()->current());
-
-        $this
-          ->followingRedirects()
-          ->actingAs($admin)
-          ->patch(route('entities.update', $entity), ['action' => 'status'])
-          ->assertSeeText(__('entities.active', ['name' => $entity->name_en]));
-
-        $entity->refresh();
-        $this->assertTrue($entity->active);
-        $this->assertEquals(route('entities.show', $entity), url()->current());
-    }
-
-    /** @test */
     public function an_admin_can_change_an_existing_entities_state()
     {
         Bus::fake();
@@ -1475,8 +1379,6 @@ class EntityControllerTest extends TestCase
         $entity = Entity::factory()->create();
         $federation = Federation::factory()->create();
 
-        $this->assertTrue($entity->active);
-        $this->assertTrue($federation->active);
         $this->assertEquals(0, Membership::whereApproved(false)->count());
 
         $this
@@ -1496,7 +1398,6 @@ class EntityControllerTest extends TestCase
     {
         $admin = User::factory()->create(['admin' => true]);
         $entity = Entity::factory()->create([
-            'active' => false,
             'deleted_at' => now(),
         ]);
         $name = $entity->name_en;

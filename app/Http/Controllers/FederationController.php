@@ -18,7 +18,6 @@ use App\Notifications\FederationDestroyed;
 use App\Notifications\FederationOperatorsChanged;
 use App\Notifications\FederationRejected;
 use App\Notifications\FederationRequested;
-use App\Notifications\FederationStatusChanged;
 use App\Notifications\YourFederationRightsChanged;
 use App\Traits\GitTrait;
 use Illuminate\Http\Request;
@@ -206,7 +205,6 @@ class FederationController extends Controller
                 $this->authorize('do-everything');
 
                 $federation->approved = true;
-                $federation->active = true;
                 $federation->update();
 
                 GitAddFederation::dispatch($federation, 'approve', Auth::user());
@@ -231,26 +229,6 @@ class FederationController extends Controller
                 return redirect()
                     ->route('federations.show', $federation)
                     ->with('status', __('federations.updated'));
-
-                break;
-
-            case 'status':
-                $this->authorize('update', $federation);
-
-                $federation->active = $federation->active ? false : true;
-                $federation->update();
-
-                $status = $federation->active ? 'active' : 'inactive';
-                $color = $federation->active ? 'green' : 'red';
-
-                $admins = User::activeAdmins()->select('id', 'email')->get();
-                Notification::send($federation->operators, new FederationStatusChanged($federation));
-                Notification::send($admins, new FederationStatusChanged($federation));
-
-                return redirect()
-                    ->route('federations.show', $federation)
-                    ->with('status', __("federations.$status", ['name' => $federation->name]))
-                    ->with('color', $color);
 
                 break;
 
@@ -481,7 +459,6 @@ class FederationController extends Controller
                 ]);
 
                 $federation->approved = true;
-                $federation->active = false;
                 $federation->update();
             });
 

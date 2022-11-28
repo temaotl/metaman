@@ -23,7 +23,6 @@ class Federation extends Model
 
     protected $casts = [
         'approved' => 'boolean',
-        'active' => 'boolean',
     ];
 
     public function operators()
@@ -41,11 +40,6 @@ class Federation extends Model
             ->withPivot('approved')
             ->wherePivot('approved', true)
             ->withTimestamps();
-    }
-
-    public function scopeActive($query)
-    {
-        $query->where('active', true);
     }
 
     public function scopeVisibleTo($query, User $user)

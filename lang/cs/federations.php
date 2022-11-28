@@ -1,12 +1,11 @@
 <?php
 
 return [
-    'active' => 'Federace :name byla úspěšně aktivována.',
     'add_empty_entities' => 'Nezvolili jste žádné entity k přidání do federace.',
     'add_empty_operators' => 'Nezvolili jste žádné uživatele, kteří by se měli stát správci.',
     'add_operators' => 'Přidat správce',
     'add' => 'Přidat federaci',
-    'approved' => 'Federace :name byla úspěšně schválena a aktivována.',
+    'approved' => 'Federace :name byla úspěšně schválena.',
     'cancelled' => 'Federace :name byla úspěšně zrušena.',
     'cfgfile' => 'CFG soubor',
     'delete_empty_entities' => 'Nezvolili jste žádné entity k odebrání z federace.',
@@ -22,8 +21,7 @@ return [
     'explanation_placeholder' => 'Vložte zdůvodnění pro tuto federaci',
     'filters' => 'Filtry',
     'import' => 'Importovat federace',
-    'imported' => '{0} Nebyla importována žádná federace.|{1} Jedna federace byla importována a potřebuje být aktivována.|[2,4] :count federace byly importovány a potřebují být aktivovány.|[5,*] :count federací bylo importováno a potřebuje být aktivováno.',
-    'inactive' => 'Federace :name byla úspěšně deaktivována.',
+    'imported' => '{0} Nebyla importována žádná federace.|{1} Jedna federace byla importována.|[2,4] :count federace byly importovány.|[5,*] :count federací bylo importováno.',
     'loading_federations_please_wait' => 'Načítám federace, prosím počkejte...',
     'membership_accepted' => 'Členství :entity bylo přijato.',
     'membership_rejected' => 'Členství :entity bylo odmítnuto.',

@@ -33,7 +33,6 @@ class FederationFactory extends Factory
             'xml_name' => "urn:mace:cesnet.cz:$id",
             'filters' => $this->faker->unique()->text(32),
             'approved' => true,
-            'active' => true,
             'explanation' => $this->faker->text(255),
         ];
     }

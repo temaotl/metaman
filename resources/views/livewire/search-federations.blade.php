@@ -46,9 +46,7 @@
                                 {{ $federation->description }}
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                <x-pils.approved :model="$federation" />
-                                <x-pils.status :model="$federation" />
-                                <x-pils.state :model="$federation" />
+                                <x-status :model="$federation" />
                             </td>
                             <td class="px-6 py-3 text-sm text-right">
                                 <a class="hover:underline text-blue-500"

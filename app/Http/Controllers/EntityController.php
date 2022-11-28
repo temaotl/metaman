@@ -29,7 +29,6 @@ use App\Notifications\EntityEdugainStatusChanged;
 use App\Notifications\EntityOperatorsChanged;
 use App\Notifications\EntityRequested;
 use App\Notifications\EntityStateChanged;
-use App\Notifications\EntityStatusChanged;
 use App\Notifications\EntityUpdated;
 use App\Notifications\FederationMemberChanged;
 use App\Notifications\IdpCategoryChanged;
@@ -75,7 +74,7 @@ class EntityController extends Controller
         $this->authorize('create', Entity::class);
 
         return view('entities.create', [
-            'federations' => Federation::active()->orderBy('name')->get(),
+            'federations' => Federation::orderBy('name')->get(),
         ]);
     }
 
@@ -319,28 +318,6 @@ class EntityController extends Controller
 
                         break;
                 }
-
-                break;
-
-            case 'status':
-                $this->authorize('update', $entity);
-
-                $entity->active = $entity->active ? false : true;
-                $entity->update();
-
-                $status = $entity->active ? 'active' : 'inactive';
-                $color = $entity->active ? 'green' : 'red';
-
-                $admins = User::activeAdmins()->select('id', 'email')->get();
-                Notification::send($entity->operators, new EntityStatusChanged($entity));
-                Notification::send($admins, new EntityStatusChanged($entity));
-
-                $locale = app()->getLocale();
-
-                return redirect()
-                    ->route('entities.show', $entity)
-                    ->with('status', __("entities.$status", ['name' => $entity->{"name_$locale"} ?? $entity->entityid]))
-                    ->with('color', $color);
 
                 break;
 
@@ -751,7 +728,6 @@ class EntityController extends Controller
                 $entity = Entity::create($new_entity);
 
                 $entity->approved = true;
-                $entity->active = false;
                 $entity->update();
             });
 

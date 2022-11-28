@@ -1,12 +1,11 @@
 <?php
 
 return [
-    'active' => ':name has been successfully activated.',
     'add_empty_entities' => 'You have not selected any entities to add to federation.',
     'add_empty_operators' => 'You have not selected any users to add as operators.',
     'add_operators' => 'Add operators',
     'add' => 'Add federation',
-    'approved' => ':name has been successfully approved and activated.',
+    'approved' => ':name has been successfully approved.',
     'cancelled' => ':name federation has been successfully cancelled.',
     'cfgfile' => 'CFG file',
     'delete_empty_entities' => 'You have not selected any entities to delete from federation.',
@@ -22,8 +21,7 @@ return [
     'explanation_placeholder' => "Enter explanation for this federation's request",
     'filters' => 'Filters',
     'import' => 'Import federations',
-    'imported' => '{0} No federation has been imported.|{1} One federation has been imported and needs to be activated.|[2,*] :count federations have been imported and need to be activated.',
-    'inactive' => ':name has been successfully deactivated.',
+    'imported' => '{0} No federation has been imported.|{1} One federation has been imported.|[2,*] :count federations have been imported.',
     'loading_federations_please_wait' => 'Loading federations, please wait...',
     'membership_accepted' => 'Membership for :entity has been accepted.',
     'membership_rejected' => 'Membership for :entity has been rejected',

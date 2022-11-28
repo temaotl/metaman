@@ -13,9 +13,7 @@
                     <dt class="text-sm text-gray-500">{{ __('common.name') }}</dt>
                     <dd class="sm:col-span-2">
                         <span class="pr-4">{{ $federation->name }}</span>
-                        <x-pils.approved :model="$federation" />
-                        <x-pils.status :model="$federation" />
-                        <x-pils.state :model="$federation" />
+                        <x-status :model="$federation" />
                     </dd>
                 </div>
                 <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
@@ -118,23 +116,16 @@
                     !$federation->trashed(),
                 'federations.partials.approve')
 
-            @includeWhen(request()->user()->can('do-everything') && $federation->trashed(),
-                'federations.partials.destroy')
-
             @includeWhen(request()->user()->can('update', $federation) &&
                     !$federation->trashed() &&
                     !$federation->approved,
                 'federations.partials.reject')
 
-            @includeWhen(request()->user()->can('update', $federation) &&
-                    !$federation->trashed() &&
-                    $federation->approved,
-                'federations.partials.status')
-
-            @includeWhen(request()->user()->can('update', $federation) &&
-                    $federation->approved &&
-                    !$federation->active,
+            @includeWhen(request()->user()->can('update', $federation) && $federation->approved,
                 'federations.partials.state')
+
+            @includeWhen(request()->user()->can('do-everything') && $federation->trashed(),
+                'federations.partials.destroy')
 
         </div>
     </div>

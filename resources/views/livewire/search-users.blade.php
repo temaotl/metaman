@@ -51,7 +51,7 @@
                                     href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                <x-pils.status :model="$user" />
+                                <x-user-status :model="$user" />
                             </td>
                             <td class="px-6 py-3 text-sm text-right">
                                 <a class="hover:underline text-blue-600"

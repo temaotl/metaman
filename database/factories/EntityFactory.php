@@ -36,7 +36,6 @@ class EntityFactory extends Factory
             'cocov1' => random_int(0, 1) ? true : false,
             'sirtfi' => random_int(0, 1) ? true : false,
             'approved' => true,
-            'active' => true,
             'metadata' => $this->faker->randomHtml(5, 5),
         ];
     }

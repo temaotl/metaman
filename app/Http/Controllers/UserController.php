@@ -8,7 +8,6 @@ use App\Notifications\UserCreated;
 use App\Notifications\UserRoleChanged;
 use App\Notifications\UserStatusChanged;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
@@ -54,7 +53,7 @@ class UserController extends Controller
 
         $user = User::create($request->validated());
 
-        $admins = User::activeAdmins()->select('id', 'email')->get()->diff(User::where('id', Auth::id())->get());
+        $admins = User::activeAdmins()->select('id', 'email')->get();
         Notification::send($admins, new UserCreated($user));
 
         return redirect('users')
@@ -93,7 +92,7 @@ class UserController extends Controller
 
                 $this->authorize('do-everything');
 
-                if ($request->user()->id === $user->id) {
+                if ($request->user()->is($user)) {
                     return redirect()
                         ->back()
                         ->with('status', __('users.cannot_toggle_your_status'))
@@ -106,7 +105,7 @@ class UserController extends Controller
                 $status = $user->active ? 'active' : 'inactive';
                 $color = $user->active ? 'green' : 'red';
 
-                $admins = User::activeAdmins()->select('id', 'email')->get()->diff(User::whereIn('id', [$user->id, Auth::id()])->get());
+                $admins = User::activeAdmins()->select('id', 'email')->get();
                 Notification::send($user, new UserStatusChanged($user));
                 Notification::send($admins, new UserStatusChanged($user));
 
@@ -121,7 +120,7 @@ class UserController extends Controller
 
                 $this->authorize('do-everything');
 
-                if ($request->user()->id === $user->id) {
+                if ($request->user()->is($user)) {
                     return redirect()
                         ->back()
                         ->with('status', __('users.cannot_toggle_your_role'))
@@ -134,7 +133,7 @@ class UserController extends Controller
                 $role = $user->admin ? 'admined' : 'deadmined';
                 $color = $user->admin ? 'indigo' : 'yellow';
 
-                $admins = User::activeAdmins()->select('id', 'email')->get()->diff(User::whereIn('id', [$user->id, Auth::id()])->get());
+                $admins = User::activeAdmins()->select('id', 'email')->get();
                 Notification::send($user, new UserRoleChanged($user));
                 Notification::send($admins, new UserRoleChanged($user));
 
@@ -150,10 +149,8 @@ class UserController extends Controller
                 $this->authorize('update', $user);
 
                 $emails = explode(';', $user->emails);
-                if (in_array(request('email'), $emails)) {
-                    $user->update([
-                        'email' => request('email'),
-                    ]);
+                if (in_array($request->email, $emails)) {
+                    $user->update(['email' => $request->email]);
                 }
 
                 if (! $user->wasChanged()) {

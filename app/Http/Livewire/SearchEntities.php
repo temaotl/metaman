@@ -32,7 +32,6 @@ class SearchEntities extends Component
         $entities = Entity::query()
             ->visibleTo(Auth::user())
             ->search($this->search)
-            ->orderByDesc('active')
             ->orderByDesc('approved')
             ->orderBy("name_{$this->locale}")
             ->paginate();

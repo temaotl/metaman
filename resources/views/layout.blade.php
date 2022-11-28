@@ -15,7 +15,7 @@
     @include('partials.header')
 
     <main class="md:p-8 max-w-screen-xl p-4 mx-auto">
-        <x-flash-message />
+        <x-status-message />
         @yield('content')
     </main>
 

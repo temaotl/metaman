@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'active' => ':name has been successfully activated.',
     'add_empty_operators' => 'You have not selected any users to add as operators.',
     'add_hfd' => 'Add HfD',
     'add' => 'Add entity',
@@ -33,8 +32,7 @@ return [
     'get_metadata' => 'Get metadata',
     'hfd' => 'Entity is now Hidden from Discovery.',
     'import' => 'Entities import',
-    'imported' => '{0} No entity has been imported.|{1} One entity has been imported and needs to be activated.|[2,*] :count entities have been imported and need to be activated.',
-    'inactive' => ':name has been successfully deactivated.',
+    'imported' => '{0} No entity has been imported.|{1} One entity has been imported.|[2,*] :count entities have been imported.',
     'join_empty_federations' => 'You have not selected any federation to join.',
     'join_explanation_placeholder' => 'Explain your join request',
     'join_federation' => 'Join a federation',

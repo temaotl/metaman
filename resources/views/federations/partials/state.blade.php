@@ -2,13 +2,12 @@
     @csrf
     @method('patch')
     <input type="hidden" name="action" value="state">
-    <x-button @click.prevent="open = !open" color="red">
-        @if ($federation->trashed())
-            {{ __('common.restore') }}
-        @else
-            {{ __('common.delete') }}
-        @endif
-    </x-button>
+
+    @if ($federation->trashed())
+        <x-button @click.prevent="open = !open" color="green">{{ __('common.restore') }}</x-button>
+    @else
+        <x-button @click.prevent="open = !open" color="red">{{ __('common.delete') }}</x-button>
+    @endif
 
     <x-modal>
         <x-slot:title>

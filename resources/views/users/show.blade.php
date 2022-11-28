@@ -18,9 +18,8 @@
                     <dd class="sm:col-span-2">
                         <span class="pr-4">{{ $user->name }}</span>
                         <span class="pr-4">
-                            <x-pils.status :model="$user" />
+                            <x-user-status :model="$user" />
                         </span>
-                        <x-pils.user-role role="{{ $user->admin }}" />
                     </dd>
                 </div>
                 <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
@@ -109,10 +108,12 @@
     <div>
         <x-buttons.back href="{{ URL::previous() }}" />
 
-        @includeWhen(request()->user()->can('update', $user) && Auth::id() !== $user->id,
+        @includeWhen(request()->user()->can('update', $user) &&
+                !request()->user()->is($user),
             'users.partials.status')
 
-        @includeWhen(request()->user()->can('do-everything') && Auth::id() !== $user->id,
+        @includeWhen(request()->user()->can('do-everything') &&
+                !request()->user()->is($user),
             'users.partials.role')
     </div>
 

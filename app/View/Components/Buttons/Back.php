@@ -6,16 +6,13 @@ use Illuminate\View\Component;
 
 class Back extends Component
 {
-    public $href;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($href)
+    public function __construct(public $href)
     {
-        $this->href = $href;
     }
 
     /**

@@ -13,9 +13,7 @@
                     <dt class="text-sm text-gray-500">{{ __('common.name') }}</dt>
                     <dd class="sm:col-span-2">
                         <span class="pr-4">{{ $entity->{"name_$locale"} ?? __('entities.no_name') }}</span>
-                        <x-pils.approved :model="$entity" />
-                        <x-pils.status :model="$entity" />
-                        <x-pils.state :model="$entity" />
+                        <x-status :model="$entity" />
                     </dd>
                 </div>
                 <div class="dark:bg-gray-800 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 px-4 py-5 bg-white">
@@ -42,7 +40,6 @@
                     <dd class="sm:col-span-2">
                         @includeWhen(request()->user()->can('do-everything') &&
                                 !$entity->trashed() &&
-                                $entity->active &&
                                 $entity->approved &&
                                 $entity->type->value === 'sp',
                             'entities.partials.rs')
@@ -58,7 +55,6 @@
 
                         @includeWhen(request()->user()->can('do-everything') &&
                                 !$entity->trashed() &&
-                                $entity->active &&
                                 $entity->approved &&
                                 $entity->type->value === 'idp',
                             'entities.partials.hfd')
@@ -72,7 +68,6 @@
                     <dd class="sm:col-span-2">
                         @includeWhen(request()->user()->can('update', $entity) &&
                                 !$entity->trashed() &&
-                                $entity->active &&
                                 $entity->approved,
                             'entities.partials.edugain')
                         @cannot('update', $entity)
@@ -130,18 +125,11 @@
                 @endunless
             @endcan
 
+            @includeWhen(request()->user()->can('update', $entity) && $entity->approved,
+                'entities.partials.state')
+
             @includeWhen(request()->user()->can('do-everything') && $entity->trashed(),
                 'entities.partials.destroy')
-
-            @includeWhen(request()->user()->can('update', $entity) &&
-                    !$entity->trashed() &&
-                    $entity->approved,
-                'entities.partials.status')
-
-            @includeWhen(request()->user()->can('update', $entity) &&
-                    $entity->approved &&
-                    !$entity->active,
-                'entities.partials.state')
 
         </div>
     </div>

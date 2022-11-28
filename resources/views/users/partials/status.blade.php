@@ -4,13 +4,11 @@
 
     <input type="hidden" name="action" value="status">
 
-    <x-button @click.prevent="open = !open">
-        @if ($user->active)
-            {{ __('common.deactivate') }}
-        @else
-            {{ __('common.activate') }}
-        @endif
-    </x-button>
+    @if ($user->active)
+        <x-button @click.prevent="open = !open" color="blue">{{ __('common.deactivate') }}</x-button>
+    @else
+        <x-button @click.prevent="open = !open" color="red">{{ __('common.activate') }}</x-button>
+    @endif
 
     <x-modal>
         <x-slot:title>

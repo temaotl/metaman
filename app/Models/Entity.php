@@ -35,7 +35,6 @@ class Entity extends Model
         'cocov1' => 'boolean',
         'sirtfi' => 'boolean',
         'approved' => 'boolean',
-        'active' => 'boolean',
     ];
 
     public function operators()

@@ -47,9 +47,7 @@
                                         {{ $entity->{"description_$locale"} ?: __('entities.no_description') }}
                                     </td>
                                     <td class="px-6 py-3 text-sm">
-                                        <x-pils.approved :model="$entity" />
-                                        <x-pils.status :model="$entity" />
-                                        <x-pils.state :model="$entity" />
+                                        <x-status :model="$federation" />
                                     </td>
                                 </tr>
                             @empty
@@ -123,9 +121,7 @@
                                         {{ $entity->{"description_$locale"} ?: __('entities.no_description') }}
                                     </td>
                                     <td class="px-6 py-3 text-sm">
-                                        <x-pils.approved :model="$entity" />
-                                        <x-pils.status :model="$entity" />
-                                        <x-pils.state :model="$entity" />
+                                        <x-status :model="$federation" />
                                     </td>
                                 </tr>
                             @empty
@@ -178,9 +174,7 @@
                                 {{ $entity->{"description_$locale"} ?: __('entities.no_description') }}
                             </td>
                             <td class="px-6 py-3 text-sm">
-                                <x-pils.approved :model="$entity" />
-                                <x-pils.status :model="$entity" />
-                                <x-pils.state :model="$entity" />
+                                <x-status :model="$federation" />
                             </td>
                         </tr>
                     @empty
