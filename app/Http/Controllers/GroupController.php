@@ -10,10 +10,15 @@ use App\Jobs\GitUpdateGroup;
 use App\Models\Category;
 use App\Models\Entity;
 use App\Models\Group;
+use App\Models\User;
+use App\Notifications\GroupCreated;
+use App\Notifications\GroupDeleted;
+use App\Notifications\GroupUpdated;
 use App\Traits\GitTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class GroupController extends Controller
@@ -60,14 +65,13 @@ class GroupController extends Controller
         $this->authorize('do-everything');
 
         $validated = $request->validated();
-        $id = generateFederationID($validated['name']);
-
         $group = Group::create(array_merge(
             $validated,
-            ['tagfile' => "$id.tag"],
+            ['tagfile' => generateFederationID($validated['name']).'.tag'],
         ));
 
         GitAddGroup::dispatch($group, Auth::user());
+        Notification::send(User::activeAdmins()->select('id', 'email')->get(), new GroupCreated($group));
 
         return redirect('groups')
             ->with('status', __('groups.added', ['name' => $group->name]));
@@ -115,8 +119,7 @@ class GroupController extends Controller
         $this->authorize('do-everything');
 
         $old_group = $group->tagfile;
-        $validated = $request->validated();
-        $group->update($validated);
+        $group->update($request->validated());
 
         if (! $group->wasChanged()) {
             return redirect()
@@ -124,6 +127,7 @@ class GroupController extends Controller
         }
 
         GitUpdateGroup::dispatch($old_group, $group, Auth::user());
+        Notification::send(User::activeAdmins()->select('id', 'email')->get(), new GroupUpdated($group));
 
         return redirect()
             ->route('groups.show', $group)
@@ -151,6 +155,7 @@ class GroupController extends Controller
         $group->delete();
 
         GitDeleteGroup::dispatch($name, Auth::user());
+        Notification::send(User::activeAdmins()->select('id', 'email')->get(), new GroupDeleted($name));
 
         return redirect('groups')
             ->with('status', __('groups.deleted', ['name' => $name]));

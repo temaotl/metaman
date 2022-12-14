@@ -10,10 +10,15 @@ use App\Jobs\GitUpdateCategory;
 use App\Models\Category;
 use App\Models\Entity;
 use App\Models\Group;
+use App\Models\User;
+use App\Notifications\CategoryCreated;
+use App\Notifications\CategoryDeleted;
+use App\Notifications\CategoryUpdated;
 use App\Traits\GitTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
@@ -60,14 +65,14 @@ class CategoryController extends Controller
         $this->authorize('do-everything');
 
         $validated = $request->validated();
-        $id = generateFederationID($validated['name']);
 
         $category = Category::create(array_merge(
             $validated,
-            ['tagfile' => "$id.tag"],
+            ['tagfile' => generateFederationID($validated['name']).'.tag'],
         ));
 
         GitAddCategory::dispatch($category, Auth::user());
+        Notification::send(User::activeAdmins()->select('id', 'email')->get(), new CategoryCreated($category));
 
         return redirect('categories')
             ->with('status', __('categories.added', ['name' => $category->name]));
@@ -115,8 +120,7 @@ class CategoryController extends Controller
         $this->authorize('do-everything');
 
         $old_category = $category->tagfile;
-        $validated = $request->validated();
-        $category->update($validated);
+        $category->update($request->validated());
 
         if (! $category->wasChanged()) {
             return redirect()
@@ -124,6 +128,7 @@ class CategoryController extends Controller
         }
 
         GitUpdateCategory::dispatch($old_category, $category, Auth::user());
+        Notification::send(User::activeAdmins()->select('id', 'email')->get(), new CategoryUpdated($category));
 
         return redirect()
             ->route('categories.show', $category)
@@ -151,6 +156,7 @@ class CategoryController extends Controller
         $category->delete();
 
         GitDeleteCategory::dispatch($name, Auth::user());
+        Notification::send(User::activeAdmins()->select('id', 'email')->get(), new CategoryDeleted($name));
 
         return redirect('categories')
             ->with('status', __('categories.deleted', ['name' => $name]));

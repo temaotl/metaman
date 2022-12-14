@@ -7,6 +7,7 @@ use App\Jobs\GitAddMembership;
 use App\Jobs\GitAddToHfd;
 use App\Models\Membership;
 use App\Models\User;
+use App\Notifications\EntityAddedToHfd;
 use App\Notifications\MembershipAccepted;
 use App\Notifications\MembershipRejected;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +50,8 @@ class MembershipController extends Controller
                 $admins = User::activeAdmins()->select('id', 'email')->get();
                 Notification::send($membership->entity->operators, new MembershipAccepted($membership));
                 Notification::send($admins, new MembershipAccepted($membership));
+                Notification::send($membership->entity->operators, new EntityAddedToHfd($membership->entity));
+                Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToHfd($membership->entity));
             },
         ])->dispatch();
 

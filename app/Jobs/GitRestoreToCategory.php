@@ -48,7 +48,7 @@ class GitRestoreToCategory implements ShouldQueue
         $this->trimWhiteSpaces($this->entity->category->tagfile);
 
         if ($git->hasChanges()) {
-            $git->add($this->entity->category->tagfile);
+            $git->addFile($this->entity->category->tagfile);
 
             $git->commit(
                 $this->committer().": {$this->entity->category->tagfile} (update)\n\n"

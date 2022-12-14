@@ -10,7 +10,6 @@ use App\Jobs\GitUpdateFederation;
 use App\Models\Entity;
 use App\Models\Federation;
 use App\Models\User;
-use App\Notifications\FederationCancelled;
 use App\Notifications\FederationDestroyed;
 use App\Notifications\FederationRejected;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -571,7 +570,8 @@ class FederationControllerTest extends TestCase
         $this->assertEquals(0, Federation::count());
         $this->assertEquals(route('federations.index'), url()->current());
 
-        Notification::assertSentTo([$admin], FederationCancelled::class);
+        Notification::assertSentTo($user, FederationRejected::class);
+        Notification::assertSentTo($admin, FederationRejected::class);
     }
 
     /** @test */

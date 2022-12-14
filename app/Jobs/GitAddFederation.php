@@ -5,8 +5,6 @@ namespace App\Jobs;
 use App\Mail\ExceptionOccured;
 use App\Models\Federation;
 use App\Models\User;
-use App\Notifications\FederationApproved;
-use App\Notifications\FederationStateChanged;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -52,8 +49,8 @@ class GitAddFederation implements ShouldQueue
         Storage::put($this->federation->tagfile, '');
 
         if ($git->hasChanges()) {
-            $git->add($this->federation->cfgfile);
-            $git->add($this->federation->tagfile);
+            $git->addFile($this->federation->cfgfile);
+            $git->addFile($this->federation->tagfile);
 
             $git->commit(
                 $this->committer().": {$this->federation->xml_id} (add)\n\n"
@@ -63,18 +60,6 @@ class GitAddFederation implements ShouldQueue
             );
 
             $git->push();
-
-            switch ($this->action) {
-                case 'approve':
-                    Notification::send($this->federation->operators, new FederationApproved($this->federation));
-                    Notification::send(User::activeAdmins()->select('id', 'email')->get(), new FederationApproved($this->federation));
-                    break;
-
-                case 'state':
-                    Notification::send($this->federation->operators, new FederationStateChanged($this->federation));
-                    Notification::send(User::activeAdmins()->select('id', 'email')->get(), new FederationStateChanged($this->federation));
-                    break;
-            }
         }
     }
 

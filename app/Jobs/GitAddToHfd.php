@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Mail\ExceptionOccured;
 use App\Models\Entity;
 use App\Models\User;
-use App\Notifications\EntityAddedToHfd;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -48,7 +46,7 @@ class GitAddToHfd implements ShouldQueue
             $this->trimWhiteSpaces($tagfile);
 
             if ($git->hasChanges()) {
-                $git->add($tagfile);
+                $git->addFile($tagfile);
 
                 $git->commit(
                     $this->committer().": $tagfile (update)\n\n"
@@ -56,9 +54,6 @@ class GitAddToHfd implements ShouldQueue
                 );
 
                 $git->push();
-
-                Notification::send($this->entity->operators, new EntityAddedToHfd($this->entity));
-                Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToHfd($this->entity));
             }
         }
     }

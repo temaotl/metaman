@@ -12,8 +12,6 @@ return [
     'federation_requested_body' => 'Bylo zažádáno o vytvoření federace :name.',
     'federation_rejected_subject' => 'Federace zamítnuta',
     'federation_rejected_body' => 'Federace :name byla zamítnuta.',
-    'federation_cancelled_subject' => 'Federace zrušena',
-    'federation_cancelled_body' => 'Federace :name byla zrušena.',
     'federation_approved_subject' => 'Federace schválena',
     'federation_approved_body' => 'Federace :name byla schválena.',
     'federation_destroyed_subject' => 'Federation odstraněna',

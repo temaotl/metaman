@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Mail\ExceptionOccured;
 use App\Models\Federation;
 use App\Models\User;
-use App\Notifications\FederationStateChanged;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Throwable;
 
 class GitDeleteFederation implements ShouldQueue
@@ -41,8 +39,8 @@ class GitDeleteFederation implements ShouldQueue
     {
         $git = $this->initializeGit();
 
-        $git->rm($this->federation->cfgfile);
-        $git->rm($this->federation->tagfile);
+        $git->removeFile($this->federation->cfgfile);
+        $git->removeFile($this->federation->tagfile);
 
         if ($git->hasChanges()) {
             $git->commit(
@@ -51,9 +49,6 @@ class GitDeleteFederation implements ShouldQueue
             );
 
             $git->push();
-
-            Notification::send($this->federation->operators, new FederationStateChanged($this->federation));
-            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new FederationStateChanged($this->federation));
         }
     }
 

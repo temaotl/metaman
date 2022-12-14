@@ -46,7 +46,7 @@ class GitAddToCategory implements ShouldQueue
         $this->trimWhiteSpaces($this->category->tagfile);
 
         if ($git->hasChanges()) {
-            $git->add($this->category->tagfile);
+            $git->addFile($this->category->tagfile);
 
             $git->commit(
                 $this->committer().": {$this->category->tagfile} (update)\n\n"

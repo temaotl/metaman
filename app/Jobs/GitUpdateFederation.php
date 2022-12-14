@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Mail\ExceptionOccured;
 use App\Models\Federation;
 use App\Models\User;
-use App\Notifications\FederationUpdated;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -49,7 +47,7 @@ class GitUpdateFederation implements ShouldQueue
         Storage::put($this->federation->cfgfile, $content);
 
         if ($git->hasChanges()) {
-            $git->add($this->federation->cfgfile);
+            $git->addFile($this->federation->cfgfile);
 
             $git->commit(
                 $this->committer().": {$this->federation->cfgfile} (update)\n\n"
@@ -57,9 +55,6 @@ class GitUpdateFederation implements ShouldQueue
             );
 
             $git->push();
-
-            Notification::send($this->federation->operators, new FederationUpdated($this->federation));
-            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new FederationUpdated($this->federation));
         }
     }
 

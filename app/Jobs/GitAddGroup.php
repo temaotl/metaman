@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Mail\ExceptionOccured;
 use App\Models\Group;
 use App\Models\User;
-use App\Notifications\GroupCreated;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -45,7 +43,7 @@ class GitAddGroup implements ShouldQueue
         Storage::put($this->group->tagfile, '');
 
         if ($git->hasChanges()) {
-            $git->add($this->group->tagfile);
+            $git->addFile($this->group->tagfile);
 
             $git->commit(
                 $this->committer().": {$this->group->tagfile} (add)\n\n"
@@ -53,8 +51,6 @@ class GitAddGroup implements ShouldQueue
             );
 
             $git->push();
-
-            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new GroupCreated($this->group));
         }
     }
 

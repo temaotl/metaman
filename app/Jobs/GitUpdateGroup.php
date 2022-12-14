@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Mail\ExceptionOccured;
 use App\Models\Group;
 use App\Models\User;
-use App\Notifications\GroupUpdated;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Throwable;
 
 class GitUpdateGroup implements ShouldQueue
@@ -43,7 +41,7 @@ class GitUpdateGroup implements ShouldQueue
         $git = $this->initializeGit();
 
         if ($this->old_group !== $this->group->tagfile) {
-            $git->mv($this->old_group, $this->group->tagfile);
+            $git->renameFile($this->old_group, $this->group->tagfile);
         }
 
         if ($git->hasChanges()) {
@@ -53,8 +51,6 @@ class GitUpdateGroup implements ShouldQueue
             );
 
             $git->push();
-
-            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new GroupUpdated($this->group));
         }
     }
 

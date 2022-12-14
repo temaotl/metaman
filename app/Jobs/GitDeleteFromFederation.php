@@ -6,7 +6,6 @@ use App\Mail\ExceptionOccured;
 use App\Models\Entity;
 use App\Models\Federation;
 use App\Models\User;
-use App\Notifications\EntityDeletedFromFederation;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,7 +14,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -51,7 +49,7 @@ class GitDeleteFromFederation implements ShouldQueue
         $this->trimWhiteSpaces($tagfile);
 
         if ($git->hasChanges()) {
-            $git->add($tagfile);
+            $git->addFile($tagfile);
 
             $git->commit(
                 $this->committer().": $tagfile (update)\n\n"
@@ -59,9 +57,6 @@ class GitDeleteFromFederation implements ShouldQueue
             );
 
             $git->push();
-
-            Notification::send($this->entity->operators, new EntityDeletedFromFederation($this->entity, $this->federation));
-            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityDeletedFromFederation($this->entity, $this->federation));
         }
     }
 

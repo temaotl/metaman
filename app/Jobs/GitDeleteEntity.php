@@ -40,7 +40,7 @@ class GitDeleteEntity implements ShouldQueue
     {
         $git = $this->initializeGit();
 
-        $git->rm($this->entity->file);
+        $git->removeFile($this->entity->file);
 
         foreach ($this->entity->federations as $federation) {
             $tagfile = Storage::get($federation->tagfile);
@@ -49,7 +49,7 @@ class GitDeleteEntity implements ShouldQueue
             $this->trimWhiteSpaces($federation->tagfile);
 
             if ($git->hasChanges()) {
-                $git->add($federation->tagfile);
+                $git->addFile($federation->tagfile);
             }
         }
 

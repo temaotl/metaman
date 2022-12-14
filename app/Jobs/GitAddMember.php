@@ -46,7 +46,7 @@ class GitAddMember implements ShouldQueue
         $this->trimWhiteSpaces($this->federation->tagfile);
 
         if ($git->hasChanges()) {
-            $git->add($this->federation->tagfile);
+            $git->addFile($this->federation->tagfile);
 
             $git->commit(
                 $this->committer().": {$this->federation->tagfile} (update)\n\n"

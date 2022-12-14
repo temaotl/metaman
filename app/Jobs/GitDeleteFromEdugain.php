@@ -47,7 +47,7 @@ class GitDeleteFromEdugain implements ShouldQueue
         $this->trimWhiteSpaces($tagfile);
 
         if ($git->hasChanges()) {
-            $git->add($tagfile);
+            $git->addFile($tagfile);
 
             $git->commit(
                 $this->committer().": $tagfile (update)\n\n"

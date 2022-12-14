@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Mail\ExceptionOccured;
 use App\Models\User;
-use App\Notifications\CategoryDeleted;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +12,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Throwable;
 
 class GitDeleteCategory implements ShouldQueue
@@ -40,7 +38,7 @@ class GitDeleteCategory implements ShouldQueue
     {
         $git = $this->initializeGit();
 
-        $git->rm($this->category);
+        $git->removeFile($this->category);
 
         if ($git->hasChanges()) {
             $git->commit(
@@ -49,8 +47,6 @@ class GitDeleteCategory implements ShouldQueue
             );
 
             $git->push();
-
-            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new CategoryDeleted($this->category));
         }
     }
 

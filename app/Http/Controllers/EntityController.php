@@ -24,6 +24,11 @@ use App\Models\Category;
 use App\Models\Entity;
 use App\Models\Federation;
 use App\Models\User;
+use App\Notifications\EntityAddedToHfd;
+use App\Notifications\EntityAddedToRs;
+use App\Notifications\EntityDeletedFromFederation;
+use App\Notifications\EntityDeletedFromHfd;
+use App\Notifications\EntityDeletedFromRs;
 use App\Notifications\EntityDestroyed;
 use App\Notifications\EntityEdugainStatusChanged;
 use App\Notifications\EntityOperatorsChanged;
@@ -336,6 +341,8 @@ class EntityController extends Controller
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityStateChanged($entity));
                             Notification::send($admins, new EntityStateChanged($entity));
+                            Notification::send($entity->operators, new EntityAddedToHfd($entity));
+                            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToHfd($entity));
                         },
                     ])->dispatch();
 
@@ -361,6 +368,8 @@ class EntityController extends Controller
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityStateChanged($entity));
                             Notification::send($admins, new EntityStateChanged($entity));
+                            Notification::send($entity->operators, new EntityDeletedFromHfd($entity));
+                            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityDeletedFromHfd($entity));
                         },
                     ])->dispatch();
                 }
@@ -478,8 +487,12 @@ class EntityController extends Controller
 
                 if ($entity->rs) {
                     GitAddToRs::dispatch($entity, Auth::user());
+                    Notification::send($entity->operators, new EntityAddedToRs($entity));
+                    Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToRs($entity));
                 } else {
                     GitDeleteFromRs::dispatch($entity, Auth::user());
+                    Notification::send($entity->operators, new EntityDeletedFromRs($entity));
+                    Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityDeletedFromRs($entity));
                 }
 
                 return redirect()
@@ -541,8 +554,12 @@ class EntityController extends Controller
 
                 if ($entity->hfd) {
                     GitAddToHfd::dispatch($entity, Auth::user());
+                    Notification::send($entity->operators, new EntityAddedToHfd($entity));
+                    Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToHfd($entity));
                 } else {
                     GitDeleteFromHfd::dispatch($entity, Auth::user());
+                    Notification::send($entity->operators, new EntityDeletedFromHfd($entity));
+                    Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityDeletedFromHfd($entity));
                 }
 
                 return redirect()
@@ -598,6 +615,8 @@ class EntityController extends Controller
         foreach (request('federations') as $f) {
             $federation = Federation::find($f);
             GitDeleteFromFederation::dispatch($entity, $federation, Auth::user());
+            Notification::send($entity->operators, new EntityDeletedFromFederation($entity, $federation));
+            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityDeletedFromFederation($entity, $federation));
         }
 
         return redirect()

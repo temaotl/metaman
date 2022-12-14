@@ -2,26 +2,24 @@
 
 namespace App\Traits;
 
+use CzProject\GitPhp\Git;
 use Illuminate\Support\Facades\Storage;
-use Symplify\GitWrapper\GitWrapper;
 
 trait GitTrait
 {
     public function initializeGit()
     {
-        $gitWrapper = new GitWrapper(config('git.binary'));
-        $gitWrapper->setPrivateKey(config('git.ssh_key'));
+        $git = new Git;
 
         if (! is_dir(config('git.local'))) {
-            $git = $gitWrapper->cloneRepository(config('git.remote'), config('git.local'), ['b' => config('git.remote_branch')]);
+            $git = $git->cloneRepository(config('git.remote'), config('git.local'), ['-b' => config('git.remote_branch')]);
         } else {
-            $git = $gitWrapper->workingCopy(config('git.local'));
+            $git = $git->open(config('git.local'));
             $git->pull();
         }
 
-        $git->config('user.name', config('git.user_name'));
-        $git->config('user.email', config('git.user_email'));
-        $git->config('commit.gpgsign', 'false');
+        $git->execute('config', 'user.name', config('git.user_name'));
+        $git->execute('config', 'user.email', config('git.user_email'));
 
         return $git;
     }

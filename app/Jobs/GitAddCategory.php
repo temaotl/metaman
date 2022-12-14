@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Mail\ExceptionOccured;
 use App\Models\Category;
 use App\Models\User;
-use App\Notifications\CategoryCreated;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -45,7 +43,7 @@ class GitAddCategory implements ShouldQueue
         Storage::put($this->category->tagfile, '');
 
         if ($git->hasChanges()) {
-            $git->add($this->category->tagfile);
+            $git->addFile($this->category->tagfile);
 
             $git->commit(
                 $this->committer().": {$this->category->tagfile} (add)\n\n"
@@ -53,8 +51,6 @@ class GitAddCategory implements ShouldQueue
             );
 
             $git->push();
-
-            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new CategoryCreated($this->category));
         }
     }
 

@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Mail\ExceptionOccured;
 use App\Models\Category;
 use App\Models\User;
-use App\Notifications\CategoryUpdated;
 use App\Traits\GitTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Throwable;
 
 class GitUpdateCategory implements ShouldQueue
@@ -43,7 +41,7 @@ class GitUpdateCategory implements ShouldQueue
         $git = $this->initializeGit();
 
         if ($this->old_category !== $this->category->tagfile) {
-            $git->mv($this->old_category, $this->category->tagfile);
+            $git->renameFile($this->old_category, $this->category->tagfile);
         }
 
         if ($git->hasChanges()) {
@@ -53,8 +51,6 @@ class GitUpdateCategory implements ShouldQueue
             );
 
             $git->push();
-
-            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new CategoryUpdated($this->category));
         }
     }
 

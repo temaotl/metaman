@@ -12,8 +12,6 @@ return [
     'federation_requested_body' => ':name federation has been requested.',
     'federation_rejected_subject' => 'Federation rejected',
     'federation_rejected_body' => ':name federation has been rejected.',
-    'federation_cancelled_subject' => 'Federation cancelled',
-    'federation_cancelled_body' => ':name federation has been cancelled.',
     'federation_approved_subject' => 'Federation approved',
     'federation_approved_body' => ':name federation has been approved.',
     'federation_destroyed_subject' => 'Federation destroyed',
