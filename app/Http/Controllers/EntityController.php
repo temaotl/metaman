@@ -341,8 +341,10 @@ class EntityController extends Controller
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityStateChanged($entity));
                             Notification::send($admins, new EntityStateChanged($entity));
-                            Notification::send($entity->operators, new EntityAddedToHfd($entity));
-                            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToHfd($entity));
+                            if ($entity->hfd) {
+                                Notification::send($entity->operators, new EntityAddedToHfd($entity));
+                                Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToHfd($entity));
+                            }
                         },
                     ])->dispatch();
 
@@ -368,8 +370,10 @@ class EntityController extends Controller
                             $admins = User::activeAdmins()->select('id', 'email')->get();
                             Notification::send($entity->operators, new EntityStateChanged($entity));
                             Notification::send($admins, new EntityStateChanged($entity));
-                            Notification::send($entity->operators, new EntityDeletedFromHfd($entity));
-                            Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityDeletedFromHfd($entity));
+                            if ($entity->hfd) {
+                                Notification::send($entity->operators, new EntityDeletedFromHfd($entity));
+                                Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityDeletedFromHfd($entity));
+                            }
                         },
                     ])->dispatch();
                 }

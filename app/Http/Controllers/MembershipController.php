@@ -50,8 +50,10 @@ class MembershipController extends Controller
                 $admins = User::activeAdmins()->select('id', 'email')->get();
                 Notification::send($membership->entity->operators, new MembershipAccepted($membership));
                 Notification::send($admins, new MembershipAccepted($membership));
-                Notification::send($membership->entity->operators, new EntityAddedToHfd($membership->entity));
-                Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToHfd($membership->entity));
+                if ($membership->entity->hfd) {
+                    Notification::send($membership->entity->operators, new EntityAddedToHfd($membership->entity));
+                    Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToHfd($membership->entity));
+                }
             },
         ])->dispatch();
 
