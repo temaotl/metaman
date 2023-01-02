@@ -286,6 +286,10 @@ class EntityController extends Controller
                             'metadata' => $updated_entity['metadata'],
                         ]);
 
+                        if ($entity->type->value === 'idp') {
+                            $entity->update(['rs' => $updated_entity['rs']]);
+                        }
+
                         if (! $entity->wasChanged()) {
                             return redirect()
                                 ->back()
