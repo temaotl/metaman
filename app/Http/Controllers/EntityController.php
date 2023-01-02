@@ -828,10 +828,15 @@ class EntityController extends Controller
 
             $metadata = Storage::get($xmlfile);
             $refreshed_entity = json_decode($this->parseMetadata($metadata), true);
+            $updated_rs = $refreshed_entity['rs'];
             unset($refreshed_entity['rs']);
 
             $entity = Entity::whereFile($xmlfile)->first();
             $entity->update($refreshed_entity);
+
+            if ($entity->type->value === 'idp') {
+                $entity->update(['rs' => $updated_rs]);
+            }
 
             $edugain = Storage::get(config('git.edugain_tag'));
             $pattern = preg_quote($refreshed_entity['entityid'], '/');
