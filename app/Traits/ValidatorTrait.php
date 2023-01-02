@@ -334,7 +334,7 @@ trait ValidatorTrait
     public function checkURLaddress(object $element): string
     {
         foreach ($element as $e) {
-            @$file = file_get_contents($e->nodeValue);
+            @$file = file_get_contents(trim($e->nodeValue));
 
             if (@$http_response_header === null) {
                 return $e->nodeValue.' from '.$e->parentNode->nodeName.'/'.$e->nodeName.'[@xml:lang="'.$e->getAttribute('xml:lang').'"] could not be read, check www.ssllabs.com for possible SSL errors. ';
