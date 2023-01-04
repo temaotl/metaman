@@ -13,14 +13,14 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/tinker": "^2.7",
-        "larswiegers/laravel-translations-checker": "^0.2.0",
+        "larswiegers/laravel-translations-checker": "^0.3",
         "livewire/livewire": "^2.10"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
         "brianium/paratest": "^6.2",
         "fakerphp/faker": "^1.9.1",
-        "laravel/dusk": "^6.15",
+        "laravel/dusk": "^7.3",
         "laravel/pint": "^1.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
