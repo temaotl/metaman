@@ -933,16 +933,11 @@ class EntityController extends Controller
             abort(500);
         }
 
-        // FIXME
-        // EduidczOrganization::create([
-        $o = new EduidczOrganization([
+        $eduidczOrganization = EduidczOrganization::create([
             'dc' => now()->timestamp,
             'oPointer' => $organization->getDn(),
             'entityIDofIdP' => $entity->entityid,
         ]);
-
-        // FIXME
-        dd("Assign IdP ({$entity->entityid}) to {$organization->getDn()}", $o);
 
         return to_route('entities.show', $entity)
             ->with('status', __('entities.organization_assigned'));
