@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AssignOrganization;
 use App\Http\Requests\JoinFederation;
 use App\Http\Requests\StoreEntity;
 use App\Jobs\GitAddEntity;
@@ -19,6 +20,8 @@ use App\Jobs\GitDeleteFromRs;
 use App\Jobs\GitRestoreToCategory;
 use App\Jobs\GitRestoreToEdugain;
 use App\Jobs\GitUpdateEntity;
+use App\Ldap\CesnetOrganization;
+use App\Ldap\EduidczOrganization;
 use App\Mail\AskRs;
 use App\Models\Category;
 use App\Models\Entity;
@@ -173,9 +176,20 @@ class EntityController extends Controller
     {
         $this->authorize('view', $entity);
 
+        if (! app()->environment('testing')) {
+            if ($entity->type->value === 'idp' && ! $entity->hfd) {
+                $eduidczOrganization = EduidczOrganization::whereEntityIDofIdP($entity->entityid)->first();
+                $cesnetOrganization = CesnetOrganization::find($eduidczOrganization?->getFirstAttribute('oPointer'));
+                $cesnetOrganizations = is_null($cesnetOrganization) ? CesnetOrganization::select('o')->get() : null;
+            }
+        }
+
         return view('entities.show', [
             'entity' => $entity,
             'categories' => Category::orderBy('name')->get(),
+            'eduidczOrganization' => $eduidczOrganization ?? null,
+            'cesnetOrganization' => $cesnetOrganization ?? null,
+            'cesnetOrganizations' => $cesnetOrganizations ?? null,
         ]);
     }
 
@@ -905,5 +919,32 @@ class EntityController extends Controller
         $this->authorize('view', $entity);
 
         return response()->file(Storage::path($entity->file));
+    }
+
+    public function organization(Entity $entity, AssignOrganization $request)
+    {
+        $this->authorize('do-everything');
+
+        abort_if($entity->type->value !== 'idp', 500);
+
+        try {
+            $organization = CesnetOrganization::select('dn')->whereDc($request->organization)->firstOrFail();
+        } catch (\LdapRecord\Models\ModelNotFoundException) {
+            abort(500);
+        }
+
+        // FIXME
+        // EduidczOrganization::create([
+        $o = new EduidczOrganization([
+            'dc' => now()->timestamp,
+            'oPointer' => $organization->getDn(),
+            'entityIDofIdP' => $entity->entityid,
+        ]);
+
+        // FIXME
+        dd("Assign IdP ({$entity->entityid}) to {$organization->getDn()}", $o);
+
+        return to_route('entities.show', $entity)
+            ->with('status', __('entities.organization_assigned'));
     }
 }
