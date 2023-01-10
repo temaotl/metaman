@@ -657,8 +657,15 @@ class EntityController extends Controller
         $this->authorize('forceDelete', $entity);
 
         $locale = app()->getLocale();
-
         $name = $entity->{"name_$locale"} ?? $entity->entityid;
+
+        if (! app()->environment('testing')) {
+            if ($entity->type->value === 'idp' && ! $entity->hfd) {
+                $eduidczOrganization = EduidczOrganization::whereEntityIDofIdP($entity->entityid)->first();
+                $eduidczOrganization->delete();
+            }
+        }
+
         $entity->forceDelete();
 
         $admins = User::activeAdmins()->select('id', 'email')->get();
