@@ -940,18 +940,10 @@ class EntityController extends Controller
             abort(500);
         }
 
-        $dom = new \DOMDocument();
-        $dom->loadXML($entity->metadata);
-        $xpath = new \DOMXPath($dom);
-        $xpath->registerNameSpace('md', 'urn:oasis:names:tc:SAML:2.0:metadata');
-        $xpath->registerNameSpace('shibmd', 'urn:mace:shibboleth:metadata:1.0');
-        $scope = $xpath->query('/md:EntityDescriptor/md:IDPSSODescriptor/md:Extensions/shibmd:Scope')->item(0)->nodeValue;
-
         $eduidczOrganization = EduidczOrganization::create([
             'dc' => now()->timestamp,
             'oPointer' => $organization->getDn(),
             'entityIDofIdP' => $entity->entityid,
-            'eduIDczScope' => $scope,
         ]);
 
         abort_if(is_null($eduidczOrganization), 500);
