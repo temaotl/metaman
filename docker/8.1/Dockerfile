@@ -53,7 +53,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ldap-server.crt /etc/ssl/certs/ca-certificates.crt
 COPY php.ini /etc/php/8.1/cli/conf.d/99-sail.ini
 RUN mkdir /home/sail/.ssh
-COPY id_ed25519 id_ed25519.pub /home/sail/.ssh/
+COPY id_ed25519 id_ed25519.pub known_hosts /home/sail/.ssh/
 RUN chown -R sail /home/sail/.ssh \
     && chmod go= /home/sail/.ssh/id_ed25519*
 RUN chmod +x /usr/local/bin/start-container
