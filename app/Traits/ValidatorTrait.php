@@ -739,6 +739,21 @@ trait ValidatorTrait
         }
     }
 
+    public function checkServiceProviderRequestedAttributeNameValueDuplicity(object $xpath): void
+    {
+        if ($this->isIDP($xpath)) {
+            return;
+        }
+
+        foreach ($xpath->query('/md:EntityDescriptor/md:SPSSODescriptor/md:AttributeConsumingService/md:RequestedAttribute') as $attribute) {
+            $values[] = $attribute->getAttribute('Name');
+        }
+
+        if ($duplicates = array_diff_key($values, array_unique($values))) {
+            $this->error .= 'Duplicated RequestedAttribute element definitions: '.implode(', ', $duplicates);
+        }
+    }
+
     public function generateResult(): void
     {
         if (empty($this->error)) {
@@ -768,6 +783,7 @@ trait ValidatorTrait
             $this->checkContactPerson($xpath);
             $this->checkEC($xpath);
             $this->checkOneEntityAttributesElementPerExtensions($xpath);
+            $this->checkServiceProviderRequestedAttributeNameValueDuplicity($xpath);
 
             $this->generateResult();
         }
