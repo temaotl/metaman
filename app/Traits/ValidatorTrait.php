@@ -745,6 +745,7 @@ trait ValidatorTrait
             return;
         }
 
+        $values = [];
         foreach ($xpath->query('/md:EntityDescriptor/md:SPSSODescriptor/md:AttributeConsumingService/md:RequestedAttribute') as $attribute) {
             $values[] = $attribute->getAttribute('Name');
         }
