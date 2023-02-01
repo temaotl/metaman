@@ -23,6 +23,7 @@ use App\Jobs\GitUpdateEntity;
 use App\Ldap\CesnetOrganization;
 use App\Ldap\EduidczOrganization;
 use App\Mail\AskRs;
+use App\Mail\NewIdentityProvider;
 use App\Models\Category;
 use App\Models\Entity;
 use App\Models\Federation;
@@ -580,6 +581,7 @@ class EntityController extends Controller
                     Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityAddedToHfd($entity));
                 } else {
                     GitDeleteFromHfd::dispatch($entity, Auth::user());
+                    Mail::to(config('mail.ra.address'))->send(new NewIdentityProvider($entity));
                     Notification::send($entity->operators, new EntityDeletedFromHfd($entity));
                     Notification::send(User::activeAdmins()->select('id', 'email')->get(), new EntityDeletedFromHfd($entity));
                 }

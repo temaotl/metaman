@@ -98,6 +98,10 @@ return [
         'address' => env('MAIL_ADMIN_ADDRESS', 'admin@example.com'),
     ],
 
+    'ra' => [
+        'address' => env('MAIL_RA_ADDRESS', 'ra@example.com'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Markdown Mail Settings
