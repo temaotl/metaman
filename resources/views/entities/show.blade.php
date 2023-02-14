@@ -143,11 +143,13 @@
         </div>
         <div class="px-6 py-3 bg-gray-100">
             <x-buttons.back href="{{ route('entities.index') }}" />
-            <a class="hover:bg-blue-700 text-blue-50 inline-block px-4 py-2 bg-blue-600 rounded shadow"
-                href="{{ route('entities.metadata', $entity) }}">{{ __('entities.get_metadata') }}</a>
-            <a class="hover:bg-blue-700 text-blue-50 inline-block px-4 py-2 bg-blue-600 rounded shadow"
-                href="{{ route('entities.showmetadata', $entity) }}"
-                target="_blank">{{ __('entities.show_metadata') }}</a>
+            @if ($entity->approved)
+                <a class="hover:bg-blue-700 text-blue-50 inline-block px-4 py-2 bg-blue-600 rounded shadow"
+                    href="{{ route('entities.metadata', $entity) }}">{{ __('entities.get_metadata') }}</a>
+                <a class="hover:bg-blue-700 text-blue-50 inline-block px-4 py-2 bg-blue-600 rounded shadow"
+                    href="{{ route('entities.showmetadata', $entity) }}"
+                    target="_blank">{{ __('entities.show_metadata') }}</a>
+            @endif
 
             @can('update', $entity)
                 @unless($entity->trashed())

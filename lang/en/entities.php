@@ -69,4 +69,5 @@ return [
     'update' => 'Update entity',
     'url_placeholder' => "Enter entity's metadata URL",
     'organization_assigned' => 'Organization has been successfully assigned.',
+    'not_yet_approved' => "This entity isn't approved, yet, thus the request cannot be completed.",
 ];

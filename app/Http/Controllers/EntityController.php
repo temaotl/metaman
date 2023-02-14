@@ -920,12 +920,24 @@ class EntityController extends Controller
     {
         $this->authorize('view', $entity);
 
+        if (! $entity->approved) {
+            return to_route('entities.show', $entity)
+                ->with('status', __('entities.not_yet_approved'))
+                ->with('color', 'red');
+        }
+
         return Storage::download($entity->file);
     }
 
     public function showmetadata(Entity $entity)
     {
         $this->authorize('view', $entity);
+
+        if (! $entity->approved) {
+            return to_route('entities.show', $entity)
+                ->with('status', __('entities.not_yet_approved'))
+                ->with('color', 'red');
+        }
 
         return response()->file(Storage::path($entity->file));
     }
