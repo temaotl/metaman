@@ -242,7 +242,7 @@ trait ValidatorTrait
         if ($this->isIDP($xpath)) {
             $SSODescriptor = 'md:IDPSSODescriptor';
         } else {
-            $SSODescriptor = 'md:IDPSSODescriptor';
+            $SSODescriptor = 'md:SPSSODescriptor';
         }
 
         // /md:EntityDescriptor[@entityID]
