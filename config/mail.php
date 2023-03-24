@@ -43,7 +43,6 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'auth_mode' => null,
-            'verify_peer' => false,
         ],
 
         'ses' => [
