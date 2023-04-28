@@ -13,6 +13,7 @@
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
+envoy
 npm-debug.log
 yarn-error.log
 /docker/8.1/id_ed25519*
