@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryManagementController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EduidczStatisticController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\EntityFederationController;
 use App\Http\Controllers\EntityManagementController;
@@ -111,6 +112,8 @@ Route::resource('groups', GroupController::class);
 Route::resource('users', UserController::class)->except('edit', 'destroy');
 
 Route::resource('memberships', MembershipController::class)->only('update', 'destroy');
+
+Route::get('statistics', EduidczStatisticController::class);
 
 Route::get('login', [ShibbolethController::class, 'create'])->name('login')->middleware('guest');
 Route::get('auth', [ShibbolethController::class, 'store'])->middleware('guest');
