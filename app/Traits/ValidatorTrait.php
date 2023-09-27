@@ -610,20 +610,10 @@ trait ValidatorTrait
 
             if ($OrganizationURL_CS->length === 0) {
                 $this->error .= 'Organization/OrganizationURL[@xml:lang="cs"] missing. ';
-            } else {
-                $r = $this->checkURLaddress($OrganizationURL_CS);
-                if ($r) {
-                    $this->error .= $r;
-                }
             }
 
             if ($OrganizationURL_EN->length === 0) {
                 $this->error .= 'Organization/OrganizationURL[@xml:lang="cs"] missing. ';
-            } else {
-                $r = $this->checkURLaddress($OrganizationURL_EN);
-                if ($r) {
-                    $this->error .= $r;
-                }
             }
         }
     }
