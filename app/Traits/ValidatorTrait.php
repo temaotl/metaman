@@ -489,9 +489,14 @@ trait ValidatorTrait
                 $this->error .= 'The certificate(s) must be valid at least for '.$CRT_VALIDITY.' days, yours certificate #'.($i + 1).' is valid for '.$cert_validFor.' days. ';
             }
 
-            $CRT_KEY_SIZE = 2048;
-            if ($pub_key['bits'] < $CRT_KEY_SIZE) {
-                $this->error .= 'The public key(s) must be at least '.$CRT_KEY_SIZE.' bits, yours public key for certificate #'.($i + 1).' is '.$pub_key['bits'].' bits. ';
+            $CRT_KEY_SIZE_RSA = 2048;
+            if (array_key_exists('rsa', $pub_key) && $pub_key['bits'] < $CRT_KEY_SIZE_RSA) {
+                $this->error .= 'The RSA public key(s) must be at least '.$CRT_KEY_SIZE_RSA.' bits, yours RSA public key for certificate #'.($i + 1).' is '.$pub_key['bits'].' bits. ';
+            }
+
+            $CRT_KEY_SIZE_EC = 384;
+            if (array_key_exists('ec', $pub_key) && $pub_key['bits'] < $CRT_KEY_SIZE_EC) {
+                $this->error .= 'The EC public key(s) must be at least '.$CRT_KEY_SIZE_EC.' bits, yours EC public key for certificate #'.($i + 1).' is '.$pub_key['bits'].' bits. ';
             }
 
             $i++;
