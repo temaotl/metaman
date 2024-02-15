@@ -20,7 +20,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Install Dependencies
@@ -29,8 +29,6 @@ jobs:
         run: php artisan key:generate
       - name: Run translations check
         run: php artisan translations:check --excludedDirectories=vendor
-      - name: Run Envy sync
-        run: php artisan envy:sync --dry
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
       - name: Create Database
