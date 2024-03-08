@@ -3,25 +3,30 @@
 @section('form_action',route('federations.import'))
 
 
+@php
+    $headers = [
+        'common.description',
+        'federations.xml_id',
+        'federations.xml_name',
+        'federations.filters',
+    ];
+
+    $field =[
+        ''
+    ];
+
+
+@endphp
+
 
 @section('specific_head_fields')
 
-    <th
-        class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
-        {{ __('common.description') }}
-    </th>
-    <th
-        class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
-        {{ __('federations.xml_id') }}
-    </th>
-    <th
-        class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
-        {{ __('federations.xml_name') }}
-    </th>
-    <th
-        class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
-        {{ __('federations.filters') }}
-    </th>
+    @foreach ($headers as $header)
+        <x-table-head-import>
+            {{ __($header) }}
+        </x-table-head-import>
+    @endforeach
+
 @endsection
 
 @section('specific_fields')
@@ -32,21 +37,27 @@
                 <input @click.stop class="rounded" type="checkbox" name="federations[]"
                        value="{{ $federation['cfgfile'] }}" x-bind:checked="selectAll">
             </td>
-            <td class="px-6 py-3 text-sm">
+
+            <x-table-body-import>
                 <input class="rounded" type="text" name="names[{{ $federation['cfgfile'] }}]">
-            </td>
-            <td class="px-6 py-3 text-sm">
+            </x-table-body-import>
+
+            <x-table-body-import>
                 <input class="rounded" type="text" name="descriptions[{{ $federation['cfgfile'] }}]">
-            </td>
-            <td class="px-6 py-3 text-sm">
+            </x-table-body-import>
+
+            <x-table-body-import>
                 {{ $federation['xml_id'] }}
-            </td>
-            <td class="px-6 py-3 text-sm">
+            </x-table-body-import>
+
+            <x-table-body-import>
                 {{ $federation['name'] }}
-            </td>
-            <td class="px-6 py-3 text-sm">
+            </x-table-body-import>
+
+            <x-table-body-import>
                 {{ $federation['filters'] }}
-            </td>
+            </x-table-body-import>
+
         </tr>
     @endforeach
 @endsection
