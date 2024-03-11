@@ -7,7 +7,7 @@
 {{--Add all cells in table --}}
 @php
 //
-    $headers = [
+    $cells = [
         'common.name',
         'common.description',
         'federations.xml_id',

@@ -15,10 +15,10 @@
                         <input class="rounded" type="checkbox" @click="selectAll = !selectAll">
                     </label>
                 </x-form-table.head-cell>
-                @isset($headers)
-                    @foreach($headers as $header)
+                @isset($cells)
+                    @foreach($cells as $cell)
                         <x-form-table.head-cell>
-                            {{  __($header)}}
+                            {{  __($cell)}}
                         </x-form-table.head-cell>
                     @endforeach
                 @endisset

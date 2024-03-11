@@ -4,34 +4,39 @@
 
 
 
-@section('specific_head_fields')
+@php
 
-    <th
-        class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
-        {{ __('common.entityid') }}
-    </th>
-    <th
-        class="dark:bg-gray-700 px-6 py-3 text-xs tracking-widest text-left uppercase bg-gray-100 border-b">
-        {{ __('common.federations') }}
-    </th>
-
-@endsection
+    $cells = [
+        'common.name',
+        'common.entityid',
+        'common.federations',
+    ];
+@endphp
 
 @section('specific_fields')
 
     @forelse ($entities as $entity)
-        <tr class="hover:bg-blue-50 dark:hover:bg-gray-700" role="button">
-            <td class="px-6 py-3 text-sm">
-                <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity['file'] }}"
-                       x-bind:checked="selectAll">
-            </td>
-            <td class="px-6 py-3 text-sm">
+
+        <x-form-table.row>
+
+
+            <x-form-table.body-cell>
+                <label>
+                    <input class="rounded" type="checkbox" name="entities[]" value="{{ $entity['file'] }}"
+                           x-bind:checked="selectAll">
+                </label>
+            </x-form-table.body-cell>
+
+
+            <x-form-table.body-cell>
                 {{ $entity["name_$locale"] }}
-            </td>
-            <td class="px-6 py-3 text-sm">
+            </x-form-table.body-cell>
+
+            <x-form-table.body-cell>
                 {{ $entity['entityid'] }}
-            </td>
-            <td class="px-6 py-3 text-sm">
+            </x-form-table.body-cell>
+
+            <x-form-table.body-cell>
                 @if (isset($entity['federations']))
                     @foreach ($entity['federations'] as $federation)
                         {{ $federation }}@if (!$loop->last)
@@ -40,8 +45,13 @@
                     @endforeach
                 @else
                 @endif
-            </td>
-        </tr>
+            </x-form-table.body-cell>
+
+
+
+        </x-form-table.row>
+
+
     @empty
 
     @endforelse
