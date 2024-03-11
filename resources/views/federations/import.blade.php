@@ -6,7 +6,6 @@
 
 {{--Add all cells in table --}}
 @php
-//
     $cells = [
         'common.name',
         'common.description',
