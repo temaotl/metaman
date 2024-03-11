@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\FormTable;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class TableBodyImport extends Component
+class HeadCell extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class TableBodyImport extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.table-body-import');
+        return view('components.form-table.head-cell');
     }
 }

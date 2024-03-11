@@ -10,59 +10,64 @@
         'federations.xml_name',
         'federations.filters',
     ];
-
-    $field =[
-        ''
-    ];
-
-
 @endphp
 
 
 @section('specific_head_fields')
 
     @foreach ($headers as $header)
-        <x-table-head-import>
+
+        <x-form-table.head-cell>
             {{ __($header) }}
-        </x-table-head-import>
+        </x-form-table.head-cell>
+
     @endforeach
 
 @endsection
 
 @section('specific_fields')
     @foreach ($federations as $federation)
-        <tr x-data class="hover:bg-blue-50 dark:hover:bg-gray-700" role="button"
-            @click="checkbox = $el.querySelector('input[type=checkbox]'); checkbox.checked = !checkbox.checked">
-            <td class="px-6 py-3 text-sm">
+        <x-form-table.row>
+
+            <x-form-table.body-cell>
                 <input @click.stop class="rounded" type="checkbox" name="federations[]"
                        value="{{ $federation['cfgfile'] }}" x-bind:checked="selectAll">
-            </td>
+            </x-form-table.body-cell>
 
-            <x-table-body-import>
+            <x-form-table.body-cell>
                 <input class="rounded" type="text" name="names[{{ $federation['cfgfile'] }}]">
-            </x-table-body-import>
+            </x-form-table.body-cell>
 
-            <x-table-body-import>
+            <x-form-table.body-cell>
                 <input class="rounded" type="text" name="descriptions[{{ $federation['cfgfile'] }}]">
-            </x-table-body-import>
+            </x-form-table.body-cell>
 
-            <x-table-body-import>
+            <x-form-table.body-cell>
                 {{ $federation['xml_id'] }}
-            </x-table-body-import>
+            </x-form-table.body-cell>
 
-            <x-table-body-import>
+            <x-form-table.body-cell>
                 {{ $federation['name'] }}
-            </x-table-body-import>
+            </x-form-table.body-cell>
 
-            <x-table-body-import>
+            <x-form-table.body-cell>
                 {{ $federation['filters'] }}
-            </x-table-body-import>
+            </x-form-table.body-cell>
 
-        </tr>
+
+        </x-form-table.row>
+
+
+
+
+
     @endforeach
 @endsection
 
 @section('submit_button')
     <x-button>{{ __('federations.import') }}</x-button>
 @endsection
+
+
+
 
