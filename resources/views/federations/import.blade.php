@@ -3,8 +3,12 @@
 @section('form_action',route('federations.import'))
 
 
+
+{{--Add all cells in table --}}
 @php
+//
     $headers = [
+        'common.name',
         'common.description',
         'federations.xml_id',
         'federations.xml_name',
@@ -12,34 +16,27 @@
     ];
 @endphp
 
-
-@section('specific_head_fields')
-
-    @foreach ($headers as $header)
-
-        <x-form-table.head-cell>
-            {{ __($header) }}
-        </x-form-table.head-cell>
-
-    @endforeach
-
-@endsection
-
 @section('specific_fields')
     @foreach ($federations as $federation)
         <x-form-table.row>
 
             <x-form-table.body-cell>
-                <input @click.stop class="rounded" type="checkbox" name="federations[]"
-                       value="{{ $federation['cfgfile'] }}" x-bind:checked="selectAll">
+                <label>
+                    <input @click.stop class="rounded" type="checkbox" name="federations[]"
+                           value="{{ $federation['cfgfile'] }}" x-bind:checked="selectAll">
+                </label>
             </x-form-table.body-cell>
 
             <x-form-table.body-cell>
-                <input class="rounded" type="text" name="names[{{ $federation['cfgfile'] }}]">
+                <label>
+                    <input class="rounded" type="text" name="names[{{ $federation['cfgfile'] }}]">
+                </label>
             </x-form-table.body-cell>
 
             <x-form-table.body-cell>
-                <input class="rounded" type="text" name="descriptions[{{ $federation['cfgfile'] }}]">
+                <label>
+                    <input class="rounded" type="text" name="descriptions[{{ $federation['cfgfile'] }}]">
+                </label>
             </x-form-table.body-cell>
 
             <x-form-table.body-cell>
@@ -53,7 +50,6 @@
             <x-form-table.body-cell>
                 {{ $federation['filters'] }}
             </x-form-table.body-cell>
-
 
         </x-form-table.row>
 
