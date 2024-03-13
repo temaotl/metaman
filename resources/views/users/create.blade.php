@@ -12,18 +12,12 @@
         name="common.full_name"
         label="name"
     >
-        <input
-            @class([
-                'text-sm','dark:bg-transparent','focus:ring-blue-500','focus:border-blue-500', 'block','w-full',
-                'shadow-sm','border-gray-300','dark:border-gray-700','rounded-md',
-                'border-red-500 border' => $errors->has('name'),
-                'border-green-500' => !$errors->has('name') && old('name') !== null,
-            ])
+        <x-forms.create.create-form-input err="name">
             type="text" name="name" id="name" maxlength="32"
             placeholder="{{ __('users.name_placeholder') }}"
             value="{{ old('name') }}"
             required
-        />
+        </x-forms.create.create-form-input>
 
     </x-forms.create.create-form-field>
 
@@ -31,17 +25,12 @@
         name="common.uniqueid_attribute"
         label="uniqueid"
     >
-        <input
-            @class([
-                'text-sm dark:bg-transparent focus:ring-blue-500',
-                'focus:border-blue-500 block w-full shadow-sm border-gray-300 dark:border-gray-700 rounded-md',
-                'border-red-500 border' =>  $errors->has('uniqueid'),
-                'border-green-500' =>  !$errors->has('uniqueid') && old('uniqueid') !== null
-                ])
+
+        <x-forms.create.create-form-input err="uniqueid">
             type="email" name="uniqueid" id="uniqueid" maxlength="255"
             placeholder="{{ __('users.uniqueid_placeholder') }}" value="{{ old('uniqueid') }}"
             required
-        />
+        </x-forms.create.create-form-input>
 
     </x-forms.create.create-form-field>
 
@@ -50,16 +39,10 @@
         name="common.email_address"
         label="email"
     >
-        <input
-            @class([
-                'text-sm dark:bg-transparent focus:ring-blue-500',
-                'focus:border-blue-500 block w-full shadow-sm border-gray-300 dark:border-gray-700 rounded-md',
-                'border-red-500 border' =>  $errors->has('email'),
-                'border-green-500' =>  !$errors->has('email') && old('email') !== null
-                ])
+        <x-forms.create.create-form-input err="email">
             type="email" name="email" id="email" maxlength="255"
             placeholder="{{ __('users.email_placeholder') }}" value="{{ old('email') }}" required
-        />
+        </x-forms.create.create-form-input>
 
     </x-forms.create.create-form-field>
 

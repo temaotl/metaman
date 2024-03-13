@@ -12,9 +12,10 @@
         name="entities.metadata_file"
         label="file"
     >
-        <input
-            class="focus:ring-blue-500 focus:border-blue-500 block w-full text-sm border-gray-300 rounded-md shadow-sm"
-            type="file" name="file" id="file">
+        <x-forms.create.create-form-input err="file">
+            type="file" name="file" id="file"
+        </x-forms.create.create-form-input>
+
     </x-forms.create.create-form-field>
 
     <x-forms.create.create-form-field
