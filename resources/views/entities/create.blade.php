@@ -22,9 +22,6 @@
         label="metadata"
     >
 
-        {{--            <textarea class="text-sm @error('metadata') border @else @if (old('metadata') !== null) border-green-500 @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm rounded-md"
-                      name="metadata" id="metadata" rows="10"
-                      placeholder="{{ __('entities.metadata_placeholder') }}">{{ old('metadata') }}</textarea>--}}
         <textarea @class([
                          'text-sm focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm rounded-md',
                          'border' => $errors->has('metadata'),
@@ -41,17 +38,6 @@
         name="entities.federation"
         label="federation"
     >
-
-        {{--            <select
-                class="text-sm @error('federation') border-red-500 border @else @if (old('federation') !== null) @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm rounded-md"
-                name="federation" id="federation" required>
-                <option value="">{{ __('entities.choose_federation') }}</option>
-                @foreach ($federations as $federation)
-                    <option value="{{ $federation->id }}"
-                        {{ old('federation') == $federation->id ? 'selected' : '' }}>
-                        {{ $federation->name }}</option>
-                @endforeach
-            </select>--}}
 
         <select @class([
                             'text-sm focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm rounded-md',
@@ -74,11 +60,6 @@
         name="common.explanation"
         label="explanation"
     >
-        {{--            <textarea class="text-sm @error('explanation') border-red-500 border @else @if (old('explanation') !== null) @endif @enderror focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm rounded-md"
-                      name="explanation" id="explanation" rows="3" maxlength="255"
-                      placeholder="{{ __('entities.explanation_placeholder') }}"
-                      required>{{ old('explanation') }}</textarea>--}}
-
         <textarea @class([
                                      'text-sm focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm rounded-md',
                                      'border-red-500 border' => $errors->has('explanation'),
