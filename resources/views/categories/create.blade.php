@@ -40,8 +40,7 @@
             type="text" name="description" id="description" maxlength="255"
             placeholder="{{ __('categories.description_placeholder') }}"
             value="{{ old('description') }}" required
-
-            />
+        />
 
     </x-forms.create.create-form-field>
 @endsection
