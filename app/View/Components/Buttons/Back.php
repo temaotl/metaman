@@ -11,7 +11,8 @@ class Back extends Component
      *
      * @return void
      */
-    public function __construct(public $href)
+
+    public function __construct()
     {
     }
 

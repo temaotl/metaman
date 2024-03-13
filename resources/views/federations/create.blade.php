@@ -1,7 +1,6 @@
 @extends('layouts.defaultCreate')
 @section('title', __('federations.add'))
 @section('form_action', route('federations.store'))
-@section('back_button', route('federations.index'))
 @section('submit_button',__('federations.add'))
 @section('profile',__('federations.profile'))
 

@@ -1,7 +1,6 @@
 @extends('layouts.defaultCreate')
 @section('title', __('users.add'))
 @section('form_action',route('users.store'))
-@section('back_button',route('users.index'))
 @section('submit_button',__('users.add'))
 @section('profile', __('users.profile'))
 

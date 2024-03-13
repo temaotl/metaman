@@ -1,7 +1,6 @@
 @extends('layouts.defaultCreate')
 @section('title', __('groups.add'))
 @section('form_action',route('groups.store'))
-@section('back_button',route('groups.index'))
 @section('submit_button',__('groups.add'))
 @section('profile', __('groups.profile'))
 

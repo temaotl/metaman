@@ -19,7 +19,7 @@
             </div>
 
             <div class="dark:bg-transparent px-4 py-4 bg-gray-100">
-                <x-buttons.back href=" @yield('back_button')" />
+                <x-buttons.back/>
                 <x-button> @yield('submit_button')</x-button>
             </div>
 

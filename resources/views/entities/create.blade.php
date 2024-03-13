@@ -1,7 +1,6 @@
 @extends('layouts.defaultCreate')
 @section('title', __('entities.add'))
 @section('form_action',route('entities.store'))
-@section('back_button',route('entities.index'))
 @section('submit_button',__('entities.add'))
 @section('form_enctype',"multipart/form-data")
 @section('profile',__('entities.profile'))
