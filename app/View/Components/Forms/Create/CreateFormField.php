@@ -11,9 +11,14 @@ class CreateFormField extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+
+    public $name;
+    public $label;
+
+    public function __construct($name,$label)
     {
-        //
+        $this->name = $name;
+        $this->label = $label;
     }
 
     /**
