@@ -1,20 +1,18 @@
 <?php
 
-namespace App\View\Components\Forms\Create;
+namespace App\View\Components\Forms\Section;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class CreateFormField extends Component
+class formBodySection extends Component
 {
     /**
      * Create a new component instance.
      */
-
     public $name;
     public $label;
-
     public function __construct($name,$label)
     {
         $this->name = $name;
@@ -26,6 +24,6 @@ class CreateFormField extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.forms.create.create-form-field');
+        return view('components.forms.section.form-body-section');
     }
 }

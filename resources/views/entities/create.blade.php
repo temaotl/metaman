@@ -7,17 +7,17 @@
 
 @section('specific_fields')
 
-    <x-forms.create.create-form-field
+    <x-forms.section.form-body-section
         name="entities.metadata_file"
         label="file"
     >
-        <x-forms.create.create-form-input err="file">
+        <x-forms.element.input err="file">
             type="file" name="file" id="file"
-        </x-forms.create.create-form-input>
+        </x-forms.element.input>
 
-    </x-forms.create.create-form-field>
+    </x-forms.section.form-body-section>
 
-    <x-forms.create.create-form-field
+    <x-forms.section.form-body-section
         name="common.metadata"
         label="metadata"
     >
@@ -31,10 +31,10 @@
                   placeholder="{{ __('entities.metadata_placeholder') }}">{{ old('metadata') }}
             </textarea>
 
-    </x-forms.create.create-form-field>
+    </x-forms.section.form-body-section>
 
 
-    <x-forms.create.create-form-field
+    <x-forms.section.form-body-section
         name="entities.federation"
         label="federation"
     >
@@ -53,10 +53,10 @@
         </select>
 
 
-    </x-forms.create.create-form-field>
+    </x-forms.section.form-body-section>
 
 
-    <x-forms.create.create-form-field
+    <x-forms.section.form-body-section
         name="common.explanation"
         label="explanation"
     >
@@ -71,7 +71,7 @@
                         </textarea>
 
 
-    </x-forms.create.create-form-field>
+    </x-forms.section.form-body-section>
 
 @endsection
 
