@@ -3,6 +3,7 @@
 @section('content')
     <form method="POST" action="@yield('form_action')" enctype="@yield('form_enctype')">
         @csrf
+        @yield('form_method')
         <div class="sm:rounded-lg mb-6 overflow-hidden bg-white shadow">
 
             <div class="sm:px-6 px-4 py-5">
