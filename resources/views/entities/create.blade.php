@@ -21,15 +21,10 @@
         name="common.metadata"
         label="metadata"
     >
-
-        <textarea @class([
-                         'text-sm focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm rounded-md',
-                         'border' => $errors->has('metadata'),
-                         'border-green-500' => old('metadata') !== null && !$errors->has('metadata'),
-                         ])
-                  name="metadata" id="metadata" rows="10"
-                  placeholder="{{ __('entities.metadata_placeholder') }}">{{ old('metadata') }}
-            </textarea>
+        <x-forms.element.textarea err="metadata">
+            name="metadata" id="metadata" rows="10"
+            placeholder="{{ __('entities.metadata_placeholder') }}"
+        </x-forms.element.textarea>
 
     </x-forms.section.form-body-section>
 
@@ -60,16 +55,11 @@
         name="common.explanation"
         label="explanation"
     >
-        <textarea @class([
-                                     'text-sm focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm rounded-md',
-                                     'border-red-500 border' => $errors->has('explanation'),
-                                     'border-green-500' => !$errors->has('explanation') && old('explanation') !== null,
-                                     ])
-                  name="explanation" id="explanation" rows="3" maxlength="255"
-                  placeholder="{{ __('entities.explanation_placeholder') }}"
-                  required>{{ old('explanation') }}
-                        </textarea>
-
+        <x-forms.element.textarea err="explanation">
+            name="explanation" id="explanation" rows="3" maxlength="255"
+            placeholder="{{ __('entities.explanation_placeholder') }}"
+            required
+        </x-forms.element.textarea>
 
     </x-forms.section.form-body-section>
 

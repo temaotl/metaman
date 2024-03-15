@@ -35,14 +35,11 @@
         name="common.explanation"
         label="explanation"
     >
-
-        <textarea @class([
-    'text-sm dark:bg-transparent focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm border-gray-300 dark:border-gray-700 rounded-md',
-    'border-red-500 border' => $errors->has('explanation'),
-    'border-green-500' => !$errors->has('explanation') && old('explanation') !== null,
-    ]) name="explanation" id="explanation" rows="3" maxlength="255"
-                  placeholder="{{ __('federations.explanation_placeholder') }}"
-                  required>{{ old('explanation') }}</textarea>
+        <x-forms.element.textarea err="metadata">
+            name="explanation" id="explanation" rows="3" maxlength="255"
+            placeholder="{{ __('federations.explanation_placeholder') }}"
+            required
+        </x-forms.element.textarea>
 
     </x-forms.section.form-body-section>
 
