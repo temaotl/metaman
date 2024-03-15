@@ -6,10 +6,8 @@
         </label>
     </dt>
     <dd class="sm:col-span-2">
-        {!! $errors->first( "$label" , '<div class="float-right text-sm font-semibold text-red-600">:message</div>') !!}
+        {!! $errors->first( "$err" , '<div class="float-right text-sm font-semibold text-red-600">:message</div>') !!}
 
         {{ $slot  }}
     </dd>
-
-
 </div>

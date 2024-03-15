@@ -23,6 +23,7 @@ class Textarea extends Component
         {
             $this->content = $content;
         }
+        $this->err = $err;
 
     }
 
