@@ -6,7 +6,6 @@
 
     <h3 class="text-lg font-semibold">@yield('profile')</h3>
     <div class="dark:bg-gray-800 sm:rounded-lg mb-6 overflow-hidden bg-white shadow">
-
         <div>
             <dl>
 
@@ -14,7 +13,8 @@
                     <dt class="text-sm text-gray-500">{{ __('common.name') }}</dt>
                     <dd class="sm:col-span-2">
                         <span class="pr-4"> @yield('name') </span>
-                        @yield('model')
+                        <span class="pr-4"> @yield('model') </span>
+
                     </dd>
                 </div>
                 @yield('specific_fields')
