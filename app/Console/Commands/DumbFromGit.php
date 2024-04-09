@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\ValidatorTrait;
+use function Symfony\Component\String\b;
 
 class DumbFromGit extends Command
 {
@@ -80,6 +81,41 @@ class DumbFromGit extends Command
             });
         }
     }
+
+
+    private function deleteCategoryTag(string $metadata): string
+    {
+        $dom = $this->createDOM($metadata);
+
+        $xPath = $this->createXPath($dom);
+        // TODO:  delete only our links
+        $tags = $xPath->query('//saml:Attribute');
+
+        foreach ($tags as $tag) {
+            $parent = $tag->parentNode;
+
+            $tag->parentNode->removeChild($tag);
+
+            $hasChildElements = false;
+            foreach ($parent->childNodes as $child) {
+                if ($child->nodeType === XML_ELEMENT_NODE) {
+                    $hasChildElements = true;
+                    break;
+                }
+            }
+
+            if (!$hasChildElements) {
+                if ($parent->parentNode) {
+                    $parent->parentNode->removeChild($parent);
+                }
+            }
+
+
+        }
+        $dom->normalize();
+        return $dom->saveXML();
+    }
+
     private function createEntites(int $adminId): void
     {
         $xmlfiles = [];
@@ -110,18 +146,26 @@ class DumbFromGit extends Command
                 continue;
             }
             $metadata = Storage::get($xmlfile);
+
+            $xml_file= $this->deleteCategoryTag($metadata);
+
             $metadata = $this->parseMetadata($metadata);
+
             $entity = json_decode($metadata, true);
+
+
 
 
             $unknown[$xmlfile]['type'] = $entity['type'];
             $unknown[$xmlfile]['entityid'] = $entity['entityid'];
             $unknown[$xmlfile]['file'] = $xmlfile;
+            $unknown[$xmlfile]['xml_file'] = $xml_file;
             $unknown[$xmlfile]['name_en'] = $entity['name_en'];
             $unknown[$xmlfile]['name_cs'] = $entity['name_cs'];
             $unknown[$xmlfile]['description_en'] = $entity['description_en'];
             $unknown[$xmlfile]['description_cs'] = $entity['description_cs'];
             $unknown[$xmlfile]['metadata'] = $entity['metadata'];
+
 
             foreach ($tagfiles as $tagfile) {
                 $content = Storage::get($tagfile);
@@ -141,8 +185,11 @@ class DumbFromGit extends Command
         }
         foreach ($unknown as $ent)
         {
+
+
             Db::transaction(function () use ($adminId, $ent) {
                 $entity = Entity::create($ent);
+
                 $entity->approved = true;
                 $entity->update();
                 foreach ($ent['federations'] as $fed)
@@ -158,8 +205,8 @@ class DumbFromGit extends Command
                     }
                 }
 
-
             });
+
         }
         $hfd = array_filter(preg_split("/\r\n|\r|\n/", Storage::get(config('git.hfd'))));
         foreach ($hfd as $entityid) {
