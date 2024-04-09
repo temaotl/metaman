@@ -141,7 +141,6 @@ class DumbFromGit extends Command
         }
         foreach ($unknown as $ent)
         {
-           // dump($ent);
             Db::transaction(function () use ($adminId, $ent) {
                 $entity = Entity::create($ent);
                 $entity->approved = true;
