@@ -92,6 +92,13 @@ class DumbFromGit extends Command
 
         return false;
     }
+    private function deleteTag(object $tag):void
+    {
+        if($tag->parentNode)
+        {
+            $tag->parentNode->removeChild($tag);
+        }
+    }
 
 
     private function deleteCategoryTag(string $metadata): string
@@ -112,21 +119,15 @@ class DumbFromGit extends Command
         foreach ($tags as $tag) {
             $parent = $tag->parentNode;
             $grandParent = $parent->parentNode;
-            $tag->parentNode->removeChild($tag);
+            $this->deleteTag($tag);
 
-            //TODO fix double code
             if (!$this->hasChildElements($parent)) {
-                if ($parent->parentNode) {
-                    $parent->parentNode->removeChild($parent);
-                }
+                $this->deleteTag($parent);
             }
 
             if (!$this->hasChildElements($grandParent)) {
-                if ($grandParent->parentNode) {
-                    $grandParent->parentNode->removeChild($grandParent);
-                }
+                $this->deleteTag($grandParent);
             }
-
         }
         $dom->normalize();
         return $dom->saveXML();
