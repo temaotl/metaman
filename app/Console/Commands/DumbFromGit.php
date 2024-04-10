@@ -82,34 +82,50 @@ class DumbFromGit extends Command
         }
     }
 
+    private function hasChildElements(object $parent):bool
+    {
+        foreach ($parent->childNodes as $child) {
+            if ($child->nodeType === XML_ELEMENT_NODE) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     private function deleteCategoryTag(string $metadata): string
     {
         $dom = $this->createDOM($metadata);
-
         $xPath = $this->createXPath($dom);
-        // TODO:  delete only our links
-        $tags = $xPath->query('//saml:Attribute');
+
+        $values = config('categories');
+        $xpathQueryParts = array_map(function($value) {
+            return "text()='$value'";
+        }, $values);
+
+
+
+         $xpathQuery = '//saml:AttributeValue['. implode(' or ', $xpathQueryParts) .']';
+         $tags = $xPath->query($xpathQuery);
 
         foreach ($tags as $tag) {
             $parent = $tag->parentNode;
-
+            $grandParent = $parent->parentNode;
             $tag->parentNode->removeChild($tag);
 
-            $hasChildElements = false;
-            foreach ($parent->childNodes as $child) {
-                if ($child->nodeType === XML_ELEMENT_NODE) {
-                    $hasChildElements = true;
-                    break;
-                }
-            }
-
-            if (!$hasChildElements) {
+            //TODO fix double code
+            if (!$this->hasChildElements($parent)) {
                 if ($parent->parentNode) {
                     $parent->parentNode->removeChild($parent);
                 }
             }
 
+            if (!$this->hasChildElements($grandParent)) {
+                if ($grandParent->parentNode) {
+                    $grandParent->parentNode->removeChild($grandParent);
+                }
+            }
 
         }
         $dom->normalize();
@@ -152,7 +168,6 @@ class DumbFromGit extends Command
             $metadata = $this->parseMetadata($metadata);
 
             $entity = json_decode($metadata, true);
-
 
 
 
@@ -228,7 +243,7 @@ class DumbFromGit extends Command
      */
     public function handle()
     {
-        $firstAdminId = User::where('admin', 1)->first()->id;
+      $firstAdminId = User::where('admin', 1)->first()->id;
         $git = $this->initializeGit();
         $this->createFederations();
         $this->createEntites($firstAdminId);
