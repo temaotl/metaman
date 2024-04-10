@@ -99,6 +99,12 @@ class DumbFromGit extends Command
             $tag->parentNode->removeChild($tag);
         }
     }
+    private function deleteNoChiledTag(object $tag):void
+    {
+        if (!$this->hasChildElements($tag)) {
+            $this->deleteTag($tag);
+        }
+    }
 
 
     private function deleteCategoryTag(string $metadata): string
@@ -121,13 +127,8 @@ class DumbFromGit extends Command
             $grandParent = $parent->parentNode;
             $this->deleteTag($tag);
 
-            if (!$this->hasChildElements($parent)) {
-                $this->deleteTag($parent);
-            }
-
-            if (!$this->hasChildElements($grandParent)) {
-                $this->deleteTag($grandParent);
-            }
+            $this->deleteNoChiledTag($parent);
+            $this->deleteNoChiledTag($grandParent);
         }
         $dom->normalize();
         return $dom->saveXML();
