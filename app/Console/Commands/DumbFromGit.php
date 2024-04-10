@@ -16,6 +16,7 @@ use function Symfony\Component\String\b;
 class DumbFromGit extends Command
 {
     use GitTrait, ValidatorTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -35,7 +36,7 @@ class DumbFromGit extends Command
     {
         $cfgfiles = [];
         foreach (Storage::files() as $file) {
-            if (preg_match('/^'.config('git.edugain_cfg').'$/', $file)) {
+            if (preg_match('/^' . config('git.edugain_cfg') . '$/', $file)) {
                 continue;
             }
 
@@ -62,8 +63,7 @@ class DumbFromGit extends Command
             $unknown[$cfgfile]['xml_name'] = $xml_name[1];
         }
 
-        foreach ($unknown as $fed)
-        {
+        foreach ($unknown as $fed) {
             DB::transaction(function () use ($fed) {
                 $federation = Federation::create([
                     'name' => $fed['xml_id'],
@@ -82,7 +82,7 @@ class DumbFromGit extends Command
         }
     }
 
-    private function hasChildElements(object $parent):bool
+    private function hasChildElements(object $parent): bool
     {
         foreach ($parent->childNodes as $child) {
             if ($child->nodeType === XML_ELEMENT_NODE) {
@@ -92,35 +92,24 @@ class DumbFromGit extends Command
 
         return false;
     }
-    private function deleteTag(object $tag):void
+
+    private function deleteTag(object $tag): void
     {
-        if($tag->parentNode)
-        {
+        if ($tag->parentNode) {
             $tag->parentNode->removeChild($tag);
         }
     }
-    private function deleteNoChiledTag(object $tag):void
+
+    private function deleteNoChiledTag(object $tag): void
     {
         if (!$this->hasChildElements($tag)) {
             $this->deleteTag($tag);
         }
     }
 
-
-    private function deleteCategoryTag(string $metadata): string
+    private function DeleteAllTags(string $xpathQuery, \DOMXPath $xPath ) : void
     {
-        $dom = $this->createDOM($metadata);
-        $xPath = $this->createXPath($dom);
-
-        $values = config('categories');
-        $xpathQueryParts = array_map(function($value) {
-            return "text()='$value'";
-        }, $values);
-
-
-
-         $xpathQuery = '//saml:AttributeValue['. implode(' or ', $xpathQueryParts) .']';
-         $tags = $xPath->query($xpathQuery);
+        $tags = $xPath->query($xpathQuery);
 
         foreach ($tags as $tag) {
             $parent = $tag->parentNode;
@@ -130,6 +119,56 @@ class DumbFromGit extends Command
             $this->deleteNoChiledTag($parent);
             $this->deleteNoChiledTag($grandParent);
         }
+    }
+
+
+    private function deleteCategories(\DOMXPath $xPath) :void
+    {
+        $values = config('categories');
+        $xpathQueryParts = array_map(function ($value) {
+            return "text()='$value'";
+        }, $values);
+
+        $xpathQuery = '//saml:AttributeValue[' . implode(' or ', $xpathQueryParts) . ']';
+        $this->DeleteAllTags($xpathQuery,$xPath);
+    }
+
+    private function deleteResearchAndScholarship(\DOMXPath $xPath) : void
+    {
+        $value = "http://refeds.org/category/research-and-scholarship" ;
+        $xpathQueryParts = "text()='$value'";
+
+        $xpathQuery = '//saml:AttributeValue[' . $xpathQueryParts . ']';
+        $this->DeleteAllTags($xpathQuery,$xPath);
+    }
+
+    private function deleteFromIdp( \DOMXPath $xPath ) : void
+    {
+        $this->deleteCategories($xPath);
+    }
+
+    private function deleteFromSP( \DOMXPath $xpath ) : void
+    {
+        $this->deleteResearchAndScholarship($xpath);
+    }
+
+
+    private function deleteTags(string $metadata): string
+    {
+        $dom = $this->createDOM($metadata);
+        $xPath = $this->createXPath($dom);
+
+        // Make action for IDP
+        if($this->isIDP($xPath))
+        {
+            $this->deleteFromIdp($xPath);
+        }
+        // Make  action for SP
+        else
+        {
+            $this->deleteFromSP($xPath);
+        }
+
         $dom->normalize();
         return $dom->saveXML();
     }
@@ -146,7 +185,7 @@ class DumbFromGit extends Command
             }
 
             if (preg_match('/\.tag$/', $file)) {
-                if (preg_match('/^'.config('git.edugain_tag').'$/', $file)) {
+                if (preg_match('/^' . config('git.edugain_tag') . '$/', $file)) {
                     continue;
                 }
 
@@ -165,13 +204,11 @@ class DumbFromGit extends Command
             }
             $metadata = Storage::get($xmlfile);
 
-            $xml_file= $this->deleteCategoryTag($metadata);
+            $xml_file = $this->deleteTags($metadata);
 
             $metadata = $this->parseMetadata($metadata);
 
             $entity = json_decode($metadata, true);
-
-
 
             $unknown[$xmlfile]['type'] = $entity['type'];
             $unknown[$xmlfile]['entityid'] = $entity['entityid'];
@@ -182,7 +219,6 @@ class DumbFromGit extends Command
             $unknown[$xmlfile]['description_en'] = $entity['description_en'];
             $unknown[$xmlfile]['description_cs'] = $entity['description_cs'];
             $unknown[$xmlfile]['metadata'] = $entity['metadata'];
-
 
             foreach ($tagfiles as $tagfile) {
                 $content = Storage::get($tagfile);
@@ -200,20 +236,15 @@ class DumbFromGit extends Command
                 }
             }
         }
-        foreach ($unknown as $ent)
-        {
-
-
+        foreach ($unknown as $ent) {
             Db::transaction(function () use ($adminId, $ent) {
                 $entity = Entity::create($ent);
 
                 $entity->approved = true;
                 $entity->update();
-                foreach ($ent['federations'] as $fed)
-                {
-                    if(!empty($fed))
-                    {
-                        $entity->federations()->attach($fed,[
+                foreach ($ent['federations'] as $fed) {
+                    if (!empty($fed)) {
+                        $entity->federations()->attach($fed, [
                             'requested_by' => $adminId,
                             'approved_by' => $adminId,
                             'approved' => true,
@@ -223,7 +254,6 @@ class DumbFromGit extends Command
                 }
 
             });
-
         }
         $hfd = array_filter(preg_split("/\r\n|\r|\n/", Storage::get(config('git.hfd'))));
         foreach ($hfd as $entityid) {
@@ -239,14 +269,14 @@ class DumbFromGit extends Command
     }
 
 
-
     /**
      * Execute the console command.
      */
     public function handle()
     {
-      $firstAdminId = User::where('admin', 1)->first()->id;
-        $git = $this->initializeGit();
+
+        $firstAdminId = User::where('admin', 1)->first()->id;
+        $this->initializeGit();
         $this->createFederations();
         $this->createEntites($firstAdminId);
 
