@@ -150,6 +150,24 @@ class DumbFromGit extends Command
     private function deleteFromSP( \DOMXPath $xpath ) : void
     {
         $this->deleteResearchAndScholarship($xpath);
+
+
+    }
+
+    private function deleteRepublishRequest(\DOMXPath $xPath) : void
+    {
+
+        $xpathQuery = '//eduidmd:RepublishRequest';
+
+        $tags = $xPath->query($xpathQuery);
+
+        foreach ($tags as $tag) {
+            $parent = $tag->parentNode;
+            $grandParent = $parent->parentNode;
+            $this->deleteTag($tag);
+
+        }
+
     }
 
 
@@ -168,6 +186,11 @@ class DumbFromGit extends Command
         {
             $this->deleteFromSP($xPath);
         }
+
+
+        // Make action for Sp and Idp
+        $this->deleteRepublishRequest($xPath);
+
 
         $dom->normalize();
         return $dom->saveXML();
