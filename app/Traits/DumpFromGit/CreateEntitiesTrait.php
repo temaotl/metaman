@@ -25,7 +25,7 @@ trait CreateEntitiesTrait{
         }
     }
 
-    private function deleteNoChiledTag(object $tag): void
+    private function deleteNoChilledTag(object $tag): void
     {
         if (!$this->hasChildElements($tag)) {
             $this->deleteTag($tag);
@@ -41,8 +41,8 @@ trait CreateEntitiesTrait{
             $grandParent = $parent->parentNode;
             $this->deleteTag($tag);
 
-            $this->deleteNoChiledTag($parent);
-            $this->deleteNoChiledTag($grandParent);
+            $this->deleteNoChilledTag($parent);
+            $this->deleteNoChilledTag($grandParent);
         }
     }
 
@@ -87,10 +87,7 @@ trait CreateEntitiesTrait{
         $tags = $xPath->query($xpathQuery);
 
         foreach ($tags as $tag) {
-            $parent = $tag->parentNode;
-            $grandParent = $parent->parentNode;
             $this->deleteTag($tag);
-
         }
 
     }
