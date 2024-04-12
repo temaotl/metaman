@@ -3,6 +3,7 @@ namespace App\Traits\DumpFromGit;
 
 use App\Models\Entity;
 use App\Models\Federation;
+use DOMNodeList;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -116,6 +117,64 @@ trait CreateEntitiesTrait{
 
         $dom->normalize();
         return $dom->saveXML();
+    }
+
+    private function updateResearchAndScholarship( \DOMDocument $dom ,\DOMXPath $xPath ) : string
+    {
+        $xPath->registerNamespace('mdattr', 'urn:oasis:names:tc:SAML:metadata:attribute');
+        $xPath->registerNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
+        $xPath->registerNamespace('md','urn:oasis:names:tc:SAML:2.0:metadata');
+        $rootTag = $xPath->query("//*[local-name()='EntityDescriptor']")->item(0);
+
+
+        $entityAttributes = $xPath->query('//mdattr:EntityAttributes');
+        if ($entityAttributes->length === 0) {
+            $entityAttributes = $dom->createElementNS('urn:oasis:names:tc:SAML:metadata:attribute', 'mdattr:EntityAttributes');
+            $rootTag->appendChild($entityAttributes);
+        } else {
+            $entityAttributes = $entityAttributes->item(0);
+        }
+
+
+        $attribute = $xPath->query('//mdattr:EntityAttributes/saml:Attribute', $entityAttributes);
+        if ($attribute->length === 0) {
+            $attribute = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:Attribute');
+            $attribute->setAttribute('NameFormat', 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri');
+            $attribute->setAttribute('Name', 'http://macedir.org/entity-category');
+            $entityAttributes->appendChild($attribute);
+        } else {
+            $attribute = $attribute->item(0);
+        }
+
+        $attributeValue = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:AttributeValue', 'http://refeds.org/category/research-and-scholarship');
+        $attribute->appendChild($attributeValue);
+
+
+        $dom->normalize();
+       return $dom->saveXML();
+
+    }
+
+    public function updateEntitiesXml() : void
+    {
+
+
+        foreach (Entity::select()->get() as $entity)
+        {
+            if(empty($entity->xml_file))
+                continue;
+            $dom = $this->createDOM($entity->xml_file);
+            $xPath = $this->createXPath($dom);
+
+            if($entity->rs)
+            {
+               $xml_document = $this->updateResearchAndScholarship($dom,$xPath);
+               Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
+            }
+
+
+
+        }
     }
 
     public function createEntities(int $adminId): void
