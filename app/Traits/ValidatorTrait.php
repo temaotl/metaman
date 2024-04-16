@@ -46,7 +46,11 @@ trait ValidatorTrait
     {
         libxml_use_internal_errors(true);
 
+
         $dom = new \DOMDocument();
+        $dom->formatOutput = true;
+        $dom->preserveWhiteSpace = false;
+
         $dom->loadXML($metadata);
 
         $result = null;
