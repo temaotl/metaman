@@ -136,14 +136,14 @@ trait CreateEntitiesTrait{
         if($entityExtensions->length === 0)
         {
             $namespaceURI = $dom->documentElement->lookupNamespaceURI('md');
-            $entityExtensions = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:metadata', 'md:Extensions');
+            $entityExtensions = $dom->createElementNS($this->mdURI, 'md:Extensions');
             $rootTag->appendChild($entityExtensions);
         }else {
             $entityExtensions = $entityExtensions->item(0);
         }
         $entityAttributes = $xPath->query('//mdattr:EntityAttributes');
         if ($entityAttributes->length === 0) {
-            $entityAttributes = $dom->createElementNS('urn:oasis:names:tc:SAML:metadata:attribute', 'mdattr:EntityAttributes');
+            $entityAttributes = $dom->createElementNS($this->mdattrURI, 'mdattr:EntityAttributes');
             $entityExtensions->appendChild($entityAttributes);
         } else {
             $entityAttributes = $entityAttributes->item(0);
@@ -152,7 +152,7 @@ trait CreateEntitiesTrait{
         $attribute = $xPath->query('//mdattr:EntityAttributes/saml:Attribute', $entityAttributes);
         if ($attribute->length === 0) {
 
-            $attribute = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:Attribute');
+            $attribute = $dom->createElementNS($this->samlURI, 'saml:Attribute');
 
             $attribute->setAttribute('Name', 'http://macedir.org/entity-category');
             $attribute->setAttribute('NameFormat', 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri');
@@ -165,14 +165,12 @@ trait CreateEntitiesTrait{
         // Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
         $categoryXml = Category::whereId($category_id)->first()->xml_value;
 
-        $attributeValue = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:AttributeValue', $categoryXml);
+        $attributeValue = $dom->createElementNS($this->samlURI, 'saml:AttributeValue', $categoryXml);
         $attribute->appendChild($attributeValue);
 
         return $dom->saveXML();
     }
 
-
-    //TODO ask about struct in SP and IDP in ResearchAndScholarship
     private function updateResearchAndScholarship( string $xml_document,bool $isIdp) : string
     {
         $dom = $this->createDOM($xml_document);
