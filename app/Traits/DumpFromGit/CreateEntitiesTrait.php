@@ -119,11 +119,31 @@ trait CreateEntitiesTrait{
         return $dom->saveXML();
     }
 
-    private function updateResearchAndScholarship( \DOMDocument $dom ,\DOMXPath $xPath ) : string
+    private function updateXmlCategories(string $xml_document ) : string
     {
-        $xPath->registerNamespace('mdattr', 'urn:oasis:names:tc:SAML:metadata:attribute');
-        $xPath->registerNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
-        $xPath->registerNamespace('md','urn:oasis:names:tc:SAML:2.0:metadata');
+        $dom = $this->createDOM($xml_document);
+        $xPath = $this->createXPath($dom);
+
+        $rootTag = $xPath->query("//*[local-name()='EntityDescriptor']")->item(0);
+        $entityAttributes = $xPath->query('//mdattr:EntityAttributes');
+        if($entityAttributes->length === 0)
+        {
+
+        }
+
+
+
+
+        return $dom->saveXML();
+    }
+
+
+    //TODO ask about struct in SP and IDP in ResearchAndScholarship
+    private function updateResearchAndScholarship( string $xml_document,bool $isIdp) : string
+    {
+        $dom = $this->createDOM($xml_document);
+        $xPath = $this->createXPath($dom);
+
         $rootTag = $xPath->query("//*[local-name()='EntityDescriptor']")->item(0);
 
 
@@ -140,7 +160,12 @@ trait CreateEntitiesTrait{
         if ($attribute->length === 0) {
             $attribute = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:Attribute');
             $attribute->setAttribute('NameFormat', 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri');
-            $attribute->setAttribute('Name', 'http://macedir.org/entity-category');
+
+            if($isIdp)
+                $attribute->setAttribute('Name', 'http://macedir.org/entity-category-support');
+            else
+                $attribute->setAttribute('Name', 'http://macedir.org/entity-category');
+
             $entityAttributes->appendChild($attribute);
         } else {
             $attribute = $attribute->item(0);
@@ -155,25 +180,41 @@ trait CreateEntitiesTrait{
 
     }
 
-    public function updateEntitiesXml() : void
+    private function makeXpath(\DOMDocument $dom ) : \DOMXPath
     {
 
+        $xPath = $this->createXPath($dom);
+        $xPath->registerNamespace('mdattr', 'urn:oasis:names:tc:SAML:metadata:attribute');
+        $xPath->registerNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
+        $xPath->registerNamespace('md','urn:oasis:names:tc:SAML:2.0:metadata');
+        return $xPath;
+    }
+
+
+
+    public function updateEntitiesXml() : void
+    {
 
         foreach (Entity::select()->get() as $entity)
         {
             if(empty($entity->xml_file))
                 continue;
-            $dom = $this->createDOM($entity->xml_file);
-            $xPath = $this->createXPath($dom);
+
+            $xml_document = $entity->xml_file;
+            $isIdp = false;
+            if($entity->type == "idp")
+                $isIdp = true;
+
 
             if($entity->rs)
             {
-               $xml_document = $this->updateResearchAndScholarship($dom,$xPath);
-               Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
+               $xml_document = $this->updateResearchAndScholarship($xml_document,$isIdp);
             }
-
-
-
+            if(!empty($entity->category_id))
+            {
+                $xml_document = $this->updateXmlCategories($xml_document);
+            }
+            Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
         }
     }
 
