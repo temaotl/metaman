@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits\DumpFromGit;
 
+use App\Models\Category;
 use App\Models\Entity;
 use App\Models\Federation;
 use DOMNodeList;
@@ -8,6 +9,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 trait CreateEntitiesTrait{
+
+   private $mdURI = 'urn:oasis:names:tc:SAML:2.0:metadata';
+   private $mdattrURI = 'urn:oasis:names:tc:SAML:metadata:attribute';
+   private $samlURI = 'urn:oasis:names:tc:SAML:2.0:assertion';
+
+
     private function hasChildElements(object $parent): bool
     {
         foreach ($parent->childNodes as $child) {
@@ -119,20 +126,47 @@ trait CreateEntitiesTrait{
         return $dom->saveXML();
     }
 
-    private function updateXmlCategories(string $xml_document ) : string
+    private function updateXmlCategories(string $xml_document, int $category_id ) : string
     {
         $dom = $this->createDOM($xml_document);
         $xPath = $this->createXPath($dom);
 
         $rootTag = $xPath->query("//*[local-name()='EntityDescriptor']")->item(0);
-        $entityAttributes = $xPath->query('//mdattr:EntityAttributes');
-        if($entityAttributes->length === 0)
+        $entityExtensions = $xPath->query('//md:Extensions');
+        if($entityExtensions->length === 0)
         {
-
+            $namespaceURI = $dom->documentElement->lookupNamespaceURI('md');
+            $entityExtensions = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:metadata', 'md:Extensions');
+            $rootTag->appendChild($entityExtensions);
+        }else {
+            $entityExtensions = $entityExtensions->item(0);
+        }
+        $entityAttributes = $xPath->query('//mdattr:EntityAttributes');
+        if ($entityAttributes->length === 0) {
+            $entityAttributes = $dom->createElementNS('urn:oasis:names:tc:SAML:metadata:attribute', 'mdattr:EntityAttributes');
+            $entityExtensions->appendChild($entityAttributes);
+        } else {
+            $entityAttributes = $entityAttributes->item(0);
         }
 
+        $attribute = $xPath->query('//mdattr:EntityAttributes/saml:Attribute', $entityAttributes);
+        if ($attribute->length === 0) {
 
+            $attribute = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:Attribute');
 
+            $attribute->setAttribute('Name', 'http://macedir.org/entity-category');
+            $attribute->setAttribute('NameFormat', 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri');
+
+            $entityAttributes->appendChild($attribute);
+        } else {
+            $attribute = $attribute->item(0);
+        }
+
+        // Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
+        $categoryXml = Category::whereId($category_id)->first()->xml_value;
+
+        $attributeValue = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:AttributeValue', $categoryXml);
+        $attribute->appendChild($attributeValue);
 
         return $dom->saveXML();
     }
@@ -149,7 +183,7 @@ trait CreateEntitiesTrait{
 
         $entityAttributes = $xPath->query('//mdattr:EntityAttributes');
         if ($entityAttributes->length === 0) {
-            $entityAttributes = $dom->createElementNS('urn:oasis:names:tc:SAML:metadata:attribute', 'mdattr:EntityAttributes');
+            $entityAttributes = $dom->createElementNS( $this->mdattrURI,'mdattr:EntityAttributes');
             $rootTag->appendChild($entityAttributes);
         } else {
             $entityAttributes = $entityAttributes->item(0);
@@ -158,7 +192,7 @@ trait CreateEntitiesTrait{
 
         $attribute = $xPath->query('//mdattr:EntityAttributes/saml:Attribute', $entityAttributes);
         if ($attribute->length === 0) {
-            $attribute = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:Attribute');
+            $attribute = $dom->createElementNS($this->samlURI, 'saml:Attribute');
             $attribute->setAttribute('NameFormat', 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri');
 
             if($isIdp)
@@ -171,7 +205,7 @@ trait CreateEntitiesTrait{
             $attribute = $attribute->item(0);
         }
 
-        $attributeValue = $dom->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:AttributeValue', 'http://refeds.org/category/research-and-scholarship');
+        $attributeValue = $dom->createElementNS($this->samlURI, 'saml:AttributeValue', 'http://refeds.org/category/research-and-scholarship');
         $attribute->appendChild($attributeValue);
 
 
@@ -180,20 +214,15 @@ trait CreateEntitiesTrait{
 
     }
 
-    private function makeXpath(\DOMDocument $dom ) : \DOMXPath
-    {
 
-        $xPath = $this->createXPath($dom);
-        $xPath->registerNamespace('mdattr', 'urn:oasis:names:tc:SAML:metadata:attribute');
-        $xPath->registerNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
-        $xPath->registerNamespace('md','urn:oasis:names:tc:SAML:2.0:metadata');
-        return $xPath;
-    }
 
 
 
     public function updateEntitiesXml() : void
     {
+        $this->mdURI = config('xmlNameSpace.md');
+        $this->mdattrURI = config('xmlNameSpace.mdattr');
+        $this->samlURI = config('xmlNameSpace.saml');
 
         foreach (Entity::select()->get() as $entity)
         {
@@ -212,7 +241,7 @@ trait CreateEntitiesTrait{
             }
             if(!empty($entity->category_id))
             {
-                $xml_document = $this->updateXmlCategories($xml_document);
+                $xml_document = $this->updateXmlCategories($xml_document,$entity->category_id);
             }
             Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
         }
