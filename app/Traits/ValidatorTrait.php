@@ -85,6 +85,7 @@ trait ValidatorTrait
         $xpath->registerNameSpace('mdattr', 'urn:oasis:names:tc:SAML:metadata:attribute');
         $xpath->registerNameSpace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
         $xpath->registerNameSpace('remd', 'http://refeds.org/metadata');
+        $xpath->registerNamespace('mdrpi','urn:oasis:names:tc:SAML:metadata:rpi');
 
         return $xpath;
     }

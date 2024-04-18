@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Storage;
 
 trait CreateEntitiesTrait{
 
-   private string $mdURI = 'urn:oasis:names:tc:SAML:2.0:metadata';
-   private string $mdattrURI = 'urn:oasis:names:tc:SAML:metadata:attribute';
-   private string $samlURI = 'urn:oasis:names:tc:SAML:2.0:assertion';
+    private string $mdURI = 'urn:oasis:names:tc:SAML:2.0:metadata';
+    private string $mdattrURI = 'urn:oasis:names:tc:SAML:metadata:attribute';
+    private string $samlURI = 'urn:oasis:names:tc:SAML:2.0:assertion';
+    private string $mdrpiURI = 'urn:oasis:names:tc:SAML:metadata:rpi';
+
+
 
 
     private function hasChildElements(object $parent): bool
@@ -221,10 +224,49 @@ trait CreateEntitiesTrait{
 
 
         $dom->normalize();
-       return $dom->saveXML();
+        return $dom->saveXML();
 
     }
+    private function updateRegistrationInfo(string $xml_document ) : string
+    {
+        $dom = $this->createDOM($xml_document);
+        $xPath = $this->createXPath($dom);
+        $rootTag = $xPath->query("//*[local-name()='EntityDescriptor']")->item(0);
 
+        $entityExtensions = $xPath->query('//md:Extensions');
+        if ($entityExtensions->length === 0) {
+            $entityExtensions = $dom->createElementNS( $this->mdURI,'md:Extensions');
+            $rootTag->appendChild($entityExtensions);
+        } else {
+            $entityExtensions = $entityExtensions->item(0);
+        }
+        $info = $xPath->query('//mdrpi:RegistrationInfo', $entityExtensions);
+        if ($info->length === 0) {
+
+            $info = $dom->createElementNS($this->samlURI, 'mdrpi:RegistrationInfo');
+
+            $info->setAttribute('registrationAuthority', config('registrationInfo.registrationAuthority'));
+
+            //TODO fix this not if its in document  need to use stamp from document
+            $info->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z'));
+
+            $entityExtensions->appendChild($info);
+        } else {
+            $info = $info->item(0);
+        }
+
+        //For English
+        $registrationPolicyEN = $dom->createElementNS($this->samlURI, 'saml:AttributeValue',config('registrationInfo.en'));
+        $registrationPolicyEN->setAttributeNS('http://www.w3.org/XML/1998/namespace', 'xml:lang', 'en');
+        $info->appendChild($registrationPolicyEN);
+        // For Czech
+        $registrationPolicyCZ = $dom->createElementNS($this->samlURI, 'saml:AttributeValue',config('registrationInfo.cs'));
+        $registrationPolicyCZ->setAttributeNS('http://www.w3.org/XML/1998/namespace', 'xml:lang', 'cs');
+        $info->appendChild($registrationPolicyCZ);
+
+        $dom->normalize();
+        return $dom->saveXML();
+    }
 
 
 
@@ -234,6 +276,7 @@ trait CreateEntitiesTrait{
         $this->mdURI = config('xmlNameSpace.md');
         $this->mdattrURI = config('xmlNameSpace.mdattr');
         $this->samlURI = config('xmlNameSpace.saml');
+        $this->mdrpiURI = config('xmlNameSpace.mdrpi');
 
         foreach (Entity::select()->get() as $entity)
         {
@@ -248,12 +291,14 @@ trait CreateEntitiesTrait{
 
             if($entity->rs)
             {
-               $xml_document = $this->updateResearchAndScholarship($xml_document,$isIdp);
+                $xml_document = $this->updateResearchAndScholarship($xml_document,$isIdp);
             }
             if(!empty($entity->category_id))
             {
                 $xml_document = $this->updateXmlCategories($xml_document,$entity->category_id);
             }
+
+            $xml_document = $this->updateRegistrationInfo($xml_document);
             Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
         }
     }

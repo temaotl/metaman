@@ -12,4 +12,6 @@ return [
     'mdattr' => 'urn:oasis:names:tc:SAML:metadata:attribute',
     'saml' => 'urn:oasis:names:tc:SAML:2.0:assertion',
     'remd' => 'http://refeds.org/metadata',
+    'mdrpi'=> 'urn:oasis:names:tc:SAML:metadata:rpi',
+
 ];
