@@ -40,6 +40,7 @@ class DumpFromGit extends Command
     public function handle()
     {
 
+
         $firstAdminId = User::where('admin', 1)->first()->id;
         $this->initializeGit();
         $this->createFederations();
