@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 trait CreateEntitiesTrait{
 
-   private $mdURI = 'urn:oasis:names:tc:SAML:2.0:metadata';
-   private $mdattrURI = 'urn:oasis:names:tc:SAML:metadata:attribute';
-   private $samlURI = 'urn:oasis:names:tc:SAML:2.0:assertion';
+   private string $mdURI = 'urn:oasis:names:tc:SAML:2.0:metadata';
+   private string $mdattrURI = 'urn:oasis:names:tc:SAML:metadata:attribute';
+   private string $samlURI = 'urn:oasis:names:tc:SAML:2.0:assertion';
 
 
     private function hasChildElements(object $parent): bool
@@ -74,6 +74,19 @@ trait CreateEntitiesTrait{
         $xpathQuery = '//saml:AttributeValue[' . $xpathQueryParts . ']';
         $this->DeleteAllTags($xpathQuery,$xPath);
     }
+    private function deleteRegistrationInfo(\DOMXPath $xPath) : void
+    {
+        $xpathQuery = '//mdrpi:RegistrationInfo';
+        $tags = $xPath->query($xpathQuery);
+        if(!empty($tags))
+        {
+            foreach ($tags as $tag) {
+                $this->deleteTag($tag);
+            }
+        }
+
+    }
+
 
     private function deleteFromIdp( \DOMXPath $xPath ) : void
     {
@@ -120,6 +133,7 @@ trait CreateEntitiesTrait{
 
         // Make action for Sp and Idp
         $this->deleteRepublishRequest($xPath);
+        $this->deleteRegistrationInfo($xPath);
 
 
         $dom->normalize();
@@ -162,7 +176,6 @@ trait CreateEntitiesTrait{
             $attribute = $attribute->item(0);
         }
 
-        // Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
         $categoryXml = Category::whereId($category_id)->first()->xml_value;
 
         $attributeValue = $dom->createElementNS($this->samlURI, 'saml:AttributeValue', $categoryXml);
