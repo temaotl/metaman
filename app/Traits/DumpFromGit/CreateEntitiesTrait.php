@@ -5,6 +5,7 @@ use App\Models\Category;
 use App\Models\Entity;
 use App\Models\Federation;
 use DOMNodeList;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -227,7 +228,32 @@ trait CreateEntitiesTrait{
         return $dom->saveXML();
 
     }
-    private function updateRegistrationInfo(string $xml_document ) : string
+
+    /**
+     * @throws Exception if  exist more or less then 2 part something gone wrong
+     */
+    private function splitDocument():array
+    {
+        $document = Storage::get(config('git.reginfo'));
+        $lines = explode("\n", $document);
+        $splitDocument = [];
+
+        foreach ($lines as $line) {
+            if(empty(ltrim($line))) {
+                continue;
+            }
+            $parts = preg_split('/\s+/', $line, 2);
+            if(count($parts) != 2) {
+                throw new Exception('no 2 part');
+            } else
+            {
+                $splitDocument[$parts[0]] = $parts[1];
+            }
+        }
+        return $splitDocument;
+    }
+
+    private function updateRegistrationInfo(string $xml_document, string $entityId,array $timestampDocumentArray ) : string
     {
         $dom = $this->createDOM($xml_document);
         $xPath = $this->createXPath($dom);
@@ -247,8 +273,13 @@ trait CreateEntitiesTrait{
 
             $info->setAttribute('registrationAuthority', config('registrationInfo.registrationAuthority'));
 
-            //TODO fix this not if its in document  need to use stamp from document
-            $info->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z'));
+
+            if(empty($timestampDocumentArray[$entityId])) {
+                $info->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z'));
+            } else {
+                $info->setAttribute('registrationInstant',$timestampDocumentArray[$entityId]);
+            }
+
 
             $entityExtensions->appendChild($info);
         } else {
@@ -278,6 +309,10 @@ trait CreateEntitiesTrait{
         $this->samlURI = config('xmlNameSpace.saml');
         $this->mdrpiURI = config('xmlNameSpace.mdrpi');
 
+        $timestampDocumentArray = $this->splitDocument();
+       // dump($timestampDocumentArray);
+
+
         foreach (Entity::select()->get() as $entity)
         {
             if(empty($entity->xml_file))
@@ -298,7 +333,7 @@ trait CreateEntitiesTrait{
                 $xml_document = $this->updateXmlCategories($xml_document,$entity->category_id);
             }
 
-            $xml_document = $this->updateRegistrationInfo($xml_document);
+            $xml_document = $this->updateRegistrationInfo($xml_document,$entity->entityid,$timestampDocumentArray);
             Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
         }
     }
