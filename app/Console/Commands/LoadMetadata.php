@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Entity;
+use App\Models\Membership;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,11 +23,19 @@ class LoadMetadata extends Command
      */
     protected $description = 'Command description';
 
+
+
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        Storage::disk('metadata')->put('test.txt', 'Contents of your file');
+        $membership = Membership::select('entity_id','federation_id')->whereApproved(1)->get();
+        foreach ($membership as $member) {
+            dump($member->entity_id);
+        }
+
+
     }
 }

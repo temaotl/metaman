@@ -7,15 +7,18 @@ use App\Models\User;
 use App\Traits\DumpFromGit\CreateCategoriesAndGroupsTrait;
 use App\Traits\DumpFromGit\CreateEntitiesTrait;
 use App\Traits\DumpFromGit\CreateFederationTrait;
+use App\Traits\FederationTrait;
 use App\Traits\GitTrait;
 use Illuminate\Console\Command;
 use App\Traits\ValidatorTrait;
+
 
 
 class DumpFromGit extends Command
 {
     use GitTrait, ValidatorTrait;
     use CreateFederationTrait,CreateEntitiesTrait,CreateCategoriesAndGroupsTrait;
+    use FederationTrait;
 
     /**
      * The name and signature of the console command.
@@ -46,5 +49,6 @@ class DumpFromGit extends Command
         $this->createCategoriesAndGroups();
         $this->updateGroupsAndCategories();
         $this->updateEntitiesXml();
+        $this->updateFederationFolders();
     }
 }
