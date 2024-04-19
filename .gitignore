@@ -5,6 +5,7 @@
 /storage/*.key
 /storage/debugbar
 /storage/git
+/storage/metadata
 /tests/report
 /vendor
 .env
