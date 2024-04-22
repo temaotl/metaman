@@ -2,9 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SaveMetadataToFolders;
 use App\Models\Entity;
 use App\Models\Membership;
+use App\Traits\FederationTrait;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class LoadMetadata extends Command
@@ -23,19 +26,24 @@ class LoadMetadata extends Command
      */
     protected $description = 'Command description';
 
-
+    use FederationTrait;
 
 
     /**
      * Execute the console command.
      */
+    //TODO rewrite this from JOB but remain JOB  untouch
+
     public function handle()
     {
+        Log::info("start Metadata");
+        $this->updateFederationFolders();
         $membership = Membership::select('entity_id','federation_id')->whereApproved(1)->get();
         foreach ($membership as $member) {
-            dump($member->entity_id);
-        }
 
+            //TODO here will be function
+         //  SaveMetadataToFolders::dispatch($member->entity_id, $member->federation_id);
+        }
 
     }
 }

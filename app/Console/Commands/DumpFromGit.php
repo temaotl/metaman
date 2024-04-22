@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 
+use App\Facades\EntityFacade;
 use App\Models\User;
 use App\Traits\DumpFromGit\CreateCategoriesAndGroupsTrait;
 use App\Traits\DumpFromGit\CreateEntitiesTrait;
@@ -42,13 +43,16 @@ class DumpFromGit extends Command
      */
     public function handle()
     {
-        $firstAdminId = User::where('admin', 1)->first()->id;
+        dump(EntityFacade::SaveEntityMetadataToFile(1,1));
+
+
+/*        $firstAdminId = User::where('admin', 1)->first()->id;
         $this->initializeGit();
         $this->createFederations();
         $this->createEntities($firstAdminId);
         $this->createCategoriesAndGroups();
         $this->updateGroupsAndCategories();
         $this->updateEntitiesXml();
-        $this->updateFederationFolders();
+        $this->updateFederationFolders();*/
     }
 }
