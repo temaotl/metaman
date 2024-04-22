@@ -43,16 +43,13 @@ class DumpFromGit extends Command
      */
     public function handle()
     {
-        dump(EntityFacade::SaveEntityMetadataToFile(1,1));
-
-
-/*        $firstAdminId = User::where('admin', 1)->first()->id;
+        $firstAdminId = User::where('admin', 1)->first()->id;
         $this->initializeGit();
         $this->createFederations();
         $this->createEntities($firstAdminId);
         $this->createCategoriesAndGroups();
         $this->updateGroupsAndCategories();
         $this->updateEntitiesXml();
-        $this->updateFederationFolders();*/
+        $this->updateFederationFolders();
     }
 }

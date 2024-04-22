@@ -105,3 +105,4 @@
 #22 /var/www/html/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle()
 #23 {main}
 "} 
+[2024-04-22 11:58:09] testing.INFO: start Metadata  

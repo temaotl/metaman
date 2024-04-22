@@ -8,6 +8,7 @@
 /storage/metadata
 /tests/report
 /vendor
+/storage/logs
 .env
 .env.backup
 .env.dusk.local

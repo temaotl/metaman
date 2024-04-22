@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Facades\EntityFacade;
 use App\Jobs\SaveMetadataToFolders;
 use App\Models\Entity;
 use App\Models\Membership;
@@ -32,7 +33,6 @@ class LoadMetadata extends Command
     /**
      * Execute the console command.
      */
-    //TODO rewrite this from JOB but remain JOB  untouch
 
     public function handle()
     {
@@ -40,8 +40,7 @@ class LoadMetadata extends Command
         $this->updateFederationFolders();
         $membership = Membership::select('entity_id','federation_id')->whereApproved(1)->get();
         foreach ($membership as $member) {
-
-            //TODO here will be function
+            EntityFacade::SaveEntityMetadataToFile($member->entity_id, $member->federation_id);
          //  SaveMetadataToFolders::dispatch($member->entity_id, $member->federation_id);
         }
 

@@ -12,7 +12,9 @@ class EntityFacadeServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
+        $this->app->singleton('entity', function ($app) {
+            return new EntityService();
+        });
     }
 
     /**

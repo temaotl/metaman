@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Facades\EntityFacade;
 use App\Models\Entity;
 use App\Models\Federation;
 use App\Traits\FederationTrait;
@@ -35,22 +36,7 @@ class SaveMetadataToFolders implements ShouldQueue
      */
     public function handle(): void
     {
-
-        $entity = Entity::find($this->entity_id);
-        $federation = Federation::find($this->federation_id);
-
-        if(!$entity || !$federation){
-            return;
-        }
-        $folderName = $federation->name;
-        $fileName = $entity->file;
-        if(!Storage::disk('metadata')->exists($folderName))
-        {
-            Storage::disk('metadata')->makeDirectory($folderName);
-        }
-        $filePath = $folderName . '/' . $fileName . 'xml';
-        $content = $entity->xml_file;
-        Storage::disk('metadata')->put($filePath, $content);
+        EntityFacade::SaveEntityMetadataToFile($this->entity_id,$this->federation_id);
 
     }
 }
