@@ -4,6 +4,7 @@ namespace App\Traits\DumpFromGit;
 use App\Models\Category;
 use App\Models\Entity;
 use App\Models\Federation;
+use App\Traits\ValidatorTrait;
 use DOMNodeList;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ trait CreateEntitiesTrait{
     private string $samlURI = 'urn:oasis:names:tc:SAML:2.0:assertion';
     private string $mdrpiURI = 'urn:oasis:names:tc:SAML:metadata:rpi';
 
-
+    use ValidatorTrait;
 
 
     private function hasChildElements(object $parent): bool
@@ -302,6 +303,7 @@ trait CreateEntitiesTrait{
 
 
 
+    //TODO with validator not working right before 104 and not working at all after
     public function updateEntitiesXml() : void
     {
         $this->mdURI = config('xmlNameSpace.md');
@@ -334,6 +336,9 @@ trait CreateEntitiesTrait{
             }
 
             $xml_document = $this->updateRegistrationInfo($xml_document,$entity->entityid,$timestampDocumentArray);
+
+            $xml_document = $this->validateMetadata($xml_document);
+            dump("hello ");
             Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
         }
     }
