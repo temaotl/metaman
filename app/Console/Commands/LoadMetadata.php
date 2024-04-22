@@ -41,7 +41,6 @@ class LoadMetadata extends Command
         $membership = Membership::select('entity_id','federation_id')->whereApproved(1)->get();
         foreach ($membership as $member) {
             EntityFacade::SaveEntityMetadataToFile($member->entity_id, $member->federation_id);
-         //  SaveMetadataToFolders::dispatch($member->entity_id, $member->federation_id);
         }
 
     }

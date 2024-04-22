@@ -12,7 +12,7 @@ use App\Traits\FederationTrait;
 use App\Traits\GitTrait;
 use Illuminate\Console\Command;
 use App\Traits\ValidatorTrait;
-
+use Illuminate\Support\Facades\Artisan;
 
 
 class DumpFromGit extends Command
@@ -51,5 +51,6 @@ class DumpFromGit extends Command
         $this->updateGroupsAndCategories();
         $this->updateEntitiesXml();
         $this->updateFederationFolders();
+        Artisan::call('app:load-metadata');
     }
 }
