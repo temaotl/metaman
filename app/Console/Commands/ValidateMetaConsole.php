@@ -37,6 +37,9 @@ class ValidateMetaConsole extends Command
             $ent = Entity::where('id', $entity->id)->select()->first();
 
             $res = json_decode($this->validateMetadata($ent->metadata),true);
+            $res = json_decode($this->validateMetadata($ent->xml_file),true);
+
+            $res['ent_id'] = $ent->id;
             dump($res);
 
 

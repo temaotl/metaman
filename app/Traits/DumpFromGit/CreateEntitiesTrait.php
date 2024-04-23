@@ -196,11 +196,21 @@ trait CreateEntitiesTrait{
 
         $rootTag = $xPath->query("//*[local-name()='EntityDescriptor']")->item(0);
 
+        $extensions = $xPath->query('//md:Extensions');
+        if($extensions->length === 0)
+        {
+            $extensions = $dom->createElementNS($this->mdURI, 'md:Extensions');
+            $rootTag->appendChild($extensions);
+        }
+        else
+        {
+            $extensions = $extensions->item(0);
+        }
 
         $entityAttributes = $xPath->query('//mdattr:EntityAttributes');
         if ($entityAttributes->length === 0) {
             $entityAttributes = $dom->createElementNS( $this->mdattrURI,'mdattr:EntityAttributes');
-            $rootTag->appendChild($entityAttributes);
+            $extensions->appendChild($entityAttributes);
         } else {
             $entityAttributes = $entityAttributes->item(0);
         }
