@@ -337,8 +337,7 @@ trait CreateEntitiesTrait{
 
             $xml_document = $this->updateRegistrationInfo($xml_document,$entity->entityid,$timestampDocumentArray);
 
-            $xml_document = $this->validateMetadata($xml_document);
-            dump("hello ");
+
             Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
         }
     }
