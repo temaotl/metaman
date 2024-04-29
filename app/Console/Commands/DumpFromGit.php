@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Traits\DumpFromGit\CreateCategoriesAndGroupsTrait;
 use App\Traits\DumpFromGit\CreateEntitiesTrait;
 use App\Traits\DumpFromGit\CreateFederationTrait;
+use App\Traits\DumpFromGit\EntitiesHelp\UpdateEntity;
 use App\Traits\FederationTrait;
 use App\Traits\GitTrait;
 use Illuminate\Console\Command;
@@ -19,7 +20,7 @@ class DumpFromGit extends Command
 {
     use GitTrait, ValidatorTrait;
     use CreateFederationTrait,CreateEntitiesTrait,CreateCategoriesAndGroupsTrait;
-    use FederationTrait;
+    use UpdateEntity,FederationTrait;
 
     /**
      * The name and signature of the console command.
