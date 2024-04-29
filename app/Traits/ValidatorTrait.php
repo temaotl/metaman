@@ -12,9 +12,24 @@ trait ValidatorTrait
 
     public string $error = '';
 
+    private  $context;
+
+
+
     // //////////////////////////////////////////////////
     // Helper functions
     // //////////////////////////////////////////////////
+    private function  initContext()
+    {
+        $this->context = stream_context_create(array(
+            'http' => array(
+                'timeout' => 5   // Timeout in seconds
+            )
+        ));
+    }
+
+
+
     public function getMetadata(Request $request): string
     {
         if ($request->hasFile('file')) {
@@ -28,6 +43,7 @@ trait ValidatorTrait
         if ($request->input('metadata')) {
             return $request->input('metadata');
         }
+
     }
 
     public function libxml_display_errors(): string
@@ -346,11 +362,13 @@ trait ValidatorTrait
         }
     }
 
+
     public function checkURLaddress(object $element): string
     {
-        foreach ($element as $e) {
-            @$file = file_get_contents(trim($e->nodeValue));
 
+        $this->initContext();
+        foreach ($element as $e) {
+            @$file = file_get_contents(trim($e->nodeValue),0,$this->context);
             if (@$http_response_header === null) {
                 return $e->nodeValue.' from '.$e->parentNode->nodeName.'/'.$e->nodeName.'[@xml:lang="'.$e->getAttribute('xml:lang').'"] could not be read, check www.ssllabs.com for possible SSL errors. ';
             } elseif (preg_match('/403|404|500/', $http_response_header[0])) {
@@ -362,6 +380,8 @@ trait ValidatorTrait
             }
         }
     }
+
+
 
     public function checkUIInfo(object $xpath): void
     {
@@ -405,12 +425,15 @@ trait ValidatorTrait
             $this->error .= $SSODescriptor.'/UIInfo/InformationURL[@xml:lang="en"] missing. ';
         }
 
+
+
         if ($this->isIDP($xpath)) {
             if ($Logo->length < 1) {
                 $this->error .= $SSODescriptor.'/UIInfo/Logo missing. ';
             } else {
+                $this->initContext();
                 foreach ($Logo as $logo) {
-                    @$file = file_get_contents($logo->nodeValue);
+                    @$file = file_get_contents($logo->nodeValue,0,$this->context);
                     if (! $file) {
                         $this->error .= $SSODescriptor.'/UIInfo/Logo '.$logo->nodeValue.' could not be read. ';
                     } else {

@@ -33,11 +33,13 @@ class ValidateMetaConsole extends Command
         foreach (Entity::select()->get() as $entity)
         {
 
+/*            if($entity->id <= 103)
+                continue;*/
 
             $ent = Entity::where('id', $entity->id)->select()->first();
 
             $res = json_decode($this->validateMetadata($ent->metadata),true);
-            $res = json_decode($this->validateMetadata($ent->xml_file),true);
+           // $res = json_decode($this->validateMetadata($ent->xml_file),true);
 
             $res['ent_id'] = $ent->id;
             dump($res);
