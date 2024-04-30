@@ -16,7 +16,8 @@
         "laravel/framework": "^10.0",
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.10",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-exif": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

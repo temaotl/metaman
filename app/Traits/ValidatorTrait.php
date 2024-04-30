@@ -389,6 +389,8 @@ trait ValidatorTrait
 
 
 
+
+
     public function checkUIInfo(object $xpath): void
     {
         if ($this->isIDP($xpath)) {
@@ -451,32 +453,39 @@ trait ValidatorTrait
                         $this->error .= $SSODescriptor.'/UIInfo/Logo '.$logo->nodeValue.' could not be read. ';
                         $this->errorsArray['Logo'] = 'Logo '.$logo->nodeValue.' could not be read';
                     } else {
-                        if (exif_imagetype($logo->nodeValue)) {
-                            $imagesize = getimagesize($logo->nodeValue);
-                            $img_width = $imagesize[0];
-                            $img_height = $imagesize[1];
-                            $md_width = $logo->getAttribute('width');
-                            $md_height = $logo->getAttribute('height');
 
-                            if ($img_width != $md_width) {
-                                $this->error .= $SSODescriptor.'/UIInfo/Logo[@width="'.$md_width.'"] does not match the width ('.$img_width.'px) of the image '.$logo->nodeValue.'. ';
-                                $this->errorsArray['Logo'] = 'Logo '.$logo->nodeValue.' could not be read';
+                        $headers = get_headers($logo->nodeValue, true);
+                        if(! 'image/svg+xml'===$headers['Content-Type']) {
+
+                            if (exif_imagetype($logo->nodeValue)) {
+
+                                $imagesize = getimagesize($logo->nodeValue);
+                                $img_width = $imagesize[0];
+                                $img_height = $imagesize[1];
+                                $md_width = $logo->getAttribute('width');
+                                $md_height = $logo->getAttribute('height');
+
+                                if ($img_width != $md_width) {
+                                    $this->error .= $SSODescriptor.'/UIInfo/Logo[@width="'.$md_width.'"] does not match the width ('.$img_width.'px) of the image '.$logo->nodeValue.'. ';
+                                    $this->errorsArray['Logo'] = 'Logo '.$logo->nodeValue.' could not be read';
+                                }
+
+                                if ($img_height != $md_height) {
+                                    $this->error .= $SSODescriptor.'/UIInfo/Logo[@height="'.$md_height.'"] does not match the height ('.$img_height.'px) of the image '.$logo->nodeValue.'. ';
+                                    $this->errorsArray['Logo'] = 'Logo '.$logo->nodeValue.' could not be read';
+                                }
+
+                            }
+                            else
+                            {
+                                $this->errorsArray['Logo'] = 'Logo '.$logo->nodeValue.'  is not an image.';
                             }
 
-                            if ($img_height != $md_height) {
-                                $this->error .= $SSODescriptor.'/UIInfo/Logo[@height="'.$md_height.'"] does not match the height ('.$img_height.'px) of the image '.$logo->nodeValue.'. ';
-                                $this->errorsArray['Logo'] = 'Logo '.$logo->nodeValue.' could not be read';
-                            }
                         }
 
-                        if (! exif_imagetype($logo->nodeValue)) {
-                            $doc = new \DOMDocument();
-                            $doc->load($logo->nodeValue);
-                            if (strcmp($doc->documentElement->nodeName, 'svg') !== 0) {
-                                $this->error .= $SSODescriptor.'/UIInfo/Logo '.$logo->nodeValue.' is not an image. ';
-                                $this->errorsArray['Logo'] = 'Logo '.$logo->nodeValue.' could not be read';
-                            }
-                        }
+
+
+
                     }
                 }
             }
@@ -831,8 +840,9 @@ trait ValidatorTrait
 
     public function validateMetadata(string $metadata,bool $withRestore = false): string
     {
-        $this->checkDependencies();
 
+        $this->errorsArray = [];
+        $this->checkDependencies();
         $dom = $this->createDOM($metadata);
         $xpath = $this->createXPath($dom);
 
@@ -853,11 +863,25 @@ trait ValidatorTrait
 
             $this->generateResult();
         }
+        if(!$withRestore)
+        {
+            return json_encode([
+                'code' => $this->code,
+                'message' => $this->message,
+                'error' => $this->error,
+            ], JSON_FORCE_OBJECT);
+        }
+        else
+        {
+            return json_encode([
+                'code' => $this->code,
+                'message' => $this->message,
+                'error' => $this->error,
+                'errorArray' => $this->errorsArray,
+            ], JSON_FORCE_OBJECT);
+        }
 
-        return json_encode([
-            'code' => $this->code,
-            'message' => $this->message,
-            'error' => $this->error,
-        ], JSON_FORCE_OBJECT);
+
+
     }
 }

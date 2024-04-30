@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Entity;
+use App\Traits\DumpFromGit\EntitiesHelp\FixEntityTrait;
 use App\Traits\ValidatorTrait;
 use Illuminate\Console\Command;
 
@@ -23,28 +24,33 @@ class ValidateMetaConsole extends Command
     protected $description = 'Command description';
 
 
-    use ValidatorTrait;
+    use ValidatorTrait,FixEntityTrait;
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        foreach (Entity::select()->get() as $entity)
+ /*       foreach (Entity::select()->get() as $entity)
         {
 
-/*            if($entity->id <= 103)
-                continue;*/
 
             $ent = Entity::where('id', $entity->id)->select()->first();
 
-            $res = json_decode($this->validateMetadata($ent->metadata),true);
-           // $res = json_decode($this->validateMetadata($ent->xml_file),true);
+           // $res = json_decode($this->validateMetadata($ent->metadata),true);
+            $res = json_decode($this->validateMetadata($ent->xml_file,true),true);
 
             $res['ent_id'] = $ent->id;
             dump($res);
 
 
-        }
+        }*/
+
+
+
+
+        $this->fixEntities();
+
+
     }
 }
