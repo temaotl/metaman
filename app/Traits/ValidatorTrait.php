@@ -838,10 +838,17 @@ trait ValidatorTrait
         }
     }
 
+    private function  setValueToDefault() : void
+    {
+        $this->errorsArray = [];
+        $this->error='';
+        $this->code=0;
+    }
+
     public function validateMetadata(string $metadata,bool $withRestore = false): string
     {
 
-        $this->errorsArray = [];
+        $this->setValueToDefault();
         $this->checkDependencies();
         $dom = $this->createDOM($metadata);
         $xpath = $this->createXPath($dom);
