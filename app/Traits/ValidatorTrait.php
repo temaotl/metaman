@@ -449,7 +449,7 @@ trait ValidatorTrait
                 $this->initContext();
                 foreach ($Logo as $logo) {
                     @$file = file_get_contents($logo->nodeValue,0,$this->context);
-                    if (! $file) {
+                    if (!$file) {
                         $this->error .= $SSODescriptor.'/UIInfo/Logo '.$logo->nodeValue.' could not be read. ';
                         $this->errorsArray['Logo'] = 'Logo '.$logo->nodeValue.' could not be read';
                     } else {

@@ -31,25 +31,25 @@ class ValidateMetaConsole extends Command
      */
     public function handle()
     {
- /*       foreach (Entity::select()->get() as $entity)
-        {
 
+       // $this->fixEntities();
+        foreach (Entity::select()->get() as $entity)
+        {
 
             $ent = Entity::where('id', $entity->id)->select()->first();
 
            // $res = json_decode($this->validateMetadata($ent->metadata),true);
             $res = json_decode($this->validateMetadata($ent->xml_file,true),true);
-
             $res['ent_id'] = $ent->id;
+            $errorArray = $res['errorArray'];
+
             dump($res);
 
 
-        }*/
+        }
 
 
 
-
-        $this->fixEntities();
 
 
     }
