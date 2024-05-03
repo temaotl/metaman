@@ -534,16 +534,16 @@ trait ValidatorTrait
             // This is here to skip every other certificate in order to
             // allow proper certificate rollover, i.e. to change
             // expired/old certificate.
-            if ($i % 2 === 0) {
+/*            if ($i % 2 === 0) {
                 $i++;
 
                 continue;
-            }
+            }*/
 
-            $CRT_VALIDITY = 30;
+/*            $CRT_VALIDITY = 30;
             if ($cert_validFor < $CRT_VALIDITY) {
                 $this->error .= 'The certificate(s) must be valid at least for '.$CRT_VALIDITY.' days, yours certificate #'.($i + 1).' is valid for '.$cert_validFor.' days. ';
-            }
+            }*/
 
             $CRT_KEY_SIZE_RSA = 2048;
             if (array_key_exists('rsa', $pub_key) && $pub_key['bits'] < $CRT_KEY_SIZE_RSA) {
