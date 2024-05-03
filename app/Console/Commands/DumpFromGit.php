@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Traits\DumpFromGit\CreateCategoriesAndGroupsTrait;
 use App\Traits\DumpFromGit\CreateEntitiesTrait;
 use App\Traits\DumpFromGit\CreateFederationTrait;
+use App\Traits\DumpFromGit\EntitiesHelp\FixEntityTrait;
 use App\Traits\DumpFromGit\EntitiesHelp\UpdateEntity;
 use App\Traits\FederationTrait;
 use App\Traits\GitTrait;
@@ -20,7 +21,7 @@ class DumpFromGit extends Command
 {
     use GitTrait, ValidatorTrait;
     use CreateFederationTrait,CreateEntitiesTrait,CreateCategoriesAndGroupsTrait;
-    use UpdateEntity,FederationTrait;
+    use UpdateEntity,FederationTrait,FixEntityTrait;
 
     /**
      * The name and signature of the console command.
@@ -52,6 +53,7 @@ class DumpFromGit extends Command
         $this->updateGroupsAndCategories();
         $this->updateEntitiesXml();
         $this->updateFederationFolders();
+        $this->fixEntities();
         Artisan::call('app:load-metadata');
     }
 }

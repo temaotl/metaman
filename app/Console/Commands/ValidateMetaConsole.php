@@ -29,27 +29,64 @@ class ValidateMetaConsole extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
 
-       // $this->fixEntities();
+    private function doc()
+    {
+        foreach (Entity::select()->get() as $entity)
+        {
+            $ent = Entity::where('id', $entity->id)->select()->first();
+
+
+            // $res = json_decode($this->validateMetadata($ent->metadata),true);
+            $res = json_decode($this->validateMetadata($ent->xml_file,true),true);
+            $res['ent_id'] = $ent->id;
+            $errorArray = $res['errorArray'];
+
+
+            if($res['code']==1)
+            {
+                dump($res);
+            }
+            else
+            {
+                dump($res['ent_id']);
+            }
+        }
+    }
+
+    private function meta()
+    {
         foreach (Entity::select()->get() as $entity)
         {
 
             $ent = Entity::where('id', $entity->id)->select()->first();
 
-           // $res = json_decode($this->validateMetadata($ent->metadata),true);
-            $res = json_decode($this->validateMetadata($ent->xml_file,true),true);
+            $curr = 345;
+
+            if($ent->id < $curr)
+                continue;
+            if($ent->id > $curr)
+                break;
+
+
+            $res = json_decode($this->validateMetadata($ent->metadata),true);
             $res['ent_id'] = $ent->id;
-            $errorArray = $res['errorArray'];
+
 
             dump($res);
+            if( $res['code']==1)
+            {
 
-
+            }
         }
+    }
 
 
+    public function handle()
+    {
 
+       // $this->fixEntities();
+        $this->doc();
 
 
     }

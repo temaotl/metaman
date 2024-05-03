@@ -29,6 +29,7 @@ trait FixEntityTrait{
 
             $xml_document = $entity->xml_file;
 
+
             //$xml_document = $entity->metadata;
 
             $res = json_decode($this->validateMetadata($xml_document,true),true);
@@ -48,9 +49,9 @@ trait FixEntityTrait{
 
             $xml_document = $dom->saveXML();
             Entity::whereId($entity->id)->update(['xml_file' => $xml_document]);
+            dump($entity->id);
 
-
-            dump($res);
+         //   dump($res);
         }
     }
 
@@ -70,7 +71,7 @@ trait FixEntityTrait{
         return $UIInfo ;
     }
 
-    private function deleteTag(object $tag): void
+    private function deleteLogo(object $tag): void
     {
         if ($tag->parentNode) {
             $tag->parentNode->removeChild($tag);
@@ -79,7 +80,7 @@ trait FixEntityTrait{
     private function ClearOldLogo(object $logos):void
     {
         foreach ($logos as $logo) {
-            $this->deleteTag($logo);
+            $this->deleteLogo($logo);
         }
     }
 

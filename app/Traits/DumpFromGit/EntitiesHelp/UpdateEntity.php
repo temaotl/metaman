@@ -26,7 +26,7 @@ trait UpdateEntity
         {
             $namespaceURI = $dom->documentElement->lookupNamespaceURI('md');
             $entityExtensions = $dom->createElementNS($this->mdURI, 'md:Extensions');
-            $rootTag->appendChild($entityExtensions);
+            $rootTag->insertBefore($entityExtensions,$rootTag->firstChild);
         }else {
             $entityExtensions = $entityExtensions->item(0);
         }
@@ -143,7 +143,7 @@ trait UpdateEntity
         $entityExtensions = $xPath->query('//md:Extensions');
         if ($entityExtensions->length === 0) {
             $entityExtensions = $dom->createElementNS( $this->mdURI,'md:Extensions');
-            $rootTag->appendChild($entityExtensions);
+            $rootTag->insertBefore($entityExtensions,$rootTag->firstChild);
         } else {
             $entityExtensions = $entityExtensions->item(0);
         }
