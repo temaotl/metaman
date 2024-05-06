@@ -10,6 +10,7 @@ use App\Traits\DumpFromGit\CreateEntitiesTrait;
 use App\Traits\DumpFromGit\CreateFederationTrait;
 use App\Traits\DumpFromGit\EntitiesHelp\FixEntityTrait;
 use App\Traits\DumpFromGit\EntitiesHelp\UpdateEntity;
+use App\Traits\EntityFolderTrait;
 use App\Traits\FederationTrait;
 use App\Traits\GitTrait;
 use Illuminate\Console\Command;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Artisan;
 
 class DumpFromGit extends Command
 {
-    use GitTrait, ValidatorTrait;
+    use GitTrait, ValidatorTrait,EntityFolderTrait;
     use CreateFederationTrait,CreateEntitiesTrait,CreateCategoriesAndGroupsTrait;
     use UpdateEntity,FederationTrait,FixEntityTrait;
 
@@ -54,6 +55,6 @@ class DumpFromGit extends Command
         $this->updateEntitiesXml();
         $this->updateFederationFolders();
         $this->fixEntities();
-        Artisan::call('app:load-metadata');
+        $this->createAllMetadataFiles();
     }
 }
